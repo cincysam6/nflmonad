@@ -1,0 +1,123 @@
+# =============================================================================
+# NFL Analytics Platform Configuration
+# =============================================================================
+
+project:
+  name: nfl_analytics
+  version: "1.0.0"
+  description: "Production NFL data platform for betting model development"
+
+# ---- Season Configuration ---------------------------------------------------
+seasons:
+  historical_start: 1999          # earliest PBP year nflreadr supports reliably
+  current_season: 2024            # update each year
+  backfill_seasons: [1999, 2024]  # inclusive range for full backfill
+  incremental_seasons: [2024]     # seasons updated in daily refresh
+
+# ---- Storage Paths ----------------------------------------------------------
+paths:
+  data_root: "data"
+  raw: "data/raw"
+  staging: "data/staging"
+  intermediate: "data/intermediate"
+  marts: "data/marts"
+  db: "db/nfl_analytics.duckdb"
+  logs: "logs"
+
+# ---- DuckDB Configuration ---------------------------------------------------
+duckdb:
+  memory_limit: "8GB"
+  threads: 4
+  temp_directory: "db/tmp"
+  read_only: false
+
+# ---- Refresh Modes ----------------------------------------------------------
+# full: drop and rebuild all seasons
+# incremental: only process new/changed records for current_season
+refresh:
+  default_mode: "incremental"
+  force_full: false
+  current_season_weeks: "auto"   # "auto" = detect max completed week from schedules
+
+# ---- nflverse Source Tables -------------------------------------------------
+sources:
+  pbp:
+    seasons: "historical_start:current_season"
+    partition_by: ["season"]
+    incremental_key: "game_id"
+    grain: "game_id + play_id"
+  schedules:
+    seasons: "historical_start:current_season"
+    partition_by: ["season"]
+    incremental_key: "game_id"
+    grain: "game_id"
+  player_stats:
+    seasons: "historical_start:current_season"
+    partition_by: ["season"]
+    incremental_key: ["season","week","player_id","stat_type"]
+    grain: "season + week + player_id + stat_type"
+  team_stats:
+    seasons: "historical_start:current_season"
+    partition_by: ["season"]
+    incremental_key: ["season","week","team"]
+    grain: "season + week + team"
+  participation:
+    seasons: 2016                  # earliest available
+    partition_by: ["season"]
+    incremental_key: ["nflverse_game_id","play_id","gsis_id"]
+    grain: "game_id + play_id + player_id"
+  players:
+    partition_by: []               # single file, no partition
+    grain: "gsis_id"
+  rosters:
+    seasons: "historical_start:current_season"
+    partition_by: ["season"]
+    grain: "season + team + gsis_id"
+  rosters_weekly:
+    seasons: 2002
+    partition_by: ["season"]
+    grain: "season + week + team + gsis_id"
+  depth_charts:
+    seasons: 2001
+    partition_by: ["season"]
+    grain: "season + week + team + gsis_id + position + depth_team + formation"
+  injuries:
+    seasons: 2009
+    partition_by: ["season"]
+    grain: "season + week + team + gsis_id + report_primary_injury"
+  nextgen_stats:
+    seasons: 2016
+    partition_by: ["season"]
+    stat_types: ["passing","rushing","receiving"]
+    grain: "season + week + player_gsis_id + stat_type"
+  pfr_advstats:
+    seasons: 2018
+    partition_by: ["season"]
+    stat_types: ["pass","rush","rec","def"]
+    grain: "season + week + pfr_id + stat_type"
+  snap_counts:
+    seasons: 2012
+    partition_by: ["season"]
+    grain: "season + week + pfr_player_id"
+  ftn_charting:
+    seasons: 2022
+    partition_by: ["season"]
+    grain: "nflverse_game_id + nflverse_play_id"
+  ff_opportunity:
+    seasons: 2016
+    partition_by: ["season"]
+    grain: "season + week + player_id"
+
+# ---- Team Abbreviation Standardization --------------------------------------
+# nflverse handles most of this but we enforce canonical abbrs here
+team_abbr_map:
+  "OAK": "LV"
+  "SD":  "LAC"
+  "STL": "LA"
+
+# ---- Logging ----------------------------------------------------------------
+logging:
+  level: "INFO"           # DEBUG | INFO | WARN | ERROR
+  file: "logs/pipeline_{date}.log"
+  console: true
+  max_log_files: 30

@@ -1,0 +1,166 @@
+# =============================================================================
+# config/config_external.yml
+# External data source configuration — odds, weather, stadium, travel
+# Merged into main config at runtime via load_config_extended()
+# =============================================================================
+
+# ---- Odds Sources ------------------------------------------------------------
+# Source adapters are enabled by setting enabled: true.
+# The architecture supports multiple simultaneous sources.
+# Priority order determines which source is used when sources overlap.
+
+odds_sources:
+  # --- The Odds API (https://the-odds-api.com) --------------------------------
+  # Commercial, ~$30/month for historical + live. Best coverage for 2018+.
+  the_odds_api:
+    enabled: false
+    base_url: "https://api.the-odds-api.com/v4"
+    api_key_env_var: "ODDS_API_KEY"          # set in GitHub secrets
+    sports_key: "americanfootball_nfl"
+    markets: ["h2h","spreads","totals"]
+    regions: ["us"]
+    coverage_start: 2018
+    coverage_end: null                        # ongoing
+    sportsbooks: ["draftkings","fanduel","betmgm","caesars","pinnacle","consensus"]
+    timestamp_granularity: "snapshot"         # point-in-time snapshots
+    update_frequency_minutes: 60             # how often to poll during season
+    reliability_score: 9
+    notes: "Best live feed. Historical requires paid plan. No team totals."
+
+  # --- Spreadsheet-style free historical (e.g. sportsbookreviewsonline.com) --
+  sbr_free:
+    enabled: false
+    base_url: null                            # manually downloaded CSVs
+    coverage_start: 2007
+    coverage_end: 2024
+    sportsbooks: ["pinnacle","consensus"]
+    markets: ["spreads","totals","moneyline"]
+    timestamp_granularity: "open_close"      # open + close only, no intraday
+    update_frequency_minutes: null           # batch/manual
+    reliability_score: 7
+    notes: "Free CSV format. Open/close only. Good for long backtests."
+
+  # --- nflverse betting lines (where available) --------------------------------
+  nflverse_lines:
+    enabled: true
+    source_fn: "nflreadr::load_espn_betting_lines"
+    coverage_start: 2002
+    coverage_end: null
+    markets: ["spreads","totals","moneyline"]
+    timestamp_granularity: "open_close"
+    reliability_score: 6
+    notes: "ESPN/nflverse source. Inconsistent before 2010. Good for open/close."
+
+  # --- Placeholder: Premium feed (Pinnacle, Action Network, etc.) -------------
+  premium_feed:
+    enabled: false
+    base_url: null
+    api_key_env_var: "PREMIUM_ODDS_API_KEY"
+    coverage_start: null
+    reliability_score: null
+    notes: "Stub for future premium integration."
+
+# ---- Weather Sources ---------------------------------------------------------
+weather_sources:
+  # --- Open-Meteo (https://open-meteo.com) — FREE, no key required -----------
+  # Historical: ERA5 reanalysis back to 1940
+  # Forecast: 7-day hourly, updated 4x/day
+  open_meteo:
+    enabled: true
+    historical_base_url: "https://archive-api.open-meteo.com/v1/archive"
+    forecast_base_url:   "https://api.open-meteo.com/v1/forecast"
+    # Variables to request (mapped to weather schema)
+    hourly_variables:
+      - "temperature_2m"
+      - "apparent_temperature"
+      - "precipitation"
+      - "rain"
+      - "snowfall"
+      - "snow_depth"
+      - "wind_speed_10m"
+      - "wind_gusts_10m"
+      - "wind_direction_10m"
+      - "relative_humidity_2m"
+      - "dew_point_2m"
+      - "surface_pressure"
+      - "weather_code"
+    timezone: "auto"
+    coverage_start: 1979                     # ERA5 practical start
+    forecast_days: 7
+    forecast_update_hours: [0, 6, 12, 18]   # UTC hours when new forecast available
+    reliability_score: 9
+    notes: "Completely free. ERA5 reanalysis for historical. ECMWF IFS for forecast."
+
+  # --- Placeholder: Premium weather (Tomorrow.io, VisualCrossing) -------------
+  premium_weather:
+    enabled: false
+    api_key_env_var: "WEATHER_API_KEY"
+    notes: "Stub for premium weather with wind direction, gusts, and field-level data."
+
+# ---- Stadium / Venue ---------------------------------------------------------
+stadium:
+  # Bundled in this repo as a static CSV/parquet seeded manually
+  # Update when teams relocate or new stadiums open
+  source: "config/stadium_metadata.csv"
+  geocoding_service: "nominatim"           # free OSM geocoding fallback
+  geocoding_api_key_env_var: null          # not needed for nominatim
+
+# ---- Prediction Horizons (leakage contract timestamps) ----------------------
+# For backtesting, each row in a mart is tagged with a prediction_horizon.
+# Features are validated against these cutoffs.
+prediction_horizons:
+  early_week:
+    label: "early_week"
+    hours_before_kickoff: 120              # Tue/Wed for Sunday games
+    allowed_odds_snapshot: "opening"       # can use opening lines
+    allowed_weather: "extended_forecast"   # 5-day window
+    allowed_injury: "initial_report"       # Wednesday practice reports
+  mid_week:
+    label: "mid_week"
+    hours_before_kickoff: 72
+    allowed_odds_snapshot: "intraday_72h"
+    allowed_weather: "3day_forecast"
+    allowed_injury: "thursday_report"
+  pre_kickoff:
+    label: "pre_kickoff"
+    hours_before_kickoff: 1
+    allowed_odds_snapshot: "latest_before_lock"
+    allowed_weather: "1h_forecast_or_observed"
+    allowed_injury: "final_status"
+
+# ---- Market Feature Engineering Constants -----------------------------------
+market:
+  key_numbers_spread: [1, 2, 3, 4, 6, 7, 10, 13, 14, 17]
+  key_numbers_total: [37, 38, 41, 44, 45, 47, 48, 51, 54]
+  vig_threshold_juice: -110                # typical standard juice (American odds)
+  stale_line_hours: 48                     # line not moved in N hours = potentially stale
+
+# ---- Weather Feature Thresholds ---------------------------------------------
+weather_thresholds:
+  wind_mild_mph: 10
+  wind_moderate_mph: 15
+  wind_strong_mph: 20
+  wind_severe_mph: 25
+  cold_temp_f: 32
+  very_cold_temp_f: 20
+  hot_temp_f: 85
+  precip_flag_mm: 1.0
+  snow_flag_mm: 0.5
+  humidity_high_pct: 80
+
+# ---- Elo / Power Rating Settings -------------------------------------------
+power_ratings:
+  elo_k_factor: 20
+  elo_initial_rating: 1500
+  elo_home_field_advantage: 65            # in Elo points ~ 2.5 pts
+  elo_season_reversion_pct: 0.33          # regress toward mean between seasons
+  qb_adjustment_scale: 50                 # Elo point adjustment per QB quality unit
+  pace_adjustment: true
+
+# ---- Automation Intervals ---------------------------------------------------
+automation:
+  odds_refresh_interval_minutes: 60        # during season weekdays
+  odds_refresh_interval_game_day_minutes: 15
+  weather_forecast_refresh_hours: [6, 12]  # UTC
+  weather_history_backfill_days_after_game: 2
+  power_rating_refresh: "weekly"           # after each game week

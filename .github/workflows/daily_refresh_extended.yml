@@ -1,0 +1,164 @@
+name: NFL Analytics — Extended Daily Refresh
+
+on:
+  schedule:
+    # ---- Base refresh (football data) ----------------------------------------
+    - cron: "0 6 * * 2-4"    # Tue-Thu: post-game updates (Mon Night + Tue data)
+    - cron: "0 6 * * 0"      # Sunday: pregame prep
+    - cron: "0 14 * * 2"     # Tuesday afternoon: full post-weekend refresh
+
+    # ---- Live odds polling (during season, every 2 hours Sun/Mon/Thu) --------
+    - cron: "0 */2 * * 0"    # Sunday: every 2 hours
+    - cron: "0 */2 * * 1"    # Monday: every 2 hours
+    - cron: "0 */2 * * 4"    # Thursday: every 2 hours
+
+    # ---- Forecast weather refresh (twice daily) ------------------------------
+    - cron: "0 12 * * *"     # Noon UTC — morning forecast update
+    - cron: "0 18 * * *"     # 6pm UTC — afternoon forecast update
+
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "Pipeline mode"
+        required: true
+        default: "daily"
+        type: choice
+        options: [daily, backfill, reference, odds_only, weather_only]
+      force_full:
+        description: "Force full re-download"
+        required: false
+        default: "false"
+        type: boolean
+
+env:
+  R_VERSION: "4.3.3"
+  RENV_PATHS_CACHE: ~/.local/share/renv
+
+jobs:
+  refresh:
+    name: "${{ github.event.inputs.mode || 'daily' }} refresh"
+    runs-on: ubuntu-22.04
+    timeout-minutes: 150
+
+    permissions:
+      contents: write
+      actions: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: ${{ env.R_VERSION }}
+          use-public-rspm: true
+
+      - name: Cache R packages
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.RENV_PATHS_CACHE }}
+          key: ${{ runner.os }}-renv-${{ hashFiles('**/renv.lock') }}
+          restore-keys: ${{ runner.os }}-renv-
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev \
+            libfontconfig1-dev libharfbuzz-dev libfribidi-dev \
+            libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev
+
+      - name: Install R packages
+        run: |
+          Rscript -e "
+            if (file.exists('renv.lock')) renv::restore(prompt=FALSE)
+            else source('R/utils/install_packages.R')
+            # Additional packages for extended pipeline
+            extra <- c('httr2','janitor','lutz')
+            missing <- extra[!extra %in% rownames(installed.packages())]
+            if (length(missing) > 0) install.packages(missing, repos='https://cloud.r-project.org')
+          "
+
+      - name: Restore data cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            data/raw
+            data/staging
+            data/intermediate
+            data/marts
+          key: nfl-data-ext-${{ github.run_id }}
+          restore-keys: |
+            nfl-data-ext-
+
+      - name: Run pipeline
+        env:
+          ODDS_API_KEY:          ${{ secrets.ODDS_API_KEY }}
+          PREMIUM_ODDS_API_KEY:  ${{ secrets.PREMIUM_ODDS_API_KEY }}
+          WEATHER_API_KEY:       ${{ secrets.WEATHER_API_KEY }}
+          PIPELINE_MODE:         ${{ github.event.inputs.mode || 'daily' }}
+        run: |
+          set -euo pipefail
+
+          case "$PIPELINE_MODE" in
+            daily)
+              Rscript pipeline_extended.R daily
+              ;;
+            backfill)
+              FORCE="${{ github.event.inputs.force_full == 'true' && '--force-full' || '' }}"
+              Rscript pipeline.R backfill $FORCE
+              Rscript pipeline_extended.R backfill
+              ;;
+            reference)
+              Rscript pipeline_extended.R reference
+              ;;
+            odds_only)
+              Rscript -e "
+                source('config/config_loader_extended.R')
+                source('R/ingest/ingest_odds.R')
+                cfg <- load_config_extended()
+                refresh_odds(cfg=cfg, live_only=TRUE)
+              "
+              ;;
+            weather_only)
+              Rscript -e "
+                source('config/config_loader_extended.R')
+                source('R/ingest/ingest_weather.R')
+                source('R/ingest/ingest_reference.R')
+                cfg <- load_config_extended()
+                refresh_weather(cfg=cfg)
+              "
+              ;;
+          esac
+        timeout-minutes: 120
+
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: logs-ext-${{ github.run_id }}
+          path: logs/
+          retention-days: 14
+
+      - name: Upload marts (current season only)
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: marts-ext-${{ github.run_id }}
+          path: data/marts/
+          retention-days: 7
+
+      - name: Save data cache
+        if: success()
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            data/raw
+            data/staging
+            data/intermediate
+            data/marts
+          key: nfl-data-ext-${{ github.run_id }}
+
+      - name: Notify failure
+        if: failure()
+        run: echo "::error::Extended NFL pipeline FAILED. Check artifact logs."

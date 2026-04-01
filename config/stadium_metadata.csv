@@ -1,0 +1,39 @@
+stadium_id,stadium_name,team,season_start,season_end,latitude,longitude,elevation_m,roof_type,surface_type,timezone,capacity,is_neutral_site_default,international_game_flag,altitude_flag,notes
+ari_state_farm,State Farm Stadium,ARI,2006,9999,33.5277,-112.2626,332,retractable,turf,America/Phoenix,63400,0,0,0,
+atl_mercedes_benz,Mercedes-Benz Stadium,ATL,2017,9999,33.7554,-84.4009,297,retractable,turf,America/New_York,71000,0,0,0,
+bal_mt_bank,M&T Bank Stadium,BAL,1998,9999,39.2780,-76.6227,12,open,grass,America/New_York,71008,0,0,0,
+buf_highmark,Highmark Stadium,BUF,1973,9999,42.7738,-78.7870,184,open,grass,America/New_York,71608,0,0,0,
+car_bank_america,Bank of America Stadium,CAR,1996,9999,35.2258,-80.8528,234,open,grass,America/New_York,74455,0,0,0,
+chi_soldier_field,Soldier Field,CHI,1971,9999,41.8623,-87.6167,176,open,grass,America/Chicago,61500,0,0,0,
+cin_paycor,Paycor Stadium,CIN,2000,9999,39.0954,-84.5160,204,open,turf,America/New_York,65515,0,0,0,
+cle_huntington,Huntington Bank Field,CLE,1999,9999,41.5061,-81.6995,179,open,grass,America/New_York,67431,0,0,0,
+dal_att,AT&T Stadium,DAL,2009,9999,32.7473,-97.0945,167,retractable,turf,America/Chicago,80000,0,0,0,
+den_empower,Empower Field,DEN,2001,9999,39.7439,-105.0201,1598,open,grass,America/Denver,76125,0,0,1,Mile High elevation
+det_ford_field,Ford Field,DET,2002,9999,42.3400,-83.0456,186,dome,turf,America/Detroit,65000,0,0,0,
+gb_lambeau,Lambeau Field,GB,1957,9999,44.5013,-88.0622,200,open,grass,America/Chicago,81441,0,0,0,Cold weather factor
+hou_nrg,NRG Stadium,HOU,2002,9999,29.6847,-95.4107,14,retractable,turf,America/Chicago,72220,0,0,0,
+ind_lucas_oil,Lucas Oil Stadium,IND,2008,9999,39.7601,-86.1639,218,retractable,turf,America/Indiana/Indianapolis,67000,0,0,0,
+jax_tiaa_bank,EverBank Stadium,JAX,1995,9999,30.3240,-81.6373,1,open,grass,America/New_York,69132,0,0,0,
+kc_arrowhead,GEHA Field at Arrowhead,KC,1972,9999,39.0489,-94.4839,298,open,grass,America/Chicago,76416,0,0,0,
+lv_allegiant,Allegiant Stadium,LV,2020,9999,36.0909,-115.1833,630,dome,turf,America/Los_Angeles,65000,0,0,0,
+la_sofi,SoFi Stadium,LA,2020,9999,33.9535,-118.3392,33,retractable,turf,America/Los_Angeles,70240,0,0,0,
+lac_sofi,SoFi Stadium,LAC,2020,9999,33.9535,-118.3392,33,retractable,turf,America/Los_Angeles,70240,0,0,0,
+mia_hardrock,Hard Rock Stadium,MIA,1987,9999,25.9580,-80.2389,3,open,grass,America/New_York,65326,0,0,0,Humid and hot early season
+min_usbank,U.S. Bank Stadium,MIN,2016,9999,44.9738,-93.2575,259,dome,turf,America/Chicago,66860,0,0,0,
+ne_gillette,Gillette Stadium,NE,2002,9999,42.0909,-71.2643,17,open,turf,America/New_York,65878,0,0,0,
+no_caesars,Caesars Superdome,NO,1975,9999,29.9509,-90.0812,2,dome,turf,America/Chicago,73208,0,0,0,
+nyg_metlife,MetLife Stadium,NYG,2010,9999,40.8135,-74.0745,5,open,turf,America/New_York,82500,0,0,0,
+nyj_metlife,MetLife Stadium,NYJ,2010,9999,40.8135,-74.0745,5,open,turf,America/New_York,82500,0,0,0,
+phi_lincoln_financial,Lincoln Financial Field,PHI,2003,9999,39.9008,-75.1675,4,open,grass,America/New_York,69876,0,0,0,
+pit_acrisure,Acrisure Stadium,PIT,2001,9999,40.4468,-80.0158,219,open,turf,America/New_York,68400,0,0,0,
+sf_levis,Levi's Stadium,SF,2014,9999,37.4032,-121.9698,9,open,grass,America/Los_Angeles,68500,0,0,0,
+sea_lumen_field,Lumen Field,SEA,2002,9999,47.5952,-122.3316,5,open,turf,America/Los_Angeles,69000,0,0,0,
+tb_raymond_james,Raymond James Stadium,TB,1998,9999,27.9759,-82.5033,8,open,grass,America/New_York,65890,0,0,0,Hot and humid
+ten_nissan,Nissan Stadium,TEN,1999,9999,36.1665,-86.7713,122,open,grass,America/Chicago,69143,0,0,0,
+was_northwest,Northwest Stadium,WAS,1997,9999,38.9078,-76.8645,7,open,grass,America/New_York,82000,0,0,0,
+london_tottenham,Tottenham Hotspur Stadium,NEUTRAL,2019,9999,51.6042,-0.0665,10,retractable,turf,Europe/London,62850,1,1,0,London NFL games
+london_wembley,Wembley Stadium,NEUTRAL,2007,9999,51.5560,-0.2795,60,open,turf,Europe/London,90000,1,1,0,London NFL games
+munich_allianz,Allianz Arena,NEUTRAL,2022,9999,48.2188,11.6248,521,retractable,turf,Europe/Berlin,75000,1,1,0,Munich NFL games
+frankfurt_deutsche,Deutsche Bank Park,NEUTRAL,2023,9999,50.0687,8.6453,96,retractable,turf,Europe/Berlin,51500,1,1,0,Frankfurt NFL games
+madrid_bernabeu,Estadio Santiago Bernabéu,NEUTRAL,2025,9999,40.4531,-3.6883,668,retractable,turf,Europe/Madrid,81044,1,1,0,Madrid NFL games planned
+sao_paulo_corinthians,Neo Quimica Arena,NEUTRAL,2024,9999,-23.5453,-46.4752,762,open,turf,America/Sao_Paulo,49205,1,1,0,Brazil NFL games
