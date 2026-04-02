@@ -238,11 +238,11 @@ SELECT
   height,
   weight,
   draft_year                                     AS entry_year,
-  rookie_year,
-  draft_club,
-  draft_number,
+  rookie_season                                  AS rookie_year,
+  draft_team                                     AS draft_club,
+  draft_pick                                     AS draft_number,
   CASE WHEN status = 'ACT' THEN 1 ELSE 0 END  AS active_flag,
-  headshot_url,
+  headshot                                       AS headshot_url,
   short_name,
   ingestion_ts
 

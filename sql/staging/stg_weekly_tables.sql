@@ -252,6 +252,7 @@ SELECT
   TRY_CAST(completion_percentage_above_expectation AS DOUBLE) AS cpoe,
   TRY_CAST(passer_rating                      AS DOUBLE) AS passer_rating,
   TRY_CAST(expected_completion_percentage     AS DOUBLE) AS xcomp_pct,
+  TRY_CAST(avg_air_yards_to_sticks           AS DOUBLE) AS avg_air_yards_to_sticks,
 
   -- Rushing NGS columns
   TRY_CAST(efficiency                         AS DOUBLE) AS rush_efficiency,
