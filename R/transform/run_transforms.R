@@ -167,13 +167,50 @@ run_staging <- function(con, cfg, incremental = FALSE) {
     list(file = "stg_weekly_tables.sql",               table = "stg_injuries_weekly",    partition = "season"),
     list(file = "stg_weekly_tables.sql",               table = "stg_snap_counts_weekly", partition = "season"),
     list(file = "stg_weekly_tables.sql",               table = "stg_nextgen_player_week",partition = "season"),
-    list(file = "stg_weekly_tables.sql",               table = "stg_external_odds_game", partition = "season")
+    list(file = "stg_external_odds_game.sql",           table = "stg_external_odds_game", partition = "season")
   )
 
   purrr::walk(tables, function(t) {
     materialise_table(con, file.path(sql_dir, t$file), t$table, out_dir,
                       t$partition, incremental, cfg)
   })
+
+  # Ensure stg_external_odds_game view exists (empty stub) so mart layer
+  # can LEFT JOIN to it even when no odds data has been ingested yet.
+  tryCatch(
+    DBI::dbGetQuery(con, "SELECT 1 FROM stg_external_odds_game LIMIT 0"),
+    error = function(e) {
+      logger::log_info("Creating empty stub for stg_external_odds_game (no odds data ingested).")
+      DBI::dbExecute(con, "
+        CREATE OR REPLACE VIEW stg_external_odds_game AS
+        SELECT
+          NULL::VARCHAR   AS game_id,
+          NULL::INTEGER   AS season,
+          NULL::INTEGER   AS week,
+          NULL::DATE      AS game_date,
+          NULL::VARCHAR   AS home_team,
+          NULL::VARCHAR   AS away_team,
+          NULL::TIMESTAMP AS market_timestamp,
+          NULL::VARCHAR   AS sportsbook,
+          NULL::VARCHAR   AS market_type,
+          NULL::DOUBLE    AS home_spread,
+          NULL::DOUBLE    AS away_spread,
+          NULL::DOUBLE    AS spread_juice_home,
+          NULL::DOUBLE    AS spread_juice_away,
+          NULL::DOUBLE    AS total_line,
+          NULL::DOUBLE    AS over_juice,
+          NULL::DOUBLE    AS under_juice,
+          NULL::INTEGER   AS home_ml,
+          NULL::INTEGER   AS away_ml,
+          NULL::DOUBLE    AS opening_spread,
+          NULL::DOUBLE    AS opening_total,
+          NULL::DOUBLE    AS closing_spread,
+          NULL::DOUBLE    AS closing_total,
+          NULL::TIMESTAMP AS ingestion_ts
+        WHERE FALSE
+      ")
+    }
+  )
 }
 
 # ---- Intermediate -----------------------------------------------------------
@@ -185,11 +222,11 @@ run_intermediate <- function(con, cfg, incremental = FALSE) {
   tables <- list(
     list(file = "int_game_team.sql",        table = "int_game_base",          partition = "season"),
     list(file = "int_game_team.sql",        table = "int_team_game",          partition = "season"),
+    list(file = "int_team_form_injury.sql", table = "int_team_form",          partition = "season"),
+    list(file = "int_team_form_injury.sql", table = "int_injury_team_impact", partition = "season"),
     list(file = "int_player_qb.sql",        table = "int_player_game",        partition = "season"),
     list(file = "int_player_qb.sql",        table = "int_player_form",        partition = "season"),
-    list(file = "int_player_qb.sql",        table = "int_qb_team_context",    partition = "season"),
-    list(file = "int_team_form_injury.sql", table = "int_team_form",          partition = "season"),
-    list(file = "int_team_form_injury.sql", table = "int_injury_team_impact", partition = "season")
+    list(file = "int_player_qb.sql",        table = "int_qb_team_context",    partition = "season")
   )
 
   purrr::walk(tables, function(t) {

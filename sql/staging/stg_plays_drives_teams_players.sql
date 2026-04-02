@@ -237,7 +237,7 @@ SELECT
   college,
   height,
   weight,
-  entry_year,
+  draft_year                                     AS entry_year,
   rookie_year,
   draft_club,
   draft_number,
