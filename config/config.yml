@@ -9,9 +9,9 @@ project:
 
 # ---- Season Configuration ---------------------------------------------------
 seasons:
-  historical_start: 1999          # earliest PBP year nflreadr supports reliably
+  historical_start: 2015          # earliest PBP year nflreadr supports reliably
   current_season: 2024            # update each year
-  backfill_seasons: [1999, 2024]  # inclusive range for full backfill
+  backfill_seasons: [2015, 2024]  # inclusive range for full backfill
   incremental_seasons: [2024]     # seasons updated in daily refresh
 
 # ---- Storage Paths ----------------------------------------------------------

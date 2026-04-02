@@ -1,28 +1,24 @@
 # =============================================================================
 # DuckDB Connection Manager
+# Fixed: register_parquet_view now skips gracefully when folder exists but
+#        contains no parquet files (avoids "No files found" IO error).
 # =============================================================================
 
 #' Open (or create) the platform DuckDB database
-#'
-#' Returns a live DBI connection. Caller is responsible for calling
-#' db_disconnect() when done, or use with_db_connection() for scoped access.
-#'
 #' @param cfg Config list
-#' @param read_only Logical, open in read-only mode
+#' @param read_only Logical
 #' @return DBI connection object
 #' @export
 db_connect <- function(cfg, read_only = FALSE) {
   db_path <- cfg$paths$db
-
   fs::dir_create(dirname(db_path))
 
   con <- DBI::dbConnect(
     duckdb::duckdb(),
-    dbdir    = db_path,
+    dbdir     = db_path,
     read_only = read_only
   )
 
-  # Apply performance settings
   DBI::dbExecute(con, glue::glue("SET memory_limit='{cfg$duckdb$memory_limit}';"))
   DBI::dbExecute(con, glue::glue("SET threads TO {cfg$duckdb$threads};"))
 
@@ -30,7 +26,6 @@ db_connect <- function(cfg, read_only = FALSE) {
   fs::dir_create(tmp_dir)
   DBI::dbExecute(con, glue::glue("SET temp_directory='{tmp_dir}';"))
 
-  # Register the httpfs extension for potential remote parquet reads
   tryCatch(
     DBI::dbExecute(con, "LOAD httpfs;"),
     error = function(e) {
@@ -43,7 +38,6 @@ db_connect <- function(cfg, read_only = FALSE) {
 }
 
 #' Close a DuckDB connection
-#'
 #' @param con DBI connection
 #' @export
 db_disconnect <- function(con) {
@@ -52,12 +46,6 @@ db_disconnect <- function(con) {
 }
 
 #' Execute a block of code with a scoped DB connection
-#'
-#' Automatically disconnects on exit, even on error.
-#'
-#' @param cfg Config list
-#' @param expr Expression to evaluate with `con` in scope
-#' @param read_only Logical
 #' @export
 with_db_connection <- function(cfg, expr, read_only = FALSE) {
   con <- db_connect(cfg, read_only = read_only)
@@ -67,7 +55,22 @@ with_db_connection <- function(cfg, expr, read_only = FALSE) {
 
 # ---- Parquet view registration -----------------------------------------------
 
+#' Check whether a directory actually contains at least one parquet file
+#' (recursively, to handle hive-partitioned subdirs)
+.has_parquet_files <- function(path) {
+  if (!fs::dir_exists(path)) return(FALSE)
+  files <- tryCatch(
+    fs::dir_ls(path, recurse = TRUE, glob = "*.parquet"),
+    error = function(e) character(0)
+  )
+  length(files) > 0
+}
+
 #' Register a Hive-partitioned Parquet directory as a DuckDB view
+#'
+#' Skips silently if the directory does not exist OR contains no parquet files.
+#' This prevents "No files found" IO errors when some sources haven't been
+#' ingested yet (e.g. team_stats, participation, external_odds).
 #'
 #' @param con DuckDB DBI connection
 #' @param view_name Name for the DuckDB view
@@ -78,8 +81,8 @@ register_parquet_view <- function(con,
                                   view_name,
                                   parquet_path,
                                   hive_partition = TRUE) {
-  if (!fs::dir_exists(parquet_path)) {
-    logger::log_warn("Parquet path does not exist, skipping view: {parquet_path}")
+  if (!.has_parquet_files(parquet_path)) {
+    logger::log_warn("No parquet files found, skipping view: {view_name} ({parquet_path})")
     return(invisible(NULL))
   }
 
@@ -90,12 +93,21 @@ register_parquet_view <- function(con,
     "SELECT * FROM read_parquet('{parquet_path}/**/*.parquet', {hp_flag});"
   )
 
-  DBI::dbExecute(con, sql)
-  logger::log_info("Registered view: {view_name} -> {parquet_path}")
+  tryCatch(
+    {
+      DBI::dbExecute(con, sql)
+      logger::log_info("Registered view: {view_name} -> {parquet_path}")
+    },
+    error = function(e) {
+      logger::log_warn("Could not register view {view_name}: {e$message}")
+    }
+  )
+
+  invisible(NULL)
 }
 
 #' Register all raw layer Parquet directories as DuckDB views
-#'
+#' Only registers tables that actually have parquet files on disk.
 #' @param con DuckDB DBI connection
 #' @param cfg Config list
 #' @export
@@ -107,16 +119,27 @@ register_all_raw_views <- function(con, cfg) {
     "ff_opportunity", "external_odds"
   )
 
+  registered <- 0L
+  skipped    <- 0L
+
   purrr::walk(raw_tables, function(tbl) {
     path <- file.path(cfg$paths$raw, tbl)
-    register_parquet_view(con, paste0("raw_", tbl), path)
+    if (.has_parquet_files(path)) {
+      register_parquet_view(con, paste0("raw_", tbl), path)
+      registered <<- registered + 1L
+    } else {
+      logger::log_warn("Skipping raw_{tbl}: no parquet files at {path}")
+      skipped <<- skipped + 1L
+    }
   })
 
+  logger::log_info(
+    "Raw views: {registered} registered, {skipped} skipped (not yet ingested)."
+  )
   invisible(NULL)
 }
 
 #' Register all staging / intermediate / mart Parquet dirs as views
-#'
 #' @param con DuckDB DBI connection
 #' @param cfg Config list
 #' @export
@@ -124,17 +147,18 @@ register_all_views <- function(con, cfg) {
   register_all_raw_views(con, cfg)
 
   layers <- list(
-    staging     = cfg$paths$staging,
+    staging      = cfg$paths$staging,
     intermediate = cfg$paths$intermediate,
-    marts       = cfg$paths$marts
+    marts        = cfg$paths$marts
   )
 
-  purrr::iwalk(layers, function(base_path, layer_prefix) {
+  purrr::iwalk(layers, function(base_path, layer_name) {
     if (!fs::dir_exists(base_path)) return(invisible(NULL))
     subdirs <- fs::dir_ls(base_path, type = "directory")
     purrr::walk(subdirs, function(d) {
-      tbl_name <- basename(d)
-      register_parquet_view(con, tbl_name, d)
+      if (.has_parquet_files(d)) {
+        register_parquet_view(con, basename(d), d)
+      }
     })
   })
 

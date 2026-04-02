@@ -1,0 +1,1268 @@
+[INFO] 2026-04-01 00:09:05 | Logger initialised. Log file: logs/backfill_20260401_000905.log
+[INFO] 2026-04-01 00:09:05 | ============================================================
+[INFO] 2026-04-01 00:09:05 | STARTING BACKFILL PIPELINE
+[INFO] 2026-04-01 00:09:05 | Seasons: 2015 - 2024
+[INFO] 2026-04-01 00:09:05 | ============================================================
+[INFO] 2026-04-01 00:09:05 | START: ingest_schedules
+[INFO] 2026-04-01 00:09:05 | schedules: Refreshing seasons 2024
+[INFO] 2026-04-01 00:09:05 | START: ingest schedules season=2024
+[INFO] 2026-04-01 00:09:06 | Wrote 285 rows across 1 partitions -> data/raw/schedules
+[INFO] 2026-04-01 00:09:06 | DONE:  ingest schedules season=2024 (1.4s)
+[INFO] 2026-04-01 00:09:06 | DONE:  ingest_schedules (1.6s)
+[INFO] 2026-04-01 00:09:06 | START: ingest_pbp
+[INFO] 2026-04-01 00:09:06 | PBP: Loading seasons 2024
+[INFO] 2026-04-01 00:09:06 | START: ingest_pbp season=2024
+[INFO] 2026-04-01 00:09:40 | Wrote 49492 rows across 1 partitions -> data/raw/pbp
+[INFO] 2026-04-01 00:09:40 | DONE:  ingest_pbp season=2024 (33.3s)
+[INFO] 2026-04-01 00:09:40 | DONE:  ingest_pbp (33.3s)
+[INFO] 2026-04-01 00:09:40 | START: ingest_player_stats
+[INFO] 2026-04-01 00:09:40 | player_stats: Refreshing seasons 2024
+[INFO] 2026-04-01 00:09:40 | START: ingest player_stats season=2024
+[INFO] 2026-04-01 00:09:42 | Wrote 5597 rows across 1 partitions -> data/raw/player_stats
+[INFO] 2026-04-01 00:09:42 | DONE:  ingest player_stats season=2024 (2.3s)
+[INFO] 2026-04-01 00:09:42 | DONE:  ingest_player_stats (2.3s)
+[INFO] 2026-04-01 00:09:43 | START: ingest_players
+[INFO] 2026-04-01 00:09:43 | START: ingest players
+[INFO] 2026-04-01 00:09:47 | Wrote 24375 rows -> data/raw/players/data.parquet
+[INFO] 2026-04-01 00:09:47 | DONE:  ingest players (3.7s)
+[INFO] 2026-04-01 00:09:47 | DONE:  ingest_players (3.7s)
+[INFO] 2026-04-01 00:09:47 | START: ingest_rosters
+[INFO] 2026-04-01 00:09:47 | rosters: Refreshing seasons 2024
+[INFO] 2026-04-01 00:09:47 | START: ingest rosters season=2024
+[INFO] 2026-04-01 00:09:48 | Wrote 3216 rows across 1 partitions -> data/raw/rosters
+[INFO] 2026-04-01 00:09:48 | DONE:  ingest rosters season=2024 (1.1s)
+[INFO] 2026-04-01 00:09:48 | DONE:  ingest_rosters (1.1s)
+[INFO] 2026-04-01 00:09:48 | START: ingest_rosters_weekly
+[INFO] 2026-04-01 00:09:48 | rosters_weekly: Refreshing seasons 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024
+[WARN] 2026-04-01 00:09:48 | nflreadr::load_weekly_rosters() not found in your installed version. Run install.packages('nflreadr') to upgrade, then re-run. Skipping weekly rosters for now — season-level rosters are still ingested.
+[INFO] 2026-04-01 00:09:48 | DONE:  ingest_rosters_weekly (0s)
+[INFO] 2026-04-01 00:09:48 | START: ingest_depth_charts
+[INFO] 2026-04-01 00:09:48 | depth_charts: Refreshing seasons 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024
+[INFO] 2026-04-01 00:09:48 | START: ingest depth_charts season=2001
+[INFO] 2026-04-01 00:09:53 | Wrote 36736 rows across 1 partitions -> data/raw/depth_charts
+[INFO] 2026-04-01 00:09:53 | DONE:  ingest depth_charts season=2001 (4.4s)
+[INFO] 2026-04-01 00:09:53 | START: ingest depth_charts season=2002
+[INFO] 2026-04-01 00:09:57 | Wrote 34594 rows across 1 partitions -> data/raw/depth_charts
+[INFO] 2026-04-01 00:09:57 | DONE:  ingest depth_charts season=2002 (4.4s)
+[INFO] 2026-04-01 00:09:57 | START: ingest depth_charts season=2003
+[INFO] 2026-04-01 00:10:02 | Wrote 34298 rows across 1 partitions -> data/raw/depth_charts
+[INFO] 2026-04-01 00:10:02 | DONE:  ingest depth_charts season=2003 (5s)
+[INFO] 2026-04-01 00:10:02 | START: ingest depth_charts season=2004
+[INFO] 2026-04-01 00:10:06 | Wrote 28898 rows across 1 partitions -> data/raw/depth_charts
+[INFO] 2026-04-01 00:10:06 | DONE:  ingest depth_charts season=2004 (4.3s)
+[INFO] 2026-04-01 00:10:06 | START: ingest depth_charts season=2005
+[INFO] 2026-04-01 00:10:11 | Wrote 32803 rows across 1 partitions -> data/raw/depth_charts
+[INFO] 2026-04-01 00:10:12 | DONE:  ingest depth_charts season=2005 (5.5s)
+[INFO] 2026-04-01 00:10:12 | START: ingest depth_charts season=2006
+[INFO] 2026-04-01 00:10:17 | Wrote 33721 rows across 1 partitions -> data/raw/depth_charts
+[INFO] 2026-04-01 00:10:18 | DONE:  ingest depth_charts season=2006 (6.5s)
+[INFO] 2026-04-01 00:10:18 | START: ingest depth_charts season=2007
+[INFO] 2026-04-01 00:10:22 | Wrote 38547 rows across 1 partitions -> data/raw/depth_charts
+[INFO] 2026-04-01 00:10:22 | DONE:  ingest depth_charts season=2007 (3.7s)
+[INFO] 2026-04-01 00:10:22 | START: ingest depth_charts season=2008
+[INFO] 2026-04-01 00:10:27 | Wrote 38651 rows across 1 partitions -> data/raw/depth_charts
+[INFO] 2026-04-01 00:10:27 | DONE:  ingest depth_charts season=2008 (4.7s)
+[INFO] 2026-04-01 00:10:27 | START: ingest depth_charts season=2009
+[INFO] 2026-04-01 00:10:31 | Wrote 38423 rows across 1 partitions -> data/raw/depth_charts
+[INFO] 2026-04-01 00:10:31 | DONE:  ingest depth_charts season=2009 (4.3s)
+[INFO] 2026-04-01 00:10:31 | START: ingest depth_charts season=2010
+[INFO] 2026-04-01 00:10:34 | Wrote 38421 rows across 1 partitions -> data/raw/depth_charts
+[INFO] 2026-04-01 00:10:34 | DONE:  ingest depth_charts season=2010 (3.2s)
+[INFO] 2026-04-01 00:10:34 | START: ingest depth_charts season=2011
+[INFO] 2026-04-01 00:10:38 | Wrote 37941 rows across 1 partitions -> data/raw/depth_charts
+[INFO] 2026-04-01 00:10:38 | DONE:  ingest depth_charts season=2011 (4.2s)
+[INFO] 2026-04-01 00:10:38 | START: ingest depth_charts season=2012
+[INFO] 2026-04-01 00:10:43 | Wrote 37312 rows across 1 partitions -> data/raw/depth_charts
+[INFO] 2026-04-01 00:10:43 | DONE:  ingest depth_charts season=2012 (4.2s)
+[INFO] 2026-04-01 00:10:43 | START: ingest depth_charts season=2013
+[INFO] 2026-04-01 00:10:46 | Wrote 37066 rows across 1 partitions -> data/raw/depth_charts
+[INFO] 2026-04-01 00:10:46 | DONE:  ingest depth_charts season=2013 (3.6s)
+[INFO] 2026-04-01 00:10:46 | START: ingest depth_charts season=2014
+[INFO] 2026-04-01 00:10:50 | Wrote 32542 rows across 1 partitions -> data/raw/depth_charts
+[INFO] 2026-04-01 00:10:50 | DONE:  ingest depth_charts season=2014 (3.8s)
+[INFO] 2026-04-01 00:10:50 | START: ingest depth_charts season=2015
+[INFO] 2026-04-01 00:10:53 | Wrote 37058 rows across 1 partitions -> data/raw/depth_charts
+[INFO] 2026-04-01 00:10:53 | DONE:  ingest depth_charts season=2015 (3.2s)
+[INFO] 2026-04-01 00:10:53 | START: ingest depth_charts season=2016
+[INFO] 2026-04-01 00:10:59 | Wrote 36612 rows across 1 partitions -> data/raw/depth_charts
+[INFO] 2026-04-01 00:10:59 | DONE:  ingest depth_charts season=2016 (5.8s)
+[INFO] 2026-04-01 00:10:59 | START: ingest depth_charts season=2017
+[INFO] 2026-04-01 00:11:03 | Wrote 36620 rows across 1 partitions -> data/raw/depth_charts
+[INFO] 2026-04-01 00:11:04 | DONE:  ingest depth_charts season=2017 (4.7s)
+[INFO] 2026-04-01 00:11:04 | START: ingest depth_charts season=2018
+[INFO] 2026-04-01 00:11:07 | Wrote 36560 rows across 1 partitions -> data/raw/depth_charts
+[INFO] 2026-04-01 00:11:07 | DONE:  ingest depth_charts season=2018 (3.7s)
+[INFO] 2026-04-01 00:11:07 | START: ingest depth_charts season=2019
+[INFO] 2026-04-01 00:11:11 | Wrote 36308 rows across 1 partitions -> data/raw/depth_charts
+[INFO] 2026-04-01 00:11:11 | DONE:  ingest depth_charts season=2019 (3.2s)
+[INFO] 2026-04-01 00:11:11 | START: ingest depth_charts season=2020
+[INFO] 2026-04-01 00:11:15 | Wrote 36168 rows across 1 partitions -> data/raw/depth_charts
+[INFO] 2026-04-01 00:11:15 | DONE:  ingest depth_charts season=2020 (4.1s)
+[INFO] 2026-04-01 00:11:15 | START: ingest depth_charts season=2021
+[INFO] 2026-04-01 00:11:19 | Wrote 37487 rows across 1 partitions -> data/raw/depth_charts
+[INFO] 2026-04-01 00:11:19 | DONE:  ingest depth_charts season=2021 (4.1s)
+[INFO] 2026-04-01 00:11:19 | START: ingest depth_charts season=2022
+[INFO] 2026-04-01 00:11:22 | Wrote 37780 rows across 1 partitions -> data/raw/depth_charts
+[INFO] 2026-04-01 00:11:22 | DONE:  ingest depth_charts season=2022 (3.7s)
+[INFO] 2026-04-01 00:11:22 | START: ingest depth_charts season=2023
+[INFO] 2026-04-01 00:11:27 | Wrote 37327 rows across 1 partitions -> data/raw/depth_charts
+[INFO] 2026-04-01 00:11:28 | DONE:  ingest depth_charts season=2023 (5.6s)
+[INFO] 2026-04-01 00:11:28 | START: ingest depth_charts season=2024
+[INFO] 2026-04-01 00:11:32 | Wrote 37312 rows across 1 partitions -> data/raw/depth_charts
+[INFO] 2026-04-01 00:11:32 | DONE:  ingest depth_charts season=2024 (4.5s)
+[INFO] 2026-04-01 00:11:32 | DONE:  ingest_depth_charts (104.2s)
+[INFO] 2026-04-01 00:11:32 | START: ingest_injuries
+[INFO] 2026-04-01 00:11:32 | injuries: Refreshing seasons 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024
+[INFO] 2026-04-01 00:11:32 | START: ingest injuries season=2009
+[INFO] 2026-04-01 00:11:34 | Wrote 4821 rows across 1 partitions -> data/raw/injuries
+[INFO] 2026-04-01 00:11:34 | DONE:  ingest injuries season=2009 (1.4s)
+[INFO] 2026-04-01 00:11:34 | START: ingest injuries season=2010
+[INFO] 2026-04-01 00:11:36 | Wrote 4491 rows across 1 partitions -> data/raw/injuries
+[INFO] 2026-04-01 00:11:37 | DONE:  ingest injuries season=2010 (2.8s)
+[INFO] 2026-04-01 00:11:37 | START: ingest injuries season=2011
+[INFO] 2026-04-01 00:11:38 | Wrote 4971 rows across 1 partitions -> data/raw/injuries
+[INFO] 2026-04-01 00:11:38 | DONE:  ingest injuries season=2011 (1.1s)
+[INFO] 2026-04-01 00:11:38 | START: ingest injuries season=2012
+[INFO] 2026-04-01 00:11:40 | Wrote 5533 rows across 1 partitions -> data/raw/injuries
+[INFO] 2026-04-01 00:11:40 | DONE:  ingest injuries season=2012 (1.9s)
+[INFO] 2026-04-01 00:11:40 | START: ingest injuries season=2013
+[INFO] 2026-04-01 00:11:42 | Wrote 5070 rows across 1 partitions -> data/raw/injuries
+[INFO] 2026-04-01 00:11:43 | DONE:  ingest injuries season=2013 (3.1s)
+[INFO] 2026-04-01 00:11:43 | START: ingest injuries season=2014
+[INFO] 2026-04-01 00:11:44 | Wrote 5078 rows across 1 partitions -> data/raw/injuries
+[INFO] 2026-04-01 00:11:44 | DONE:  ingest injuries season=2014 (1.3s)
+[INFO] 2026-04-01 00:11:44 | START: ingest injuries season=2015
+[INFO] 2026-04-01 00:11:45 | Wrote 5232 rows across 1 partitions -> data/raw/injuries
+[INFO] 2026-04-01 00:11:45 | DONE:  ingest injuries season=2015 (1.4s)
+[INFO] 2026-04-01 00:11:45 | START: ingest injuries season=2016
+[INFO] 2026-04-01 00:11:47 | Wrote 5115 rows across 1 partitions -> data/raw/injuries
+[INFO] 2026-04-01 00:11:47 | DONE:  ingest injuries season=2016 (1.6s)
+[INFO] 2026-04-01 00:11:47 | START: ingest injuries season=2017
+[INFO] 2026-04-01 00:11:49 | Wrote 5104 rows across 1 partitions -> data/raw/injuries
+[INFO] 2026-04-01 00:11:49 | DONE:  ingest injuries season=2017 (2.3s)
+[INFO] 2026-04-01 00:11:49 | START: ingest injuries season=2018
+[INFO] 2026-04-01 00:11:51 | Wrote 5133 rows across 1 partitions -> data/raw/injuries
+[INFO] 2026-04-01 00:11:51 | DONE:  ingest injuries season=2018 (1.5s)
+[INFO] 2026-04-01 00:11:51 | START: ingest injuries season=2019
+[INFO] 2026-04-01 00:11:52 | Wrote 5392 rows across 1 partitions -> data/raw/injuries
+[INFO] 2026-04-01 00:11:52 | DONE:  ingest injuries season=2019 (1.5s)
+[INFO] 2026-04-01 00:11:52 | START: ingest injuries season=2020
+[INFO] 2026-04-01 00:11:54 | Wrote 5661 rows across 1 partitions -> data/raw/injuries
+[INFO] 2026-04-01 00:11:54 | DONE:  ingest injuries season=2020 (1.6s)
+[INFO] 2026-04-01 00:11:54 | START: ingest injuries season=2021
+[INFO] 2026-04-01 00:11:56 | Wrote 5587 rows across 1 partitions -> data/raw/injuries
+[INFO] 2026-04-01 00:11:56 | DONE:  ingest injuries season=2021 (1.8s)
+[INFO] 2026-04-01 00:11:56 | START: ingest injuries season=2022
+[INFO] 2026-04-01 00:11:59 | Wrote 5682 rows across 1 partitions -> data/raw/injuries
+[INFO] 2026-04-01 00:11:59 | DONE:  ingest injuries season=2022 (3.1s)
+[INFO] 2026-04-01 00:11:59 | START: ingest injuries season=2023
+[INFO] 2026-04-01 00:12:01 | Wrote 5599 rows across 1 partitions -> data/raw/injuries
+[INFO] 2026-04-01 00:12:01 | DONE:  ingest injuries season=2023 (1.6s)
+[INFO] 2026-04-01 00:12:01 | START: ingest injuries season=2024
+[INFO] 2026-04-01 00:12:02 | Wrote 6215 rows across 1 partitions -> data/raw/injuries
+[INFO] 2026-04-01 00:12:02 | DONE:  ingest injuries season=2024 (1.6s)
+[INFO] 2026-04-01 00:12:02 | DONE:  ingest_injuries (29.8s)
+[INFO] 2026-04-01 00:12:02 | START: ingest_snap_counts
+[INFO] 2026-04-01 00:12:02 | snap_counts: Refreshing seasons 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024
+[INFO] 2026-04-01 00:12:02 | START: ingest snap_counts season=2012
+[WARN] 2026-04-01 00:12:04 | snap_counts season=2012: 0 rows returned, skipping.
+[INFO] 2026-04-01 00:12:04 | START: ingest snap_counts season=2013
+[INFO] 2026-04-01 00:12:08 | Wrote 23799 rows across 1 partitions -> data/raw/snap_counts
+[INFO] 2026-04-01 00:12:08 | DONE:  ingest snap_counts season=2013 (4.1s)
+[INFO] 2026-04-01 00:12:08 | START: ingest snap_counts season=2014
+[INFO] 2026-04-01 00:12:11 | Wrote 23864 rows across 1 partitions -> data/raw/snap_counts
+[INFO] 2026-04-01 00:12:11 | DONE:  ingest snap_counts season=2014 (3s)
+[INFO] 2026-04-01 00:12:11 | START: ingest snap_counts season=2015
+[INFO] 2026-04-01 00:12:14 | Wrote 23842 rows across 1 partitions -> data/raw/snap_counts
+[INFO] 2026-04-01 00:12:14 | DONE:  ingest snap_counts season=2015 (3.5s)
+[INFO] 2026-04-01 00:12:14 | START: ingest snap_counts season=2016
+[INFO] 2026-04-01 00:12:17 | Wrote 23890 rows across 1 partitions -> data/raw/snap_counts
+[INFO] 2026-04-01 00:12:17 | DONE:  ingest snap_counts season=2016 (2.8s)
+[INFO] 2026-04-01 00:12:17 | START: ingest snap_counts season=2017
+[INFO] 2026-04-01 00:12:22 | Wrote 23862 rows across 1 partitions -> data/raw/snap_counts
+[INFO] 2026-04-01 00:12:22 | DONE:  ingest snap_counts season=2017 (5s)
+[INFO] 2026-04-01 00:12:22 | START: ingest snap_counts season=2018
+[INFO] 2026-04-01 00:12:25 | Wrote 23877 rows across 1 partitions -> data/raw/snap_counts
+[INFO] 2026-04-01 00:12:25 | DONE:  ingest snap_counts season=2018 (2.9s)
+[INFO] 2026-04-01 00:12:25 | START: ingest snap_counts season=2019
+[INFO] 2026-04-01 00:12:30 | Wrote 23862 rows across 1 partitions -> data/raw/snap_counts
+[INFO] 2026-04-01 00:12:30 | DONE:  ingest snap_counts season=2019 (4.4s)
+[INFO] 2026-04-01 00:12:30 | START: ingest snap_counts season=2020
+[INFO] 2026-04-01 00:12:32 | Wrote 24999 rows across 1 partitions -> data/raw/snap_counts
+[INFO] 2026-04-01 00:12:32 | DONE:  ingest snap_counts season=2020 (2.8s)
+[INFO] 2026-04-01 00:12:32 | START: ingest snap_counts season=2021
+[INFO] 2026-04-01 00:12:36 | Wrote 26468 rows across 1 partitions -> data/raw/snap_counts
+[INFO] 2026-04-01 00:12:36 | DONE:  ingest snap_counts season=2021 (3.5s)
+[INFO] 2026-04-01 00:12:36 | START: ingest snap_counts season=2022
+[INFO] 2026-04-01 00:12:39 | Wrote 26381 rows across 1 partitions -> data/raw/snap_counts
+[INFO] 2026-04-01 00:12:39 | DONE:  ingest snap_counts season=2022 (2.8s)
+[INFO] 2026-04-01 00:12:39 | START: ingest snap_counts season=2023
+[INFO] 2026-04-01 00:12:42 | Wrote 26540 rows across 1 partitions -> data/raw/snap_counts
+[INFO] 2026-04-01 00:12:42 | DONE:  ingest snap_counts season=2023 (3.5s)
+[INFO] 2026-04-01 00:12:42 | START: ingest snap_counts season=2024
+[INFO] 2026-04-01 00:12:46 | Wrote 26615 rows across 1 partitions -> data/raw/snap_counts
+[INFO] 2026-04-01 00:12:46 | DONE:  ingest snap_counts season=2024 (3.3s)
+[INFO] 2026-04-01 00:12:46 | DONE:  ingest_snap_counts (43.3s)
+[INFO] 2026-04-01 00:12:46 | START: ingest_nextgen_stats
+[INFO] 2026-04-01 00:12:46 | nextgen_stats: Refreshing seasons 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024
+[INFO] 2026-04-01 00:12:46 | START: ingest nextgen_stats season=2016 type=passing
+[INFO] 2026-04-01 00:12:47 | Wrote 573 rows across 1 partitions -> data/raw/nextgen_stats
+[INFO] 2026-04-01 00:12:47 | DONE:  ingest nextgen_stats season=2016 type=passing (1.3s)
+[INFO] 2026-04-01 00:12:47 | START: ingest nextgen_stats season=2016 type=rushing
+[INFO] 2026-04-01 00:12:48 | Wrote 579 rows across 1 partitions -> data/raw/nextgen_stats
+[INFO] 2026-04-01 00:12:48 | DONE:  ingest nextgen_stats season=2016 type=rushing (0.9s)
+[INFO] 2026-04-01 00:12:48 | START: ingest nextgen_stats season=2016 type=receiving
+[INFO] 2026-04-01 00:12:49 | Wrote 1601 rows across 1 partitions -> data/raw/nextgen_stats
+[INFO] 2026-04-01 00:12:49 | DONE:  ingest nextgen_stats season=2016 type=receiving (1.5s)
+[INFO] 2026-04-01 00:12:49 | START: ingest nextgen_stats season=2017 type=passing
+[INFO] 2026-04-01 00:12:52 | Wrote 575 rows across 1 partitions -> data/raw/nextgen_stats
+[INFO] 2026-04-01 00:12:52 | DONE:  ingest nextgen_stats season=2017 type=passing (2.9s)
+[INFO] 2026-04-01 00:12:52 | START: ingest nextgen_stats season=2017 type=rushing
+[INFO] 2026-04-01 00:12:53 | Wrote 595 rows across 1 partitions -> data/raw/nextgen_stats
+[INFO] 2026-04-01 00:12:54 | DONE:  ingest nextgen_stats season=2017 type=rushing (1.4s)
+[INFO] 2026-04-01 00:12:54 | START: ingest nextgen_stats season=2017 type=receiving
+[INFO] 2026-04-01 00:12:54 | Wrote 1422 rows across 1 partitions -> data/raw/nextgen_stats
+[INFO] 2026-04-01 00:12:54 | DONE:  ingest nextgen_stats season=2017 type=receiving (0.2s)
+[INFO] 2026-04-01 00:12:54 | START: ingest nextgen_stats season=2018 type=passing
+[INFO] 2026-04-01 00:12:56 | Wrote 578 rows across 1 partitions -> data/raw/nextgen_stats
+[INFO] 2026-04-01 00:12:56 | DONE:  ingest nextgen_stats season=2018 type=passing (2.1s)
+[INFO] 2026-04-01 00:12:56 | START: ingest nextgen_stats season=2018 type=rushing
+[INFO] 2026-04-01 00:12:56 | Wrote 594 rows across 1 partitions -> data/raw/nextgen_stats
+[INFO] 2026-04-01 00:12:56 | DONE:  ingest nextgen_stats season=2018 type=rushing (0.1s)
+[INFO] 2026-04-01 00:12:56 | START: ingest nextgen_stats season=2018 type=receiving
+[INFO] 2026-04-01 00:12:58 | Wrote 1419 rows across 1 partitions -> data/raw/nextgen_stats
+[INFO] 2026-04-01 00:12:58 | DONE:  ingest nextgen_stats season=2018 type=receiving (2.4s)
+[INFO] 2026-04-01 00:12:58 | START: ingest nextgen_stats season=2019 type=passing
+[INFO] 2026-04-01 00:12:59 | Wrote 576 rows across 1 partitions -> data/raw/nextgen_stats
+[INFO] 2026-04-01 00:12:59 | DONE:  ingest nextgen_stats season=2019 type=passing (0.3s)
+[INFO] 2026-04-01 00:12:59 | START: ingest nextgen_stats season=2019 type=rushing
+[INFO] 2026-04-01 00:13:01 | Wrote 588 rows across 1 partitions -> data/raw/nextgen_stats
+[INFO] 2026-04-01 00:13:01 | DONE:  ingest nextgen_stats season=2019 type=rushing (2.5s)
+[INFO] 2026-04-01 00:13:01 | START: ingest nextgen_stats season=2019 type=receiving
+[INFO] 2026-04-01 00:13:01 | Wrote 1418 rows across 1 partitions -> data/raw/nextgen_stats
+[INFO] 2026-04-01 00:13:01 | DONE:  ingest nextgen_stats season=2019 type=receiving (0.2s)
+[INFO] 2026-04-01 00:13:01 | START: ingest nextgen_stats season=2020 type=passing
+[INFO] 2026-04-01 00:13:02 | Wrote 581 rows across 1 partitions -> data/raw/nextgen_stats
+[INFO] 2026-04-01 00:13:02 | DONE:  ingest nextgen_stats season=2020 type=passing (0.2s)
+[INFO] 2026-04-01 00:13:02 | START: ingest nextgen_stats season=2020 type=rushing
+[INFO] 2026-04-01 00:13:03 | Wrote 596 rows across 1 partitions -> data/raw/nextgen_stats
+[INFO] 2026-04-01 00:13:03 | DONE:  ingest nextgen_stats season=2020 type=rushing (1s)
+[INFO] 2026-04-01 00:13:03 | START: ingest nextgen_stats season=2020 type=receiving
+[INFO] 2026-04-01 00:13:04 | Wrote 1520 rows across 1 partitions -> data/raw/nextgen_stats
+[INFO] 2026-04-01 00:13:04 | DONE:  ingest nextgen_stats season=2020 type=receiving (0.9s)
+[INFO] 2026-04-01 00:13:04 | START: ingest nextgen_stats season=2021 type=passing
+[INFO] 2026-04-01 00:13:04 | Wrote 608 rows across 1 partitions -> data/raw/nextgen_stats
+[INFO] 2026-04-01 00:13:04 | DONE:  ingest nextgen_stats season=2021 type=passing (0.2s)
+[INFO] 2026-04-01 00:13:04 | START: ingest nextgen_stats season=2021 type=rushing
+[INFO] 2026-04-01 00:13:04 | Wrote 618 rows across 1 partitions -> data/raw/nextgen_stats
+[INFO] 2026-04-01 00:13:05 | DONE:  ingest nextgen_stats season=2021 type=rushing (1.3s)
+[INFO] 2026-04-01 00:13:05 | START: ingest nextgen_stats season=2021 type=receiving
+[INFO] 2026-04-01 00:13:05 | Wrote 1575 rows across 1 partitions -> data/raw/nextgen_stats
+[INFO] 2026-04-01 00:13:05 | DONE:  ingest nextgen_stats season=2021 type=receiving (0.3s)
+[INFO] 2026-04-01 00:13:05 | START: ingest nextgen_stats season=2022 type=passing
+[INFO] 2026-04-01 00:13:06 | Wrote 603 rows across 1 partitions -> data/raw/nextgen_stats
+[INFO] 2026-04-01 00:13:06 | DONE:  ingest nextgen_stats season=2022 type=passing (0.9s)
+[INFO] 2026-04-01 00:13:06 | START: ingest nextgen_stats season=2022 type=rushing
+[INFO] 2026-04-01 00:13:07 | Wrote 617 rows across 1 partitions -> data/raw/nextgen_stats
+[INFO] 2026-04-01 00:13:07 | DONE:  ingest nextgen_stats season=2022 type=rushing (0.8s)
+[INFO] 2026-04-01 00:13:07 | START: ingest nextgen_stats season=2022 type=receiving
+[INFO] 2026-04-01 00:13:07 | Wrote 1466 rows across 1 partitions -> data/raw/nextgen_stats
+[INFO] 2026-04-01 00:13:07 | DONE:  ingest nextgen_stats season=2022 type=receiving (0.3s)
+[INFO] 2026-04-01 00:13:07 | START: ingest nextgen_stats season=2023 type=passing
+[INFO] 2026-04-01 00:13:08 | Wrote 620 rows across 1 partitions -> data/raw/nextgen_stats
+[INFO] 2026-04-01 00:13:08 | DONE:  ingest nextgen_stats season=2023 type=passing (1s)
+[INFO] 2026-04-01 00:13:08 | START: ingest nextgen_stats season=2023 type=rushing
+[INFO] 2026-04-01 00:13:08 | Wrote 623 rows across 1 partitions -> data/raw/nextgen_stats
+[INFO] 2026-04-01 00:13:08 | DONE:  ingest nextgen_stats season=2023 type=rushing (0.1s)
+[INFO] 2026-04-01 00:13:08 | START: ingest nextgen_stats season=2023 type=receiving
+[INFO] 2026-04-01 00:13:09 | Wrote 1473 rows across 1 partitions -> data/raw/nextgen_stats
+[INFO] 2026-04-01 00:13:09 | DONE:  ingest nextgen_stats season=2023 type=receiving (0.3s)
+[INFO] 2026-04-01 00:13:09 | START: ingest nextgen_stats season=2024 type=passing
+[INFO] 2026-04-01 00:13:11 | Wrote 614 rows across 1 partitions -> data/raw/nextgen_stats
+[INFO] 2026-04-01 00:13:11 | DONE:  ingest nextgen_stats season=2024 type=passing (1.2s)
+[INFO] 2026-04-01 00:13:11 | START: ingest nextgen_stats season=2024 type=rushing
+[INFO] 2026-04-01 00:13:11 | Wrote 601 rows across 1 partitions -> data/raw/nextgen_stats
+[INFO] 2026-04-01 00:13:11 | DONE:  ingest nextgen_stats season=2024 type=rushing (0.1s)
+[INFO] 2026-04-01 00:13:11 | START: ingest nextgen_stats season=2024 type=receiving
+[INFO] 2026-04-01 00:13:11 | Wrote 1435 rows across 1 partitions -> data/raw/nextgen_stats
+[INFO] 2026-04-01 00:13:11 | DONE:  ingest nextgen_stats season=2024 type=receiving (0.3s)
+[INFO] 2026-04-01 00:13:11 | DONE:  ingest_nextgen_stats (25.7s)
+[INFO] 2026-04-01 00:13:11 | START: ingest_pfr_advstats
+[INFO] 2026-04-01 00:13:11 | pfr_advstats: Refreshing seasons 2018, 2019, 2020, 2021, 2022, 2023, 2024
+[INFO] 2026-04-01 00:13:11 | START: ingest pfr_advstats season=2018 type=pass
+[INFO] 2026-04-01 00:13:13 | Wrote 646 rows across 1 partitions -> data/raw/pfr_advstats
+[INFO] 2026-04-01 00:13:13 | DONE:  ingest pfr_advstats season=2018 type=pass (1.6s)
+[INFO] 2026-04-01 00:13:13 | START: ingest pfr_advstats season=2018 type=rush
+[INFO] 2026-04-01 00:13:14 | Wrote 2189 rows across 1 partitions -> data/raw/pfr_advstats
+[INFO] 2026-04-01 00:13:14 | DONE:  ingest pfr_advstats season=2018 type=rush (1.1s)
+[INFO] 2026-04-01 00:13:14 | START: ingest pfr_advstats season=2018 type=rec
+[INFO] 2026-04-01 00:13:15 | Wrote 4292 rows across 1 partitions -> data/raw/pfr_advstats
+[INFO] 2026-04-01 00:13:15 | DONE:  ingest pfr_advstats season=2018 type=rec (1.3s)
+[INFO] 2026-04-01 00:13:15 | START: ingest pfr_advstats season=2018 type=def
+[INFO] 2026-04-01 00:13:17 | Wrote 7277 rows across 1 partitions -> data/raw/pfr_advstats
+[INFO] 2026-04-01 00:13:17 | DONE:  ingest pfr_advstats season=2018 type=def (1.8s)
+[INFO] 2026-04-01 00:13:17 | START: ingest pfr_advstats season=2019 type=pass
+[INFO] 2026-04-01 00:13:18 | Wrote 640 rows across 1 partitions -> data/raw/pfr_advstats
+[INFO] 2026-04-01 00:13:18 | DONE:  ingest pfr_advstats season=2019 type=pass (1.2s)
+[INFO] 2026-04-01 00:13:18 | START: ingest pfr_advstats season=2019 type=rush
+[INFO] 2026-04-01 00:13:19 | Wrote 2148 rows across 1 partitions -> data/raw/pfr_advstats
+[INFO] 2026-04-01 00:13:19 | DONE:  ingest pfr_advstats season=2019 type=rush (1.1s)
+[INFO] 2026-04-01 00:13:19 | START: ingest pfr_advstats season=2019 type=rec
+[INFO] 2026-04-01 00:13:22 | Wrote 4269 rows across 1 partitions -> data/raw/pfr_advstats
+[INFO] 2026-04-01 00:13:22 | DONE:  ingest pfr_advstats season=2019 type=rec (2.7s)
+[INFO] 2026-04-01 00:13:22 | START: ingest pfr_advstats season=2019 type=def
+[INFO] 2026-04-01 00:13:24 | Wrote 7285 rows across 1 partitions -> data/raw/pfr_advstats
+[INFO] 2026-04-01 00:13:24 | DONE:  ingest pfr_advstats season=2019 type=def (1.9s)
+[INFO] 2026-04-01 00:13:24 | START: ingest pfr_advstats season=2020 type=pass
+[INFO] 2026-04-01 00:13:25 | Wrote 666 rows across 1 partitions -> data/raw/pfr_advstats
+[INFO] 2026-04-01 00:13:25 | DONE:  ingest pfr_advstats season=2020 type=pass (1.1s)
+[INFO] 2026-04-01 00:13:25 | START: ingest pfr_advstats season=2020 type=rush
+[INFO] 2026-04-01 00:13:26 | Wrote 2266 rows across 1 partitions -> data/raw/pfr_advstats
+[INFO] 2026-04-01 00:13:26 | DONE:  ingest pfr_advstats season=2020 type=rush (1.2s)
+[INFO] 2026-04-01 00:13:26 | START: ingest pfr_advstats season=2020 type=rec
+[INFO] 2026-04-01 00:13:28 | Wrote 4428 rows across 1 partitions -> data/raw/pfr_advstats
+[INFO] 2026-04-01 00:13:28 | DONE:  ingest pfr_advstats season=2020 type=rec (1.9s)
+[INFO] 2026-04-01 00:13:28 | START: ingest pfr_advstats season=2020 type=def
+[INFO] 2026-04-01 00:13:30 | Wrote 7643 rows across 1 partitions -> data/raw/pfr_advstats
+[INFO] 2026-04-01 00:13:30 | DONE:  ingest pfr_advstats season=2020 type=def (1.9s)
+[INFO] 2026-04-01 00:13:30 | START: ingest pfr_advstats season=2021 type=pass
+[INFO] 2026-04-01 00:13:31 | Wrote 706 rows across 1 partitions -> data/raw/pfr_advstats
+[INFO] 2026-04-01 00:13:31 | DONE:  ingest pfr_advstats season=2021 type=pass (1.3s)
+[INFO] 2026-04-01 00:13:31 | START: ingest pfr_advstats season=2021 type=rush
+[INFO] 2026-04-01 00:13:33 | Wrote 2375 rows across 1 partitions -> data/raw/pfr_advstats
+[INFO] 2026-04-01 00:13:33 | DONE:  ingest pfr_advstats season=2021 type=rush (1.1s)
+[INFO] 2026-04-01 00:13:33 | START: ingest pfr_advstats season=2021 type=rec
+[INFO] 2026-04-01 00:13:34 | Wrote 4608 rows across 1 partitions -> data/raw/pfr_advstats
+[INFO] 2026-04-01 00:13:34 | DONE:  ingest pfr_advstats season=2021 type=rec (1.8s)
+[INFO] 2026-04-01 00:13:34 | START: ingest pfr_advstats season=2021 type=def
+[INFO] 2026-04-01 00:13:37 | Wrote 8442 rows across 1 partitions -> data/raw/pfr_advstats
+[INFO] 2026-04-01 00:13:37 | DONE:  ingest pfr_advstats season=2021 type=def (3.1s)
+[INFO] 2026-04-01 00:13:37 | START: ingest pfr_advstats season=2022 type=pass
+[INFO] 2026-04-01 00:13:39 | Wrote 685 rows across 1 partitions -> data/raw/pfr_advstats
+[INFO] 2026-04-01 00:13:39 | DONE:  ingest pfr_advstats season=2022 type=pass (1.3s)
+[INFO] 2026-04-01 00:13:39 | START: ingest pfr_advstats season=2022 type=rush
+[INFO] 2026-04-01 00:13:40 | Wrote 2389 rows across 1 partitions -> data/raw/pfr_advstats
+[INFO] 2026-04-01 00:13:40 | DONE:  ingest pfr_advstats season=2022 type=rush (1.4s)
+[INFO] 2026-04-01 00:13:40 | START: ingest pfr_advstats season=2022 type=rec
+[INFO] 2026-04-01 00:13:41 | Wrote 4547 rows across 1 partitions -> data/raw/pfr_advstats
+[INFO] 2026-04-01 00:13:41 | DONE:  ingest pfr_advstats season=2022 type=rec (1.3s)
+[INFO] 2026-04-01 00:13:41 | START: ingest pfr_advstats season=2022 type=def
+[INFO] 2026-04-01 00:13:44 | Wrote 7878 rows across 1 partitions -> data/raw/pfr_advstats
+[INFO] 2026-04-01 00:13:44 | DONE:  ingest pfr_advstats season=2022 type=def (2.6s)
+[INFO] 2026-04-01 00:13:44 | START: ingest pfr_advstats season=2023 type=pass
+[INFO] 2026-04-01 00:13:45 | Wrote 700 rows across 1 partitions -> data/raw/pfr_advstats
+[INFO] 2026-04-01 00:13:45 | DONE:  ingest pfr_advstats season=2023 type=pass (1.4s)
+[INFO] 2026-04-01 00:13:45 | START: ingest pfr_advstats season=2023 type=rush
+[INFO] 2026-04-01 00:13:47 | Wrote 2380 rows across 1 partitions -> data/raw/pfr_advstats
+[INFO] 2026-04-01 00:13:47 | DONE:  ingest pfr_advstats season=2023 type=rush (1.4s)
+[INFO] 2026-04-01 00:13:47 | START: ingest pfr_advstats season=2023 type=rec
+[INFO] 2026-04-01 00:13:49 | Wrote 4594 rows across 1 partitions -> data/raw/pfr_advstats
+[INFO] 2026-04-01 00:13:49 | DONE:  ingest pfr_advstats season=2023 type=rec (1.7s)
+[INFO] 2026-04-01 00:13:49 | START: ingest pfr_advstats season=2023 type=def
+[INFO] 2026-04-01 00:13:51 | Wrote 7902 rows across 1 partitions -> data/raw/pfr_advstats
+[INFO] 2026-04-01 00:13:51 | DONE:  ingest pfr_advstats season=2023 type=def (2.7s)
+[INFO] 2026-04-01 00:13:51 | START: ingest pfr_advstats season=2024 type=pass
+[INFO] 2026-04-01 00:13:52 | Wrote 697 rows across 1 partitions -> data/raw/pfr_advstats
+[INFO] 2026-04-01 00:13:52 | DONE:  ingest pfr_advstats season=2024 type=pass (1.2s)
+[INFO] 2026-04-01 00:13:52 | START: ingest pfr_advstats season=2024 type=rush
+[INFO] 2026-04-01 00:13:54 | Wrote 2359 rows across 1 partitions -> data/raw/pfr_advstats
+[INFO] 2026-04-01 00:13:54 | DONE:  ingest pfr_advstats season=2024 type=rush (1.3s)
+[INFO] 2026-04-01 00:13:54 | START: ingest pfr_advstats season=2024 type=rec
+[INFO] 2026-04-01 00:13:55 | Wrote 4453 rows across 1 partitions -> data/raw/pfr_advstats
+[INFO] 2026-04-01 00:13:55 | DONE:  ingest pfr_advstats season=2024 type=rec (1.5s)
+[INFO] 2026-04-01 00:13:55 | START: ingest pfr_advstats season=2024 type=def
+[INFO] 2026-04-01 00:13:57 | Wrote 7992 rows across 1 partitions -> data/raw/pfr_advstats
+[INFO] 2026-04-01 00:13:57 | DONE:  ingest pfr_advstats season=2024 type=def (2s)
+[INFO] 2026-04-01 00:13:57 | DONE:  ingest_pfr_advstats (46.1s)
+[INFO] 2026-04-01 00:13:57 | START: ingest_ftn_charting
+[INFO] 2026-04-01 00:13:57 | ftn_charting: Refreshing seasons 2022, 2023, 2024
+[INFO] 2026-04-01 00:13:57 | START: ingest ftn_charting season=2022
+[INFO] 2026-04-01 00:14:03 | Wrote 41643 rows across 1 partitions -> data/raw/ftn_charting
+[INFO] 2026-04-01 00:14:04 | DONE:  ingest ftn_charting season=2022 (6.8s)
+[INFO] 2026-04-01 00:14:04 | START: ingest ftn_charting season=2023
+[INFO] 2026-04-01 00:14:10 | Wrote 48225 rows across 1 partitions -> data/raw/ftn_charting
+[INFO] 2026-04-01 00:14:10 | DONE:  ingest ftn_charting season=2023 (5.6s)
+[INFO] 2026-04-01 00:14:10 | START: ingest ftn_charting season=2024
+[INFO] 2026-04-01 00:14:17 | Wrote 48031 rows across 1 partitions -> data/raw/ftn_charting
+[INFO] 2026-04-01 00:14:17 | DONE:  ingest ftn_charting season=2024 (6.8s)
+[INFO] 2026-04-01 00:14:17 | DONE:  ingest_ftn_charting (19.2s)
+[INFO] 2026-04-01 00:14:17 | START: ingest_ff_opportunity
+[INFO] 2026-04-01 00:14:17 | ff_opportunity: Refreshing seasons 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024
+[INFO] 2026-04-01 00:14:17 | START: ingest ff_opportunity season=2016
+[INFO] 2026-04-01 00:14:20 | Wrote 5473 rows across 1 partitions -> data/raw/ff_opportunity
+[INFO] 2026-04-01 00:14:20 | DONE:  ingest ff_opportunity season=2016 (3.9s)
+[INFO] 2026-04-01 00:14:20 | START: ingest ff_opportunity season=2017
+[INFO] 2026-04-01 00:14:24 | Wrote 5549 rows across 1 partitions -> data/raw/ff_opportunity
+[INFO] 2026-04-01 00:14:24 | DONE:  ingest ff_opportunity season=2017 (3.7s)
+[INFO] 2026-04-01 00:14:24 | START: ingest ff_opportunity season=2018
+[INFO] 2026-04-01 00:14:30 | Wrote 5586 rows across 1 partitions -> data/raw/ff_opportunity
+[INFO] 2026-04-01 00:14:30 | DONE:  ingest ff_opportunity season=2018 (5.8s)
+[INFO] 2026-04-01 00:14:30 | START: ingest ff_opportunity season=2019
+[INFO] 2026-04-01 00:14:34 | Wrote 5633 rows across 1 partitions -> data/raw/ff_opportunity
+[INFO] 2026-04-01 00:14:34 | DONE:  ingest ff_opportunity season=2019 (3.7s)
+[INFO] 2026-04-01 00:14:34 | START: ingest ff_opportunity season=2020
+[INFO] 2026-04-01 00:14:39 | Wrote 5820 rows across 1 partitions -> data/raw/ff_opportunity
+[INFO] 2026-04-01 00:14:39 | DONE:  ingest ff_opportunity season=2020 (4.9s)
+[INFO] 2026-04-01 00:14:39 | START: ingest ff_opportunity season=2021
+[INFO] 2026-04-01 00:14:44 | Wrote 6065 rows across 1 partitions -> data/raw/ff_opportunity
+[INFO] 2026-04-01 00:14:45 | DONE:  ingest ff_opportunity season=2021 (5.8s)
+[INFO] 2026-04-01 00:14:45 | START: ingest ff_opportunity season=2022
+[INFO] 2026-04-01 00:14:52 | Wrote 6038 rows across 1 partitions -> data/raw/ff_opportunity
+[INFO] 2026-04-01 00:14:52 | DONE:  ingest ff_opportunity season=2022 (7.3s)
+[INFO] 2026-04-01 00:14:52 | START: ingest ff_opportunity season=2023
+[INFO] 2026-04-01 00:14:56 | Wrote 6081 rows across 1 partitions -> data/raw/ff_opportunity
+[INFO] 2026-04-01 00:14:56 | DONE:  ingest ff_opportunity season=2023 (3.8s)
+[INFO] 2026-04-01 00:14:56 | START: ingest ff_opportunity season=2024
+[INFO] 2026-04-01 00:15:01 | Wrote 6005 rows across 1 partitions -> data/raw/ff_opportunity
+[INFO] 2026-04-01 00:15:01 | DONE:  ingest ff_opportunity season=2024 (5.1s)
+[INFO] 2026-04-01 00:15:01 | DONE:  ingest_ff_opportunity (44.8s)
+[INFO] 2026-04-01 00:15:01 | START: run_transforms
+[WARN] 2026-04-01 00:15:02 | httpfs extension not available; remote parquet reads disabled.
+[INFO] 2026-04-01 00:15:02 | DuckDB connected: db/nfl_analytics.duckdb
+[INFO] 2026-04-01 00:15:03 | Registered view: raw_pbp -> data/raw/pbp
+[INFO] 2026-04-01 00:15:04 | Registered view: raw_schedules -> data/raw/schedules
+[INFO] 2026-04-01 00:15:04 | Registered view: raw_player_stats -> data/raw/player_stats
+[INFO] 2026-04-01 00:15:04 | DuckDB disconnected.
+[ERROR] 2026-04-01 00:15:04 | FAILED: run_transforms — [38;5;232m[36mℹ[38;5;232m In index: 4.[39m
+[1mCaused by error in `dbSendQuery()`:[22m
+[33m![39m IO Error: No files found that match the pattern "data/raw/team_stats/**/*.parquet"
+
+LINE 1: CREATE OR REPLACE VIEW raw_team_stats AS SELECT * FROM read_parquet('data/raw/team_stats/**/*.parquet', hive_parti...
+                                                               ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: IO
+[WARN] 2026-04-01 08:11:20 | httpfs extension not available; remote parquet reads disabled.
+[INFO] 2026-04-01 08:11:20 | DuckDB connected: db/nfl_analytics.duckdb
+[INFO] 2026-04-01 08:11:20 | START: build_team_stats
+[INFO] 2026-04-01 08:11:20 | team_stats: building for seasons: 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024
+[INFO] 2026-04-01 08:11:20 | START: build team_stats season=2015
+[INFO] 2026-04-01 08:11:35 | Wrote 32 rows across 1 partitions -> data/raw/team_stats
+[INFO] 2026-04-01 08:11:35 | DONE:  build team_stats season=2015 (14.1s)
+[INFO] 2026-04-01 08:11:35 | START: build team_stats season=2016
+[INFO] 2026-04-01 08:11:45 | Wrote 32 rows across 1 partitions -> data/raw/team_stats
+[INFO] 2026-04-01 08:11:45 | DONE:  build team_stats season=2016 (10s)
+[INFO] 2026-04-01 08:11:45 | START: build team_stats season=2017
+[INFO] 2026-04-01 08:11:55 | Wrote 32 rows across 1 partitions -> data/raw/team_stats
+[INFO] 2026-04-01 08:11:55 | DONE:  build team_stats season=2017 (10.1s)
+[INFO] 2026-04-01 08:11:55 | START: build team_stats season=2018
+[INFO] 2026-04-01 08:12:05 | Wrote 32 rows across 1 partitions -> data/raw/team_stats
+[INFO] 2026-04-01 08:12:05 | DONE:  build team_stats season=2018 (9.8s)
+[INFO] 2026-04-01 08:12:05 | START: build team_stats season=2019
+[INFO] 2026-04-01 08:12:15 | Wrote 32 rows across 1 partitions -> data/raw/team_stats
+[INFO] 2026-04-01 08:12:15 | DONE:  build team_stats season=2019 (10s)
+[INFO] 2026-04-01 08:12:15 | START: build team_stats season=2020
+[INFO] 2026-04-01 08:12:24 | Wrote 32 rows across 1 partitions -> data/raw/team_stats
+[INFO] 2026-04-01 08:12:24 | DONE:  build team_stats season=2020 (10s)
+[INFO] 2026-04-01 08:12:24 | START: build team_stats season=2021
+[INFO] 2026-04-01 08:12:35 | Wrote 32 rows across 1 partitions -> data/raw/team_stats
+[INFO] 2026-04-01 08:12:35 | DONE:  build team_stats season=2021 (10.4s)
+[INFO] 2026-04-01 08:12:35 | START: build team_stats season=2022
+[INFO] 2026-04-01 08:12:45 | Wrote 32 rows across 1 partitions -> data/raw/team_stats
+[INFO] 2026-04-01 08:12:45 | DONE:  build team_stats season=2022 (10.3s)
+[INFO] 2026-04-01 08:12:45 | START: build team_stats season=2023
+[INFO] 2026-04-01 08:12:55 | Wrote 32 rows across 1 partitions -> data/raw/team_stats
+[INFO] 2026-04-01 08:12:55 | DONE:  build team_stats season=2023 (10.3s)
+[INFO] 2026-04-01 08:12:55 | START: build team_stats season=2024
+[INFO] 2026-04-01 08:13:05 | Wrote 32 rows across 1 partitions -> data/raw/team_stats
+[INFO] 2026-04-01 08:13:05 | DONE:  build team_stats season=2024 (9.9s)
+[INFO] 2026-04-01 08:13:05 | DONE:  build_team_stats (104.9s)
+[INFO] 2026-04-01 08:13:05 | Registered view: raw_pbp -> data/raw/pbp
+[INFO] 2026-04-01 08:13:06 | Registered view: raw_schedules -> data/raw/schedules
+[INFO] 2026-04-01 08:13:06 | Registered view: raw_player_stats -> data/raw/player_stats
+[INFO] 2026-04-01 08:13:06 | Registered view: raw_team_stats -> data/raw/team_stats
+[WARN] 2026-04-01 08:13:06 | Skipping raw_participation: no parquet files at data/raw/participation
+[INFO] 2026-04-01 08:13:06 | Registered view: raw_players -> data/raw/players
+[INFO] 2026-04-01 08:13:06 | Registered view: raw_rosters -> data/raw/rosters
+[WARN] 2026-04-01 08:13:06 | Skipping raw_rosters_weekly: no parquet files at data/raw/rosters_weekly
+[INFO] 2026-04-01 08:13:07 | Registered view: raw_depth_charts -> data/raw/depth_charts
+[INFO] 2026-04-01 08:13:07 | Registered view: raw_injuries -> data/raw/injuries
+[INFO] 2026-04-01 08:13:07 | Registered view: raw_nextgen_stats -> data/raw/nextgen_stats
+[INFO] 2026-04-01 08:13:07 | Registered view: raw_pfr_advstats -> data/raw/pfr_advstats
+[INFO] 2026-04-01 08:13:07 | Registered view: raw_snap_counts -> data/raw/snap_counts
+[INFO] 2026-04-01 08:13:07 | Registered view: raw_ftn_charting -> data/raw/ftn_charting
+[INFO] 2026-04-01 08:13:07 | Registered view: raw_ff_opportunity -> data/raw/ff_opportunity
+[WARN] 2026-04-01 08:13:07 | Skipping raw_external_odds: no parquet files at data/raw/external_odds
+[INFO] 2026-04-01 08:13:07 | Raw views: 13 registered, 3 skipped (not yet ingested).
+[INFO] 2026-04-01 08:13:07 | === STAGING LAYER ===
+[INFO] 2026-04-01 08:13:07 | START: materialise stg_games
+[ERROR] 2026-04-01 08:13:07 | FAILED materialise stg_games: Binder Error: Referenced column "conf_game" not found in FROM clause!
+Candidate bindings: "old_game_id", "div_game", "home_team", "away_moneyline", "surface"
+
+LINE 70:     conf_game,
+             ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: BINDER
+[WARN] 2026-04-01 08:13:07 | Continuing pipeline — stg_games will be absent from downstream.
+[INFO] 2026-04-01 08:13:07 | DONE:  materialise stg_games (0.1s)
+[INFO] 2026-04-01 08:13:07 | START: materialise stg_plays
+[ERROR] 2026-04-01 08:13:07 | FAILED materialise stg_plays: Invalid Error: Binder Error: Column "qtr_seconds_remaining" referenced that exists in the SELECT clause - but this column cannot be referenced before it is defined
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[WARN] 2026-04-01 08:13:07 | Continuing pipeline — stg_plays will be absent from downstream.
+[INFO] 2026-04-01 08:13:07 | DONE:  materialise stg_plays (0.2s)
+[INFO] 2026-04-01 08:13:07 | START: materialise stg_drives
+[ERROR] 2026-04-01 08:13:07 | FAILED materialise stg_drives: Invalid Error: Binder Error: Column "qtr_seconds_remaining" referenced that exists in the SELECT clause - but this column cannot be referenced before it is defined
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[WARN] 2026-04-01 08:13:07 | Continuing pipeline — stg_drives will be absent from downstream.
+[INFO] 2026-04-01 08:13:07 | DONE:  materialise stg_drives (0.1s)
+[INFO] 2026-04-01 08:13:07 | START: materialise stg_teams
+[ERROR] 2026-04-01 08:13:07 | FAILED materialise stg_teams: Invalid Error: Binder Error: Column "qtr_seconds_remaining" referenced that exists in the SELECT clause - but this column cannot be referenced before it is defined
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[WARN] 2026-04-01 08:13:07 | Continuing pipeline — stg_teams will be absent from downstream.
+[INFO] 2026-04-01 08:13:07 | DONE:  materialise stg_teams (0s)
+[INFO] 2026-04-01 08:13:07 | START: materialise stg_players
+[ERROR] 2026-04-01 08:13:08 | FAILED materialise stg_players: Invalid Error: Binder Error: Column "qtr_seconds_remaining" referenced that exists in the SELECT clause - but this column cannot be referenced before it is defined
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[WARN] 2026-04-01 08:13:08 | Continuing pipeline — stg_players will be absent from downstream.
+[INFO] 2026-04-01 08:13:08 | DONE:  materialise stg_players (0.9s)
+[INFO] 2026-04-01 08:13:08 | START: materialise stg_player_week
+[ERROR] 2026-04-01 08:13:08 | FAILED materialise stg_player_week: Invalid Error: Catalog Error: Table with name raw_rosters_weekly does not exist!
+Did you mean "raw_rosters"?
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[WARN] 2026-04-01 08:13:08 | Continuing pipeline — stg_player_week will be absent from downstream.
+[INFO] 2026-04-01 08:13:08 | DONE:  materialise stg_player_week (0s)
+[INFO] 2026-04-01 08:13:08 | START: materialise stg_team_week
+[ERROR] 2026-04-01 08:13:08 | FAILED materialise stg_team_week: Invalid Error: Catalog Error: Table with name raw_rosters_weekly does not exist!
+Did you mean "raw_rosters"?
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[WARN] 2026-04-01 08:13:08 | Continuing pipeline — stg_team_week will be absent from downstream.
+[INFO] 2026-04-01 08:13:08 | DONE:  materialise stg_team_week (0s)
+[INFO] 2026-04-01 08:13:08 | START: materialise stg_rosters_weekly
+[ERROR] 2026-04-01 08:13:08 | FAILED materialise stg_rosters_weekly: Invalid Error: Catalog Error: Table with name raw_rosters_weekly does not exist!
+Did you mean "raw_rosters"?
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[WARN] 2026-04-01 08:13:08 | Continuing pipeline — stg_rosters_weekly will be absent from downstream.
+[INFO] 2026-04-01 08:13:08 | DONE:  materialise stg_rosters_weekly (0.1s)
+[INFO] 2026-04-01 08:13:08 | START: materialise stg_injuries_weekly
+[ERROR] 2026-04-01 08:13:09 | FAILED materialise stg_injuries_weekly: Invalid Error: Catalog Error: Table with name raw_rosters_weekly does not exist!
+Did you mean "raw_rosters"?
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[WARN] 2026-04-01 08:13:09 | Continuing pipeline — stg_injuries_weekly will be absent from downstream.
+[INFO] 2026-04-01 08:13:09 | DONE:  materialise stg_injuries_weekly (1.1s)
+[INFO] 2026-04-01 08:13:09 | START: materialise stg_snap_counts_weekly
+[ERROR] 2026-04-01 08:13:09 | FAILED materialise stg_snap_counts_weekly: Invalid Error: Catalog Error: Table with name raw_rosters_weekly does not exist!
+Did you mean "raw_rosters"?
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[WARN] 2026-04-01 08:13:09 | Continuing pipeline — stg_snap_counts_weekly will be absent from downstream.
+[INFO] 2026-04-01 08:13:09 | DONE:  materialise stg_snap_counts_weekly (0.1s)
+[INFO] 2026-04-01 08:13:09 | START: materialise stg_nextgen_player_week
+[ERROR] 2026-04-01 08:13:11 | FAILED materialise stg_nextgen_player_week: Invalid Error: Catalog Error: Table with name raw_rosters_weekly does not exist!
+Did you mean "raw_rosters"?
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[WARN] 2026-04-01 08:13:11 | Continuing pipeline — stg_nextgen_player_week will be absent from downstream.
+[INFO] 2026-04-01 08:13:11 | DONE:  materialise stg_nextgen_player_week (1.9s)
+[INFO] 2026-04-01 08:13:11 | START: materialise stg_external_odds_game
+[ERROR] 2026-04-01 08:13:11 | FAILED materialise stg_external_odds_game: Invalid Error: Catalog Error: Table with name raw_rosters_weekly does not exist!
+Did you mean "raw_rosters"?
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[WARN] 2026-04-01 08:13:11 | Continuing pipeline — stg_external_odds_game will be absent from downstream.
+[INFO] 2026-04-01 08:13:11 | DONE:  materialise stg_external_odds_game (0.1s)
+[INFO] 2026-04-01 08:13:11 | === INTERMEDIATE LAYER ===
+[INFO] 2026-04-01 08:13:11 | START: materialise int_game_base
+[ERROR] 2026-04-01 08:13:11 | FAILED materialise int_game_base: Invalid Error: Catalog Error: Table with name stg_games does not exist!
+Did you mean "stg_team_week"?
+
+LINE 100: FROM stg_games g
+               ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[WARN] 2026-04-01 08:13:11 | Continuing pipeline — int_game_base will be absent from downstream.
+[INFO] 2026-04-01 08:13:11 | DONE:  materialise int_game_base (0s)
+[INFO] 2026-04-01 08:13:11 | START: materialise int_team_game
+[ERROR] 2026-04-01 08:13:11 | FAILED materialise int_team_game: Invalid Error: Catalog Error: Table with name stg_games does not exist!
+Did you mean "stg_team_week"?
+
+LINE 100: FROM stg_games g
+               ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[WARN] 2026-04-01 08:13:11 | Continuing pipeline — int_team_game will be absent from downstream.
+[INFO] 2026-04-01 08:13:11 | DONE:  materialise int_team_game (0s)
+[INFO] 2026-04-01 08:13:11 | START: materialise int_player_game
+[ERROR] 2026-04-01 08:13:11 | FAILED materialise int_player_game: Invalid Error: Catalog Error: Table with name stg_games does not exist!
+Did you mean "stg_team_week"?
+
+LINE 76: LEFT JOIN stg_games g
+                   ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[WARN] 2026-04-01 08:13:11 | Continuing pipeline — int_player_game will be absent from downstream.
+[INFO] 2026-04-01 08:13:11 | DONE:  materialise int_player_game (0.1s)
+[INFO] 2026-04-01 08:13:11 | START: materialise int_player_form
+[ERROR] 2026-04-01 08:13:12 | FAILED materialise int_player_form: Invalid Error: Catalog Error: Table with name stg_games does not exist!
+Did you mean "stg_team_week"?
+
+LINE 76: LEFT JOIN stg_games g
+                   ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[WARN] 2026-04-01 08:13:12 | Continuing pipeline — int_player_form will be absent from downstream.
+[INFO] 2026-04-01 08:13:12 | DONE:  materialise int_player_form (0.2s)
+[INFO] 2026-04-01 08:13:12 | START: materialise int_qb_team_context
+[ERROR] 2026-04-01 08:13:12 | FAILED materialise int_qb_team_context: Invalid Error: Catalog Error: Table with name stg_games does not exist!
+Did you mean "stg_team_week"?
+
+LINE 76: LEFT JOIN stg_games g
+                   ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[WARN] 2026-04-01 08:13:12 | Continuing pipeline — int_qb_team_context will be absent from downstream.
+[INFO] 2026-04-01 08:13:12 | DONE:  materialise int_qb_team_context (0s)
+[INFO] 2026-04-01 08:13:12 | START: materialise int_team_form
+[ERROR] 2026-04-01 08:13:12 | FAILED materialise int_team_form: Invalid Error: Catalog Error: Table with name int_team_game does not exist!
+Did you mean "fact_team_game"?
+
+LINE 15:   FROM int_team_game tg
+                ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[WARN] 2026-04-01 08:13:12 | Continuing pipeline — int_team_form will be absent from downstream.
+[INFO] 2026-04-01 08:13:12 | DONE:  materialise int_team_form (0.9s)
+[INFO] 2026-04-01 08:13:12 | START: materialise int_injury_team_impact
+[ERROR] 2026-04-01 08:13:12 | FAILED materialise int_injury_team_impact: Invalid Error: Catalog Error: Table with name int_team_game does not exist!
+Did you mean "fact_team_game"?
+
+LINE 15:   FROM int_team_game tg
+                ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[WARN] 2026-04-01 08:13:12 | Continuing pipeline — int_injury_team_impact will be absent from downstream.
+[INFO] 2026-04-01 08:13:12 | DONE:  materialise int_injury_team_impact (0s)
+[INFO] 2026-04-01 08:13:13 | === MART LAYER ===
+[INFO] 2026-04-01 08:13:13 | START: materialise mart_game_modeling
+[ERROR] 2026-04-01 08:13:13 | FAILED materialise mart_game_modeling: Invalid Error: Catalog Error: Table with name int_game_base does not exist!
+Did you mean "pg_namespace"?
+
+LINE 137: FROM int_game_base g
+               ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[WARN] 2026-04-01 08:13:13 | Continuing pipeline — mart_game_modeling will be absent from downstream.
+[INFO] 2026-04-01 08:13:13 | DONE:  materialise mart_game_modeling (0.2s)
+[INFO] 2026-04-01 08:13:13 | START: materialise mart_team_week_modeling
+[ERROR] 2026-04-01 08:13:13 | FAILED materialise mart_team_week_modeling: Invalid Error: Catalog Error: Table with name int_game_base does not exist!
+Did you mean "pg_namespace"?
+
+LINE 137: FROM int_game_base g
+               ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[WARN] 2026-04-01 08:13:13 | Continuing pipeline — mart_team_week_modeling will be absent from downstream.
+[INFO] 2026-04-01 08:13:13 | DONE:  materialise mart_team_week_modeling (0.4s)
+[INFO] 2026-04-01 08:13:13 | START: materialise mart_player_week_projection
+[ERROR] 2026-04-01 08:13:14 | FAILED materialise mart_player_week_projection: Invalid Error: Catalog Error: Table with name int_player_form does not exist!
+Did you mean "dim_player"?
+
+LINE 94: FROM int_player_form pf
+              ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[WARN] 2026-04-01 08:13:14 | Continuing pipeline — mart_player_week_projection will be absent from downstream.
+[INFO] 2026-04-01 08:13:14 | DONE:  materialise mart_player_week_projection (0.6s)
+[INFO] 2026-04-01 08:13:14 | START: materialise mart_qb_projection
+[ERROR] 2026-04-01 08:13:14 | FAILED materialise mart_qb_projection: Invalid Error: Catalog Error: Table with name int_player_form does not exist!
+Did you mean "dim_player"?
+
+LINE 94: FROM int_player_form pf
+              ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[WARN] 2026-04-01 08:13:14 | Continuing pipeline — mart_qb_projection will be absent from downstream.
+[INFO] 2026-04-01 08:13:14 | DONE:  materialise mart_qb_projection (0s)
+[INFO] 2026-04-01 08:13:14 | START: materialise mart_receiver_projection
+[ERROR] 2026-04-01 08:13:14 | FAILED materialise mart_receiver_projection: Invalid Error: Catalog Error: Table with name int_player_form does not exist!
+Did you mean "dim_player"?
+
+LINE 94: FROM int_player_form pf
+              ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[WARN] 2026-04-01 08:13:14 | Continuing pipeline — mart_receiver_projection will be absent from downstream.
+[INFO] 2026-04-01 08:13:14 | DONE:  materialise mart_receiver_projection (0s)
+[INFO] 2026-04-01 08:13:14 | START: materialise mart_rusher_projection
+[ERROR] 2026-04-01 08:13:14 | FAILED materialise mart_rusher_projection: Invalid Error: Catalog Error: Table with name int_player_form does not exist!
+Did you mean "dim_player"?
+
+LINE 94: FROM int_player_form pf
+              ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[WARN] 2026-04-01 08:13:14 | Continuing pipeline — mart_rusher_projection will be absent from downstream.
+[INFO] 2026-04-01 08:13:14 | DONE:  materialise mart_rusher_projection (0s)
+[INFO] 2026-04-01 08:13:14 | START: materialise mart_backtest_game
+[ERROR] 2026-04-01 08:13:14 | FAILED materialise mart_backtest_game: Invalid Error: Catalog Error: Table with name int_player_form does not exist!
+Did you mean "dim_player"?
+
+LINE 94: FROM int_player_form pf
+              ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[WARN] 2026-04-01 08:13:14 | Continuing pipeline — mart_backtest_game will be absent from downstream.
+[INFO] 2026-04-01 08:13:14 | DONE:  materialise mart_backtest_game (0s)
+[INFO] 2026-04-01 08:13:14 | START: materialise mart_backtest_player
+[ERROR] 2026-04-01 08:13:14 | FAILED materialise mart_backtest_player: Invalid Error: Catalog Error: Table with name int_player_form does not exist!
+Did you mean "dim_player"?
+
+LINE 94: FROM int_player_form pf
+              ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[WARN] 2026-04-01 08:13:14 | Continuing pipeline — mart_backtest_player will be absent from downstream.
+[INFO] 2026-04-01 08:13:14 | DONE:  materialise mart_backtest_player (0.1s)
+[INFO] 2026-04-01 08:13:14 | run_transforms complete.
+[INFO] 2026-04-01 08:13:14 | DuckDB disconnected.
+[WARN] 2026-04-01 21:39:05 | httpfs extension not available; remote parquet reads disabled.
+[INFO] 2026-04-01 21:39:05 | DuckDB connected: db/nfl_analytics.duckdb
+[INFO] 2026-04-01 21:39:05 | START: build_team_stats
+[INFO] 2026-04-01 21:39:05 | team_stats: building for seasons: 2024
+[INFO] 2026-04-01 21:39:05 | START: build team_stats season=2024
+[INFO] 2026-04-01 21:39:20 | Wrote 32 rows across 1 partitions -> data/raw/team_stats
+[INFO] 2026-04-01 21:39:20 | DONE:  build team_stats season=2024 (15.1s)
+[INFO] 2026-04-01 21:39:20 | DONE:  build_team_stats (15.3s)
+[INFO] 2026-04-01 21:39:21 | Registered view: raw_pbp -> data/raw/pbp
+[INFO] 2026-04-01 21:39:21 | Registered view: raw_schedules -> data/raw/schedules
+[INFO] 2026-04-01 21:39:21 | Registered view: raw_player_stats -> data/raw/player_stats
+[INFO] 2026-04-01 21:39:21 | Registered view: raw_team_stats -> data/raw/team_stats
+[WARN] 2026-04-01 21:39:21 | Skipping raw_participation: no parquet files at data/raw/participation
+[INFO] 2026-04-01 21:39:22 | Registered view: raw_players -> data/raw/players
+[INFO] 2026-04-01 21:39:22 | Registered view: raw_rosters -> data/raw/rosters
+[WARN] 2026-04-01 21:39:22 | Skipping raw_rosters_weekly: no parquet files at data/raw/rosters_weekly
+[INFO] 2026-04-01 21:39:22 | Registered view: raw_depth_charts -> data/raw/depth_charts
+[INFO] 2026-04-01 21:39:23 | Registered view: raw_injuries -> data/raw/injuries
+[INFO] 2026-04-01 21:39:23 | Registered view: raw_nextgen_stats -> data/raw/nextgen_stats
+[INFO] 2026-04-01 21:39:23 | Registered view: raw_pfr_advstats -> data/raw/pfr_advstats
+[INFO] 2026-04-01 21:39:23 | Registered view: raw_snap_counts -> data/raw/snap_counts
+[INFO] 2026-04-01 21:39:24 | Registered view: raw_ftn_charting -> data/raw/ftn_charting
+[INFO] 2026-04-01 21:39:24 | Registered view: raw_ff_opportunity -> data/raw/ff_opportunity
+[WARN] 2026-04-01 21:39:24 | Skipping raw_external_odds: no parquet files at data/raw/external_odds
+[INFO] 2026-04-01 21:39:24 | Raw views: 13 registered, 3 skipped (not yet ingested).
+[INFO] 2026-04-01 21:39:24 | === STAGING LAYER ===
+[INFO] 2026-04-01 21:39:25 | START: materialise stg_games
+[ERROR] 2026-04-01 21:39:25 | FAILED materialise stg_games: Binder Error: Referenced column "pfr_game_id" not found in FROM clause!
+Candidate bindings: "pfr", "old_game_id", "game_id", "div_game", "gametime"
+
+LINE 76:     pfr_game_id,
+             ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: BINDER
+[WARN] 2026-04-01 21:39:25 | Continuing pipeline — stg_games will be absent from downstream.
+[INFO] 2026-04-01 21:39:25 | DONE:  materialise stg_games (0.1s)
+[INFO] 2026-04-01 21:39:25 | START: materialise stg_plays
+[ERROR] 2026-04-01 21:39:25 | FAILED materialise stg_plays: Invalid Error: Binder Error: Referenced column "qtr_seconds_remaining" not found in FROM clause!
+Candidate bindings: "half_seconds_remaining", "quarter_seconds_remaining", "qtr", "game_seconds_remaining", "drive_end_transition"
+
+LINE 33:     qtr_seconds_remaining,
+             ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[WARN] 2026-04-01 21:39:25 | Continuing pipeline — stg_plays will be absent from downstream.
+[INFO] 2026-04-01 21:39:25 | DONE:  materialise stg_plays (0.2s)
+[INFO] 2026-04-01 21:39:25 | START: materialise stg_drives
+[ERROR] 2026-04-01 21:39:26 | FAILED materialise stg_drives: Invalid Error: Binder Error: Referenced column "qtr_seconds_remaining" not found in FROM clause!
+Candidate bindings: "half_seconds_remaining", "quarter_seconds_remaining", "qtr", "game_seconds_remaining", "drive_end_transition"
+
+LINE 33:     qtr_seconds_remaining,
+             ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[WARN] 2026-04-01 21:39:26 | Continuing pipeline — stg_drives will be absent from downstream.
+[INFO] 2026-04-01 21:39:26 | DONE:  materialise stg_drives (0.9s)
+[INFO] 2026-04-01 21:39:26 | START: materialise stg_teams
+[ERROR] 2026-04-01 21:39:27 | FAILED materialise stg_teams: Invalid Error: Binder Error: Referenced column "qtr_seconds_remaining" not found in FROM clause!
+Candidate bindings: "half_seconds_remaining", "quarter_seconds_remaining", "qtr", "game_seconds_remaining", "drive_end_transition"
+
+LINE 33:     qtr_seconds_remaining,
+             ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[WARN] 2026-04-01 21:39:27 | Continuing pipeline — stg_teams will be absent from downstream.
+[INFO] 2026-04-01 21:39:27 | DONE:  materialise stg_teams (0.2s)
+[INFO] 2026-04-01 21:39:27 | START: materialise stg_players
+[ERROR] 2026-04-01 21:39:27 | FAILED materialise stg_players: Invalid Error: Binder Error: Referenced column "qtr_seconds_remaining" not found in FROM clause!
+Candidate bindings: "half_seconds_remaining", "quarter_seconds_remaining", "qtr", "game_seconds_remaining", "drive_end_transition"
+
+LINE 33:     qtr_seconds_remaining,
+             ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[WARN] 2026-04-01 21:39:27 | Continuing pipeline — stg_players will be absent from downstream.
+[INFO] 2026-04-01 21:39:27 | DONE:  materialise stg_players (0.4s)
+[INFO] 2026-04-01 21:39:27 | START: materialise stg_player_week
+[ERROR] 2026-04-01 21:39:28 | FAILED materialise stg_player_week: Invalid Error: Binder Error: Column "report_date" referenced that exists in the SELECT clause - but this column cannot be referenced before it is defined
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[WARN] 2026-04-01 21:39:28 | Continuing pipeline — stg_player_week will be absent from downstream.
+[INFO] 2026-04-01 21:39:28 | DONE:  materialise stg_player_week (0.5s)
+[INFO] 2026-04-01 21:39:28 | START: materialise stg_team_week
+[ERROR] 2026-04-01 21:39:29 | FAILED materialise stg_team_week: Invalid Error: Binder Error: Column "report_date" referenced that exists in the SELECT clause - but this column cannot be referenced before it is defined
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[WARN] 2026-04-01 21:39:29 | Continuing pipeline — stg_team_week will be absent from downstream.
+[INFO] 2026-04-01 21:39:29 | DONE:  materialise stg_team_week (1.5s)
+[INFO] 2026-04-01 21:39:29 | START: materialise stg_rosters_weekly
+[ERROR] 2026-04-01 21:39:29 | FAILED materialise stg_rosters_weekly: Invalid Error: Binder Error: Column "report_date" referenced that exists in the SELECT clause - but this column cannot be referenced before it is defined
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[WARN] 2026-04-01 21:39:29 | Continuing pipeline — stg_rosters_weekly will be absent from downstream.
+[INFO] 2026-04-01 21:39:29 | DONE:  materialise stg_rosters_weekly (0.1s)
+[INFO] 2026-04-01 21:39:29 | START: materialise stg_injuries_weekly
+[ERROR] 2026-04-01 21:39:29 | FAILED materialise stg_injuries_weekly: Invalid Error: Binder Error: Column "report_date" referenced that exists in the SELECT clause - but this column cannot be referenced before it is defined
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[WARN] 2026-04-01 21:39:29 | Continuing pipeline — stg_injuries_weekly will be absent from downstream.
+[INFO] 2026-04-01 21:39:29 | DONE:  materialise stg_injuries_weekly (0.1s)
+[INFO] 2026-04-01 21:39:29 | START: materialise stg_snap_counts_weekly
+[ERROR] 2026-04-01 21:39:31 | FAILED materialise stg_snap_counts_weekly: Invalid Error: Binder Error: Column "report_date" referenced that exists in the SELECT clause - but this column cannot be referenced before it is defined
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[WARN] 2026-04-01 21:39:31 | Continuing pipeline — stg_snap_counts_weekly will be absent from downstream.
+[INFO] 2026-04-01 21:39:31 | DONE:  materialise stg_snap_counts_weekly (1.5s)
+[INFO] 2026-04-01 21:39:31 | START: materialise stg_nextgen_player_week
+[ERROR] 2026-04-01 21:39:31 | FAILED materialise stg_nextgen_player_week: Invalid Error: Binder Error: Column "report_date" referenced that exists in the SELECT clause - but this column cannot be referenced before it is defined
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[WARN] 2026-04-01 21:39:31 | Continuing pipeline — stg_nextgen_player_week will be absent from downstream.
+[INFO] 2026-04-01 21:39:31 | DONE:  materialise stg_nextgen_player_week (0.1s)
+[INFO] 2026-04-01 21:39:31 | START: materialise stg_external_odds_game
+[ERROR] 2026-04-01 21:39:31 | FAILED materialise stg_external_odds_game: Invalid Error: Binder Error: Column "report_date" referenced that exists in the SELECT clause - but this column cannot be referenced before it is defined
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[WARN] 2026-04-01 21:39:31 | Continuing pipeline — stg_external_odds_game will be absent from downstream.
+[INFO] 2026-04-01 21:39:31 | DONE:  materialise stg_external_odds_game (0.1s)
+[INFO] 2026-04-01 21:39:31 | === INTERMEDIATE LAYER ===
+[INFO] 2026-04-01 21:39:31 | START: materialise int_game_base
+[ERROR] 2026-04-01 21:39:31 | FAILED materialise int_game_base: Invalid Error: Catalog Error: Table with name stg_games does not exist!
+Did you mean "stg_team_week"?
+
+LINE 100: FROM stg_games g
+               ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[WARN] 2026-04-01 21:39:31 | Continuing pipeline — int_game_base will be absent from downstream.
+[INFO] 2026-04-01 21:39:31 | DONE:  materialise int_game_base (0.1s)
+[INFO] 2026-04-01 21:39:31 | START: materialise int_team_game
+[ERROR] 2026-04-01 21:39:32 | FAILED materialise int_team_game: Invalid Error: Catalog Error: Table with name stg_games does not exist!
+Did you mean "stg_team_week"?
+
+LINE 100: FROM stg_games g
+               ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[WARN] 2026-04-01 21:39:32 | Continuing pipeline — int_team_game will be absent from downstream.
+[INFO] 2026-04-01 21:39:32 | DONE:  materialise int_team_game (0.8s)
+[INFO] 2026-04-01 21:39:32 | START: materialise int_player_game
+[ERROR] 2026-04-01 21:39:32 | FAILED materialise int_player_game: Invalid Error: Catalog Error: Table with name stg_games does not exist!
+Did you mean "stg_team_week"?
+
+LINE 76: LEFT JOIN stg_games g
+                   ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[WARN] 2026-04-01 21:39:32 | Continuing pipeline — int_player_game will be absent from downstream.
+[INFO] 2026-04-01 21:39:32 | DONE:  materialise int_player_game (0.2s)
+[INFO] 2026-04-01 21:39:32 | START: materialise int_player_form
+[ERROR] 2026-04-01 21:39:32 | FAILED materialise int_player_form: Invalid Error: Catalog Error: Table with name stg_games does not exist!
+Did you mean "stg_team_week"?
+
+LINE 76: LEFT JOIN stg_games g
+                   ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[WARN] 2026-04-01 21:39:32 | Continuing pipeline — int_player_form will be absent from downstream.
+[INFO] 2026-04-01 21:39:32 | DONE:  materialise int_player_form (0.4s)
+[INFO] 2026-04-01 21:39:32 | START: materialise int_qb_team_context
+[ERROR] 2026-04-01 21:39:33 | FAILED materialise int_qb_team_context: Invalid Error: Catalog Error: Table with name stg_games does not exist!
+Did you mean "stg_team_week"?
+
+LINE 76: LEFT JOIN stg_games g
+                   ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[WARN] 2026-04-01 21:39:33 | Continuing pipeline — int_qb_team_context will be absent from downstream.
+[INFO] 2026-04-01 21:39:33 | DONE:  materialise int_qb_team_context (0.7s)
+[INFO] 2026-04-01 21:39:33 | START: materialise int_team_form
+[ERROR] 2026-04-01 21:39:33 | FAILED materialise int_team_form: Invalid Error: Catalog Error: Table with name int_team_game does not exist!
+Did you mean "fact_team_game"?
+
+LINE 15:   FROM int_team_game tg
+                ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[WARN] 2026-04-01 21:39:33 | Continuing pipeline — int_team_form will be absent from downstream.
+[INFO] 2026-04-01 21:39:33 | DONE:  materialise int_team_form (0.1s)
+[INFO] 2026-04-01 21:39:33 | START: materialise int_injury_team_impact
+[ERROR] 2026-04-01 21:39:33 | FAILED materialise int_injury_team_impact: Invalid Error: Catalog Error: Table with name int_team_game does not exist!
+Did you mean "fact_team_game"?
+
+LINE 15:   FROM int_team_game tg
+                ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[WARN] 2026-04-01 21:39:33 | Continuing pipeline — int_injury_team_impact will be absent from downstream.
+[INFO] 2026-04-01 21:39:33 | DONE:  materialise int_injury_team_impact (0s)
+[INFO] 2026-04-01 21:39:33 | === MART LAYER ===
+[INFO] 2026-04-01 21:39:33 | START: materialise mart_game_modeling
+[ERROR] 2026-04-01 21:39:34 | FAILED materialise mart_game_modeling: Invalid Error: Catalog Error: Table with name int_game_base does not exist!
+Did you mean "pg_namespace"?
+
+LINE 137: FROM int_game_base g
+               ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[WARN] 2026-04-01 21:39:34 | Continuing pipeline — mart_game_modeling will be absent from downstream.
+[INFO] 2026-04-01 21:39:34 | DONE:  materialise mart_game_modeling (0.4s)
+[INFO] 2026-04-01 21:39:34 | START: materialise mart_team_week_modeling
+[ERROR] 2026-04-01 21:39:34 | FAILED materialise mart_team_week_modeling: Invalid Error: Catalog Error: Table with name int_game_base does not exist!
+Did you mean "pg_namespace"?
+
+LINE 137: FROM int_game_base g
+               ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[WARN] 2026-04-01 21:39:34 | Continuing pipeline — mart_team_week_modeling will be absent from downstream.
+[INFO] 2026-04-01 21:39:34 | DONE:  materialise mart_team_week_modeling (0.7s)
+[INFO] 2026-04-01 21:39:34 | START: materialise mart_player_week_projection
+[ERROR] 2026-04-01 21:39:34 | FAILED materialise mart_player_week_projection: Invalid Error: Catalog Error: Table with name int_player_form does not exist!
+Did you mean "dim_player"?
+
+LINE 94: FROM int_player_form pf
+              ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[WARN] 2026-04-01 21:39:34 | Continuing pipeline — mart_player_week_projection will be absent from downstream.
+[INFO] 2026-04-01 21:39:34 | DONE:  materialise mart_player_week_projection (0.1s)
+[INFO] 2026-04-01 21:39:34 | START: materialise mart_qb_projection
+[ERROR] 2026-04-01 21:39:34 | FAILED materialise mart_qb_projection: Invalid Error: Catalog Error: Table with name int_player_form does not exist!
+Did you mean "dim_player"?
+
+LINE 94: FROM int_player_form pf
+              ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[WARN] 2026-04-01 21:39:34 | Continuing pipeline — mart_qb_projection will be absent from downstream.
+[INFO] 2026-04-01 21:39:34 | DONE:  materialise mart_qb_projection (0.1s)
+[INFO] 2026-04-01 21:39:34 | START: materialise mart_receiver_projection
+[ERROR] 2026-04-01 21:39:34 | FAILED materialise mart_receiver_projection: Invalid Error: Catalog Error: Table with name int_player_form does not exist!
+Did you mean "dim_player"?
+
+LINE 94: FROM int_player_form pf
+              ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[WARN] 2026-04-01 21:39:34 | Continuing pipeline — mart_receiver_projection will be absent from downstream.
+[INFO] 2026-04-01 21:39:34 | DONE:  materialise mart_receiver_projection (0.1s)
+[INFO] 2026-04-01 21:39:34 | START: materialise mart_rusher_projection
+[ERROR] 2026-04-01 21:39:35 | FAILED materialise mart_rusher_projection: Invalid Error: Catalog Error: Table with name int_player_form does not exist!
+Did you mean "dim_player"?
+
+LINE 94: FROM int_player_form pf
+              ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[WARN] 2026-04-01 21:39:35 | Continuing pipeline — mart_rusher_projection will be absent from downstream.
+[INFO] 2026-04-01 21:39:35 | DONE:  materialise mart_rusher_projection (0.1s)
+[INFO] 2026-04-01 21:39:35 | START: materialise mart_backtest_game
+[ERROR] 2026-04-01 21:39:35 | FAILED materialise mart_backtest_game: Invalid Error: Catalog Error: Table with name int_player_form does not exist!
+Did you mean "dim_player"?
+
+LINE 94: FROM int_player_form pf
+              ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[WARN] 2026-04-01 21:39:35 | Continuing pipeline — mart_backtest_game will be absent from downstream.
+[INFO] 2026-04-01 21:39:35 | DONE:  materialise mart_backtest_game (0.8s)
+[INFO] 2026-04-01 21:39:35 | START: materialise mart_backtest_player
+[ERROR] 2026-04-01 21:39:35 | FAILED materialise mart_backtest_player: Invalid Error: Catalog Error: Table with name int_player_form does not exist!
+Did you mean "dim_player"?
+
+LINE 94: FROM int_player_form pf
+              ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[WARN] 2026-04-01 21:39:35 | Continuing pipeline — mart_backtest_player will be absent from downstream.
+[INFO] 2026-04-01 21:39:35 | DONE:  materialise mart_backtest_player (0.1s)
+[INFO] 2026-04-01 21:39:35 | run_transforms complete.
+[INFO] 2026-04-01 21:39:35 | DuckDB disconnected.
+[WARN] 2026-04-01 21:48:43 | httpfs extension not available; remote parquet reads disabled.
+[INFO] 2026-04-01 21:48:43 | DuckDB connected: db/nfl_analytics.duckdb
+[INFO] 2026-04-01 21:48:43 | Dropped 43 stale views from DuckDB catalog.
+[INFO] 2026-04-01 21:48:43 | START: build_team_stats
+[INFO] 2026-04-01 21:48:44 | team_stats: building for seasons: 2024
+[INFO] 2026-04-01 21:48:44 | START: build team_stats season=2024
+[INFO] 2026-04-01 21:48:53 | Wrote 32 rows across 1 partitions -> data/raw/team_stats
+[INFO] 2026-04-01 21:48:53 | DONE:  build team_stats season=2024 (9.3s)
+[INFO] 2026-04-01 21:48:53 | DONE:  build_team_stats (10.3s)
+[INFO] 2026-04-01 21:48:53 | Registered view: raw_pbp -> data/raw/pbp
+[INFO] 2026-04-01 21:48:53 | Registered view: raw_schedules -> data/raw/schedules
+[INFO] 2026-04-01 21:48:53 | Registered view: raw_player_stats -> data/raw/player_stats
+[INFO] 2026-04-01 21:48:54 | Registered view: raw_team_stats -> data/raw/team_stats
+[WARN] 2026-04-01 21:48:54 | Skipping raw_participation: no parquet files at data/raw/participation
+[INFO] 2026-04-01 21:48:55 | Registered view: raw_players -> data/raw/players
+[INFO] 2026-04-01 21:48:55 | Registered view: raw_rosters -> data/raw/rosters
+[WARN] 2026-04-01 21:48:55 | Skipping raw_rosters_weekly: no parquet files at data/raw/rosters_weekly
+[INFO] 2026-04-01 21:48:55 | Registered view: raw_depth_charts -> data/raw/depth_charts
+[INFO] 2026-04-01 21:48:55 | Registered view: raw_injuries -> data/raw/injuries
+[INFO] 2026-04-01 21:48:55 | Registered view: raw_nextgen_stats -> data/raw/nextgen_stats
+[INFO] 2026-04-01 21:48:55 | Registered view: raw_pfr_advstats -> data/raw/pfr_advstats
+[INFO] 2026-04-01 21:48:55 | Registered view: raw_snap_counts -> data/raw/snap_counts
+[INFO] 2026-04-01 21:48:55 | Registered view: raw_ftn_charting -> data/raw/ftn_charting
+[INFO] 2026-04-01 21:48:55 | Registered view: raw_ff_opportunity -> data/raw/ff_opportunity
+[WARN] 2026-04-01 21:48:55 | Skipping raw_external_odds: no parquet files at data/raw/external_odds
+[INFO] 2026-04-01 21:48:55 | Raw views: 13 registered, 3 skipped (not yet ingested).
+[INFO] 2026-04-01 21:48:55 | === STAGING LAYER ===
+[INFO] 2026-04-01 21:48:56 | START: materialise stg_games
+[INFO] 2026-04-01 21:48:57 | Wrote 2743 rows across 10 partitions -> data/staging/stg_games
+[INFO] 2026-04-01 21:48:57 | Registered view: stg_games -> data/staging/stg_games
+[INFO] 2026-04-01 21:48:57 | stg_games: 2743 rows written.
+[INFO] 2026-04-01 21:48:57 | DONE:  materialise stg_games (1.7s)
+[INFO] 2026-04-01 21:48:57 | START: materialise stg_plays
+[ERROR] 2026-04-01 21:48:59 | FAILED materialise stg_plays: Binder Error: Referenced column "college" not found in FROM clause!
+Candidate bindings: "college_name", "college_conference", "latest_team", "source_name", "football_name"
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: BINDER
+[INFO] 2026-04-01 21:48:59 | DONE:  materialise stg_plays (1.6s)
+[INFO] 2026-04-01 21:48:59 | START: materialise stg_drives
+[ERROR] 2026-04-01 21:49:00 | FAILED materialise stg_drives: Binder Error: Referenced column "college" not found in FROM clause!
+Candidate bindings: "college_name", "college_conference", "latest_team", "source_name", "football_name"
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: BINDER
+[INFO] 2026-04-01 21:49:00 | DONE:  materialise stg_drives (1s)
+[INFO] 2026-04-01 21:49:00 | START: materialise stg_teams
+[ERROR] 2026-04-01 21:49:00 | FAILED materialise stg_teams: Binder Error: Referenced column "college" not found in FROM clause!
+Candidate bindings: "college_name", "college_conference", "latest_team", "source_name", "football_name"
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: BINDER
+[INFO] 2026-04-01 21:49:00 | DONE:  materialise stg_teams (0.1s)
+[INFO] 2026-04-01 21:49:00 | START: materialise stg_players
+[ERROR] 2026-04-01 21:49:00 | FAILED materialise stg_players: Binder Error: Referenced column "college" not found in FROM clause!
+Candidate bindings: "college_name", "college_conference", "latest_team", "source_name", "football_name"
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: BINDER
+[INFO] 2026-04-01 21:49:00 | DONE:  materialise stg_players (0.1s)
+[INFO] 2026-04-01 21:49:00 | START: materialise stg_player_week
+[ERROR] 2026-04-01 21:49:00 | FAILED materialise stg_player_week: Parser Error: syntax error at or near "unpivot"
+
+LINE 80: WITH unpivot AS (
+              ^
+
+LINE 80: WITH unpivot AS (
+              ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: PARSER
+[INFO] 2026-04-01 21:49:00 | DONE:  materialise stg_player_week (0.1s)
+[INFO] 2026-04-01 21:49:00 | START: materialise stg_team_week
+[ERROR] 2026-04-01 21:49:02 | FAILED materialise stg_team_week: Parser Error: syntax error at or near "unpivot"
+
+LINE 80: WITH unpivot AS (
+              ^
+
+LINE 80: WITH unpivot AS (
+              ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: PARSER
+[INFO] 2026-04-01 21:49:02 | DONE:  materialise stg_team_week (1.2s)
+[INFO] 2026-04-01 21:49:02 | START: materialise stg_rosters_weekly
+[ERROR] 2026-04-01 21:49:02 | FAILED materialise stg_rosters_weekly: Parser Error: syntax error at or near "unpivot"
+
+LINE 80: WITH unpivot AS (
+              ^
+
+LINE 80: WITH unpivot AS (
+              ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: PARSER
+[INFO] 2026-04-01 21:49:02 | DONE:  materialise stg_rosters_weekly (0.1s)
+[INFO] 2026-04-01 21:49:02 | START: materialise stg_injuries_weekly
+[ERROR] 2026-04-01 21:49:02 | FAILED materialise stg_injuries_weekly: Parser Error: syntax error at or near "unpivot"
+
+LINE 80: WITH unpivot AS (
+              ^
+
+LINE 80: WITH unpivot AS (
+              ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: PARSER
+[INFO] 2026-04-01 21:49:02 | DONE:  materialise stg_injuries_weekly (0.1s)
+[INFO] 2026-04-01 21:49:02 | START: materialise stg_snap_counts_weekly
+[ERROR] 2026-04-01 21:49:02 | FAILED materialise stg_snap_counts_weekly: Parser Error: syntax error at or near "unpivot"
+
+LINE 80: WITH unpivot AS (
+              ^
+
+LINE 80: WITH unpivot AS (
+              ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: PARSER
+[INFO] 2026-04-01 21:49:02 | DONE:  materialise stg_snap_counts_weekly (0.5s)
+[INFO] 2026-04-01 21:49:02 | START: materialise stg_nextgen_player_week
+[ERROR] 2026-04-01 21:49:03 | FAILED materialise stg_nextgen_player_week: Parser Error: syntax error at or near "unpivot"
+
+LINE 80: WITH unpivot AS (
+              ^
+
+LINE 80: WITH unpivot AS (
+              ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: PARSER
+[INFO] 2026-04-01 21:49:03 | DONE:  materialise stg_nextgen_player_week (0.6s)
+[INFO] 2026-04-01 21:49:03 | START: materialise stg_external_odds_game
+[ERROR] 2026-04-01 21:49:03 | FAILED materialise stg_external_odds_game: Parser Error: syntax error at or near "unpivot"
+
+LINE 80: WITH unpivot AS (
+              ^
+
+LINE 80: WITH unpivot AS (
+              ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: PARSER
+[INFO] 2026-04-01 21:49:03 | DONE:  materialise stg_external_odds_game (0.5s)
+[INFO] 2026-04-01 21:49:04 | Registered view: stg_games -> data/staging/stg_games
+[INFO] 2026-04-01 21:49:04 | === INTERMEDIATE LAYER ===
+[INFO] 2026-04-01 21:49:04 | START: materialise int_game_base
+[ERROR] 2026-04-01 21:49:04 | FAILED materialise int_game_base: Invalid Error: Catalog Error: Table with name stg_team_week does not exist!
+Did you mean "main.stg_team_week"?
+
+LINE 25:   FROM stg_team_week tw
+                ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[INFO] 2026-04-01 21:49:04 | DONE:  materialise int_game_base (0.4s)
+[INFO] 2026-04-01 21:49:04 | START: materialise int_team_game
+[ERROR] 2026-04-01 21:49:05 | FAILED materialise int_team_game: Invalid Error: Catalog Error: Table with name stg_team_week does not exist!
+Did you mean "main.stg_team_week"?
+
+LINE 25:   FROM stg_team_week tw
+                ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[INFO] 2026-04-01 21:49:05 | DONE:  materialise int_team_game (0.4s)
+[INFO] 2026-04-01 21:49:05 | START: materialise int_player_game
+[ERROR] 2026-04-01 21:49:05 | FAILED materialise int_player_game: Invalid Error: Catalog Error: Table with name stg_player_week does not exist!
+Did you mean "main.stg_player_week"?
+
+LINE 75: FROM stg_player_week pw
+              ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[INFO] 2026-04-01 21:49:05 | DONE:  materialise int_player_game (0.4s)
+[INFO] 2026-04-01 21:49:05 | START: materialise int_player_form
+[ERROR] 2026-04-01 21:49:05 | FAILED materialise int_player_form: Invalid Error: Catalog Error: Table with name stg_player_week does not exist!
+Did you mean "main.stg_player_week"?
+
+LINE 75: FROM stg_player_week pw
+              ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[INFO] 2026-04-01 21:49:05 | DONE:  materialise int_player_form (0.4s)
+[INFO] 2026-04-01 21:49:05 | START: materialise int_qb_team_context
+[ERROR] 2026-04-01 21:49:06 | FAILED materialise int_qb_team_context: Invalid Error: Catalog Error: Table with name stg_player_week does not exist!
+Did you mean "main.stg_player_week"?
+
+LINE 75: FROM stg_player_week pw
+              ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[INFO] 2026-04-01 21:49:06 | DONE:  materialise int_qb_team_context (0.4s)
+[INFO] 2026-04-01 21:49:06 | START: materialise int_team_form
+[ERROR] 2026-04-01 21:49:06 | FAILED materialise int_team_form: Invalid Error: Catalog Error: Table with name int_team_game does not exist!
+Did you mean "fact_team_game"?
+
+LINE 15:   FROM int_team_game tg
+                ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[INFO] 2026-04-01 21:49:06 | DONE:  materialise int_team_form (0.4s)
+[INFO] 2026-04-01 21:49:06 | START: materialise int_injury_team_impact
+[ERROR] 2026-04-01 21:49:07 | FAILED materialise int_injury_team_impact: Invalid Error: Catalog Error: Table with name int_team_game does not exist!
+Did you mean "fact_team_game"?
+
+LINE 15:   FROM int_team_game tg
+                ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[INFO] 2026-04-01 21:49:07 | DONE:  materialise int_injury_team_impact (0.4s)
+[INFO] 2026-04-01 21:49:07 | === MART LAYER ===
+[INFO] 2026-04-01 21:49:07 | START: materialise mart_game_modeling
+[ERROR] 2026-04-01 21:49:07 | FAILED materialise mart_game_modeling: Invalid Error: Catalog Error: Table with name int_game_base does not exist!
+Did you mean "pg_namespace"?
+
+LINE 137: FROM int_game_base g
+               ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[INFO] 2026-04-01 21:49:07 | DONE:  materialise mart_game_modeling (0s)
+[INFO] 2026-04-01 21:49:07 | START: materialise mart_team_week_modeling
+[ERROR] 2026-04-01 21:49:08 | FAILED materialise mart_team_week_modeling: Invalid Error: Catalog Error: Table with name int_game_base does not exist!
+Did you mean "pg_namespace"?
+
+LINE 137: FROM int_game_base g
+               ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[INFO] 2026-04-01 21:49:08 | DONE:  materialise mart_team_week_modeling (0.7s)
+[INFO] 2026-04-01 21:49:08 | START: materialise mart_player_week_projection
+[ERROR] 2026-04-01 21:49:08 | FAILED materialise mart_player_week_projection: Invalid Error: Catalog Error: Table with name int_player_form does not exist!
+Did you mean "dim_player"?
+
+LINE 94: FROM int_player_form pf
+              ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[INFO] 2026-04-01 21:49:08 | DONE:  materialise mart_player_week_projection (0s)
+[INFO] 2026-04-01 21:49:08 | START: materialise mart_qb_projection
+[ERROR] 2026-04-01 21:49:08 | FAILED materialise mart_qb_projection: Invalid Error: Catalog Error: Table with name int_player_form does not exist!
+Did you mean "dim_player"?
+
+LINE 94: FROM int_player_form pf
+              ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[INFO] 2026-04-01 21:49:08 | DONE:  materialise mart_qb_projection (0.1s)
+[INFO] 2026-04-01 21:49:08 | START: materialise mart_receiver_projection
+[ERROR] 2026-04-01 21:49:08 | FAILED materialise mart_receiver_projection: Invalid Error: Catalog Error: Table with name int_player_form does not exist!
+Did you mean "dim_player"?
+
+LINE 94: FROM int_player_form pf
+              ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[INFO] 2026-04-01 21:49:08 | DONE:  materialise mart_receiver_projection (0s)
+[INFO] 2026-04-01 21:49:08 | START: materialise mart_rusher_projection
+[ERROR] 2026-04-01 21:49:08 | FAILED materialise mart_rusher_projection: Invalid Error: Catalog Error: Table with name int_player_form does not exist!
+Did you mean "dim_player"?
+
+LINE 94: FROM int_player_form pf
+              ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[INFO] 2026-04-01 21:49:08 | DONE:  materialise mart_rusher_projection (0.1s)
+[INFO] 2026-04-01 21:49:08 | START: materialise mart_backtest_game
+[ERROR] 2026-04-01 21:49:08 | FAILED materialise mart_backtest_game: Invalid Error: Catalog Error: Table with name int_player_form does not exist!
+Did you mean "dim_player"?
+
+LINE 94: FROM int_player_form pf
+              ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[INFO] 2026-04-01 21:49:08 | DONE:  materialise mart_backtest_game (0s)
+[INFO] 2026-04-01 21:49:08 | START: materialise mart_backtest_player
+[ERROR] 2026-04-01 21:49:08 | FAILED materialise mart_backtest_player: Invalid Error: Catalog Error: Table with name int_player_form does not exist!
+Did you mean "dim_player"?
+
+LINE 94: FROM int_player_form pf
+              ^
+[34mℹ[39m Context: rapi_prepare
+[34mℹ[39m Error type: INVALID
+[INFO] 2026-04-01 21:49:08 | DONE:  materialise mart_backtest_player (0s)
+[INFO] 2026-04-01 21:49:08 | run_transforms complete.
+[INFO] 2026-04-01 21:49:08 | DuckDB disconnected.

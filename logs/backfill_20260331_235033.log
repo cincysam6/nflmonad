@@ -1,0 +1,149 @@
+[INFO] 2026-03-31 23:50:33 | Logger initialised. Log file: logs/backfill_20260331_235033.log
+[INFO] 2026-03-31 23:50:33 | ============================================================
+[INFO] 2026-03-31 23:50:33 | STARTING BACKFILL PIPELINE
+[INFO] 2026-03-31 23:50:33 | Seasons: 2015 - 2024
+[INFO] 2026-03-31 23:50:33 | ============================================================
+[INFO] 2026-03-31 23:50:33 | START: ingest_schedules
+[INFO] 2026-03-31 23:50:33 | schedules: Refreshing seasons 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024
+[INFO] 2026-03-31 23:50:33 | START: ingest schedules season=2015
+[INFO] 2026-03-31 23:50:35 | Wrote 267 rows across 1 partitions -> data/raw/schedules
+[INFO] 2026-03-31 23:50:35 | DONE:  ingest schedules season=2015 (1.8s)
+[INFO] 2026-03-31 23:50:35 | START: ingest schedules season=2016
+[INFO] 2026-03-31 23:50:36 | Wrote 267 rows across 1 partitions -> data/raw/schedules
+[INFO] 2026-03-31 23:50:36 | DONE:  ingest schedules season=2016 (1s)
+[INFO] 2026-03-31 23:50:36 | START: ingest schedules season=2017
+[INFO] 2026-03-31 23:50:36 | Wrote 267 rows across 1 partitions -> data/raw/schedules
+[INFO] 2026-03-31 23:50:36 | DONE:  ingest schedules season=2017 (0.1s)
+[INFO] 2026-03-31 23:50:36 | START: ingest schedules season=2018
+[INFO] 2026-03-31 23:50:36 | Wrote 267 rows across 1 partitions -> data/raw/schedules
+[INFO] 2026-03-31 23:50:36 | DONE:  ingest schedules season=2018 (0.1s)
+[INFO] 2026-03-31 23:50:36 | START: ingest schedules season=2019
+[INFO] 2026-03-31 23:50:36 | Wrote 267 rows across 1 partitions -> data/raw/schedules
+[INFO] 2026-03-31 23:50:36 | DONE:  ingest schedules season=2019 (0.1s)
+[INFO] 2026-03-31 23:50:36 | START: ingest schedules season=2020
+[INFO] 2026-03-31 23:50:37 | Wrote 269 rows across 1 partitions -> data/raw/schedules
+[INFO] 2026-03-31 23:50:37 | DONE:  ingest schedules season=2020 (1s)
+[INFO] 2026-03-31 23:50:37 | START: ingest schedules season=2021
+[INFO] 2026-03-31 23:50:37 | Wrote 285 rows across 1 partitions -> data/raw/schedules
+[INFO] 2026-03-31 23:50:37 | DONE:  ingest schedules season=2021 (0.1s)
+[INFO] 2026-03-31 23:50:37 | START: ingest schedules season=2022
+[INFO] 2026-03-31 23:50:37 | Wrote 284 rows across 1 partitions -> data/raw/schedules
+[INFO] 2026-03-31 23:50:37 | DONE:  ingest schedules season=2022 (0.1s)
+[INFO] 2026-03-31 23:50:37 | START: ingest schedules season=2023
+[INFO] 2026-03-31 23:50:39 | Wrote 285 rows across 1 partitions -> data/raw/schedules
+[INFO] 2026-03-31 23:50:39 | DONE:  ingest schedules season=2023 (1.9s)
+[INFO] 2026-03-31 23:50:39 | START: ingest schedules season=2024
+[INFO] 2026-03-31 23:50:40 | Wrote 285 rows across 1 partitions -> data/raw/schedules
+[INFO] 2026-03-31 23:50:40 | DONE:  ingest schedules season=2024 (0.1s)
+[INFO] 2026-03-31 23:50:40 | DONE:  ingest_schedules (7.5s)
+[INFO] 2026-03-31 23:50:40 | START: ingest_pbp
+[INFO] 2026-03-31 23:50:40 | PBP: Loading seasons 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024
+[INFO] 2026-03-31 23:50:40 | START: ingest_pbp season=2015
+[INFO] 2026-03-31 23:51:38 | Wrote 48122 rows across 1 partitions -> data/raw/pbp
+[INFO] 2026-03-31 23:51:38 | DONE:  ingest_pbp season=2015 (57.4s)
+[INFO] 2026-03-31 23:51:38 | START: ingest_pbp season=2016
+[INFO] 2026-03-31 23:52:19 | Wrote 47651 rows across 1 partitions -> data/raw/pbp
+[INFO] 2026-03-31 23:52:19 | DONE:  ingest_pbp season=2016 (41.1s)
+[INFO] 2026-03-31 23:52:19 | START: ingest_pbp season=2017
+[INFO] 2026-03-31 23:52:56 | Wrote 47245 rows across 1 partitions -> data/raw/pbp
+[INFO] 2026-03-31 23:52:56 | DONE:  ingest_pbp season=2017 (37.7s)
+[INFO] 2026-03-31 23:52:56 | START: ingest_pbp season=2018
+[INFO] 2026-03-31 23:53:36 | Wrote 47109 rows across 1 partitions -> data/raw/pbp
+[INFO] 2026-03-31 23:53:36 | DONE:  ingest_pbp season=2018 (39.7s)
+[INFO] 2026-03-31 23:53:36 | START: ingest_pbp season=2019
+[INFO] 2026-03-31 23:54:19 | Wrote 47260 rows across 1 partitions -> data/raw/pbp
+[INFO] 2026-03-31 23:54:19 | DONE:  ingest_pbp season=2019 (42.9s)
+[INFO] 2026-03-31 23:54:19 | START: ingest_pbp season=2020
+[INFO] 2026-03-31 23:54:59 | Wrote 47705 rows across 1 partitions -> data/raw/pbp
+[INFO] 2026-03-31 23:54:59 | DONE:  ingest_pbp season=2020 (40.1s)
+[INFO] 2026-03-31 23:54:59 | START: ingest_pbp season=2021
+[INFO] 2026-03-31 23:55:49 | Wrote 49922 rows across 1 partitions -> data/raw/pbp
+[INFO] 2026-03-31 23:55:49 | DONE:  ingest_pbp season=2021 (50.2s)
+[INFO] 2026-03-31 23:55:49 | START: ingest_pbp season=2022
+[INFO] 2026-03-31 23:56:40 | Wrote 49434 rows across 1 partitions -> data/raw/pbp
+[INFO] 2026-03-31 23:56:41 | DONE:  ingest_pbp season=2022 (51.8s)
+[INFO] 2026-03-31 23:56:41 | START: ingest_pbp season=2023
+[INFO] 2026-03-31 23:57:22 | Wrote 49665 rows across 1 partitions -> data/raw/pbp
+[INFO] 2026-03-31 23:57:23 | DONE:  ingest_pbp season=2023 (42.3s)
+[INFO] 2026-03-31 23:57:23 | START: ingest_pbp season=2024
+[INFO] 2026-03-31 23:58:09 | Wrote 49492 rows across 1 partitions -> data/raw/pbp
+[INFO] 2026-03-31 23:58:10 | DONE:  ingest_pbp season=2024 (46.7s)
+[INFO] 2026-03-31 23:58:10 | DONE:  ingest_pbp (449.9s)
+[INFO] 2026-03-31 23:58:10 | START: ingest_player_stats
+[INFO] 2026-03-31 23:58:10 | player_stats: Refreshing seasons 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024
+[INFO] 2026-03-31 23:58:10 | START: ingest player_stats season=2015
+[INFO] 2026-03-31 23:58:13 | Wrote 5318 rows across 1 partitions -> data/raw/player_stats
+[INFO] 2026-03-31 23:58:13 | DONE:  ingest player_stats season=2015 (2.4s)
+[INFO] 2026-03-31 23:58:13 | START: ingest player_stats season=2016
+[INFO] 2026-03-31 23:58:16 | Wrote 5274 rows across 1 partitions -> data/raw/player_stats
+[INFO] 2026-03-31 23:58:16 | DONE:  ingest player_stats season=2016 (2.9s)
+[INFO] 2026-03-31 23:58:16 | START: ingest player_stats season=2017
+[INFO] 2026-03-31 23:58:17 | Wrote 5319 rows across 1 partitions -> data/raw/player_stats
+[INFO] 2026-03-31 23:58:17 | DONE:  ingest player_stats season=2017 (1.8s)
+[INFO] 2026-03-31 23:58:17 | START: ingest player_stats season=2018
+[INFO] 2026-03-31 23:58:19 | Wrote 5281 rows across 1 partitions -> data/raw/player_stats
+[INFO] 2026-03-31 23:58:19 | DONE:  ingest player_stats season=2018 (1.6s)
+[INFO] 2026-03-31 23:58:19 | START: ingest player_stats season=2019
+[INFO] 2026-03-31 23:58:21 | Wrote 5261 rows across 1 partitions -> data/raw/player_stats
+[INFO] 2026-03-31 23:58:21 | DONE:  ingest player_stats season=2019 (1.8s)
+[INFO] 2026-03-31 23:58:21 | START: ingest player_stats season=2020
+[INFO] 2026-03-31 23:58:23 | Wrote 5447 rows across 1 partitions -> data/raw/player_stats
+[INFO] 2026-03-31 23:58:23 | DONE:  ingest player_stats season=2020 (2s)
+[INFO] 2026-03-31 23:58:23 | START: ingest player_stats season=2021
+[INFO] 2026-03-31 23:58:24 | Wrote 5698 rows across 1 partitions -> data/raw/player_stats
+[INFO] 2026-03-31 23:58:24 | DONE:  ingest player_stats season=2021 (1.8s)
+[INFO] 2026-03-31 23:58:24 | START: ingest player_stats season=2022
+[INFO] 2026-03-31 23:58:28 | Wrote 5631 rows across 1 partitions -> data/raw/player_stats
+[INFO] 2026-03-31 23:58:28 | DONE:  ingest player_stats season=2022 (3.1s)
+[INFO] 2026-03-31 23:58:28 | START: ingest player_stats season=2023
+[INFO] 2026-03-31 23:58:29 | Wrote 5653 rows across 1 partitions -> data/raw/player_stats
+[INFO] 2026-03-31 23:58:29 | DONE:  ingest player_stats season=2023 (1.6s)
+[INFO] 2026-03-31 23:58:29 | START: ingest player_stats season=2024
+[INFO] 2026-03-31 23:58:31 | Wrote 5597 rows across 1 partitions -> data/raw/player_stats
+[INFO] 2026-03-31 23:58:31 | DONE:  ingest player_stats season=2024 (1.6s)
+[INFO] 2026-03-31 23:58:31 | DONE:  ingest_player_stats (20.8s)
+[INFO] 2026-03-31 23:58:31 | START: ingest_players
+[INFO] 2026-03-31 23:58:31 | START: ingest players
+[INFO] 2026-03-31 23:58:36 | Wrote 24375 rows -> data/raw/players/data.parquet
+[INFO] 2026-03-31 23:58:36 | DONE:  ingest players (5.2s)
+[INFO] 2026-03-31 23:58:36 | DONE:  ingest_players (5.2s)
+[INFO] 2026-03-31 23:58:36 | START: ingest_rosters
+[INFO] 2026-03-31 23:58:36 | rosters: Refreshing seasons 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024
+[INFO] 2026-03-31 23:58:36 | START: ingest rosters season=2015
+[INFO] 2026-03-31 23:58:38 | Wrote 2190 rows across 1 partitions -> data/raw/rosters
+[INFO] 2026-03-31 23:58:38 | DONE:  ingest rosters season=2015 (1.7s)
+[INFO] 2026-03-31 23:58:38 | START: ingest rosters season=2016
+[INFO] 2026-03-31 23:58:39 | Wrote 3061 rows across 1 partitions -> data/raw/rosters
+[INFO] 2026-03-31 23:58:39 | DONE:  ingest rosters season=2016 (1.5s)
+[INFO] 2026-03-31 23:58:39 | START: ingest rosters season=2017
+[INFO] 2026-03-31 23:58:41 | Wrote 3082 rows across 1 partitions -> data/raw/rosters
+[INFO] 2026-03-31 23:58:41 | DONE:  ingest rosters season=2017 (1.8s)
+[INFO] 2026-03-31 23:58:41 | START: ingest rosters season=2018
+[INFO] 2026-03-31 23:58:43 | Wrote 3142 rows across 1 partitions -> data/raw/rosters
+[INFO] 2026-03-31 23:58:43 | DONE:  ingest rosters season=2018 (2.1s)
+[INFO] 2026-03-31 23:58:43 | START: ingest rosters season=2019
+[INFO] 2026-03-31 23:58:45 | Wrote 3114 rows across 1 partitions -> data/raw/rosters
+[INFO] 2026-03-31 23:58:45 | DONE:  ingest rosters season=2019 (1.5s)
+[INFO] 2026-03-31 23:58:45 | START: ingest rosters season=2020
+[INFO] 2026-03-31 23:58:48 | Wrote 3068 rows across 1 partitions -> data/raw/rosters
+[INFO] 2026-03-31 23:58:48 | DONE:  ingest rosters season=2020 (3s)
+[INFO] 2026-03-31 23:58:48 | START: ingest rosters season=2021
+[INFO] 2026-03-31 23:58:49 | Wrote 2961 rows across 1 partitions -> data/raw/rosters
+[INFO] 2026-03-31 23:58:49 | DONE:  ingest rosters season=2021 (1.7s)
+[INFO] 2026-03-31 23:58:49 | START: ingest rosters season=2022
+[INFO] 2026-03-31 23:58:53 | Wrote 3134 rows across 1 partitions -> data/raw/rosters
+[INFO] 2026-03-31 23:58:54 | DONE:  ingest rosters season=2022 (4.2s)
+[INFO] 2026-03-31 23:58:54 | START: ingest rosters season=2023
+[INFO] 2026-03-31 23:58:55 | Wrote 3090 rows across 1 partitions -> data/raw/rosters
+[INFO] 2026-03-31 23:58:55 | DONE:  ingest rosters season=2023 (1.2s)
+[INFO] 2026-03-31 23:58:55 | START: ingest rosters season=2024
+[INFO] 2026-03-31 23:58:56 | Wrote 3216 rows across 1 partitions -> data/raw/rosters
+[INFO] 2026-03-31 23:58:56 | DONE:  ingest rosters season=2024 (1.5s)
+[INFO] 2026-03-31 23:58:56 | DONE:  ingest_rosters (20.3s)
+[INFO] 2026-03-31 23:58:56 | START: ingest_rosters_weekly
+[INFO] 2026-03-31 23:58:56 | rosters_weekly: Refreshing seasons 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024
+[INFO] 2026-03-31 23:58:56 | START: ingest rosters_weekly season=2002
+[ERROR] 2026-03-31 23:58:56 | FAILED: ingest rosters_weekly season=2002 — unused argument (weekly = TRUE)
+[ERROR] 2026-03-31 23:58:57 | FAILED: ingest_rosters_weekly — [38;5;232m[36mℹ[38;5;232m In index: 1.[39m
+[1mCaused by error:[22m
+[33m![39m unused argument (weekly = TRUE)
