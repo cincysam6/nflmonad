@@ -234,7 +234,7 @@ SELECT
     ELSE 'OTHER'
   END                                          AS position_group,
   birth_date,
-  college,
+  college_name                                   AS college,
   height,
   weight,
   draft_year                                     AS entry_year,
