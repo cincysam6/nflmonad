@@ -77,7 +77,7 @@ WHERE player_id IS NOT NULL
 -- =============================================================================
 
 CREATE OR REPLACE VIEW stg_team_week AS
-WITH unpivot AS (
+WITH team_games AS (
   SELECT
     game_id,
     CAST(season AS INTEGER)          AS season,
@@ -126,7 +126,7 @@ SELECT
     ELSE NULL
   END                                AS win_flag,
   CASE WHEN game_type = 'REG' THEN 'regular' ELSE 'postseason' END AS season_type
-FROM unpivot
+FROM team_games
 WHERE team IS NOT NULL
 ;
 
