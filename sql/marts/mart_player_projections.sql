@@ -7,6 +7,7 @@
 CREATE OR REPLACE VIEW mart_player_week_projection AS
 WITH pf AS (
   SELECT
+    CAST(player_id          AS VARCHAR)  AS player_id,
     CAST(player_id          AS VARCHAR)  AS pid,
     CAST(full_name          AS VARCHAR)  AS full_name,
     CAST(position           AS VARCHAR)  AS position,
@@ -57,6 +58,7 @@ tw AS (
 ),
 pg AS (
   SELECT
+    CAST(player_id          AS VARCHAR)  AS player_id,
     CAST(player_id          AS VARCHAR)  AS pid,
     CAST(season             AS INTEGER)  AS season,
     CAST(week               AS INTEGER)  AS week,
@@ -76,6 +78,7 @@ pg AS (
 ),
 inj AS (
   SELECT
+    CAST(gsis_id  AS VARCHAR) AS player_id,
     CAST(gsis_id  AS VARCHAR) AS pid,
     CAST(season   AS INTEGER) AS season,
     CAST(week     AS INTEGER) AS week,
@@ -95,7 +98,7 @@ inj AS (
   WHERE gsis_id IS NOT NULL
 )
 SELECT
-  pf.pid AS player_id,
+  pf.player_id,
   pf.full_name,
   pf.position,
   pf.position_group,
@@ -180,12 +183,12 @@ LEFT JOIN int_injury_team_impact opp_inj
  AND  pf.season   = opp_inj.season
  AND  pf.week     = opp_inj.week
 LEFT JOIN inj
-  ON  CAST(pf.player_id AS VARCHAR) = CAST(inj.player_id AS VARCHAR)
+  ON  pf.player_id = inj.player_id
  AND  pf.season    = inj.season
  AND  pf.week      = inj.week
  AND  inj.rn       = 1
 LEFT JOIN pg
-  ON  CAST(pf.player_id AS VARCHAR) = CAST(pg.player_id AS VARCHAR)
+  ON  pf.player_id = pg.player_id
  AND  pf.season    = pg.season
  AND  pf.week      = pg.week
 ;
@@ -199,6 +202,7 @@ LEFT JOIN pg
 CREATE OR REPLACE VIEW mart_qb_projection AS
 WITH qc AS (
   SELECT
+    CAST(player_id  AS VARCHAR) AS player_id,
     CAST(player_id  AS VARCHAR) AS pid,
     CAST(season     AS INTEGER) AS season,
     CAST(week       AS INTEGER) AS week,
@@ -218,6 +222,7 @@ WITH qc AS (
 ),
 pf AS (
   SELECT
+    CAST(player_id           AS VARCHAR) AS player_id,
     CAST(player_id           AS VARCHAR) AS pid,
     CAST(season              AS INTEGER) AS season,
     CAST(week                AS INTEGER) AS week,
@@ -251,7 +256,7 @@ ngs AS (
   ) b
 )
 SELECT
-  qc.game_id, qc.pid AS player_id, qc.full_name, qc.team, qc.opponent,
+  qc.game_id, qc.player_id, qc.full_name, qc.team, qc.opponent,
   qc.season, qc.week, qc.home_flag, qc.game_date,
   pf.attempts_per_game_std, pf.pass_yds_per_game_std,
   pf.pass_tds_per_game_std, pf.pass_epa_per_game_std,
@@ -268,11 +273,11 @@ SELECT
   qc.qb_carries, qc.qb_rush_yards, qc.qb_rush_tds
 FROM qc
 LEFT JOIN pf
-  ON  CAST(qc.player_id AS VARCHAR) = CAST(pf.player_id AS VARCHAR)
+  ON  qc.player_id = pf.player_id
  AND  qc.season    = pf.season
  AND  qc.week      = pf.week
 LEFT JOIN ngs
-  ON  CAST(qc.player_id AS VARCHAR) = CAST(ngs.player_id AS VARCHAR)
+  ON  qc.player_id = ngs.player_id
  AND  qc.season    = ngs.season
  AND  qc.week      = ngs.week
 ;
@@ -281,6 +286,7 @@ LEFT JOIN ngs
 CREATE OR REPLACE VIEW mart_receiver_projection AS
 WITH p AS (
   SELECT
+    CAST(player_id      AS VARCHAR) AS player_id,
     CAST(player_id      AS VARCHAR) AS pid,
     CAST(season         AS INTEGER) AS season,
     CAST(week           AS INTEGER) AS week,
@@ -328,7 +334,7 @@ ngs AS (
   )
 )
 SELECT
-  p.game_id, p.pid AS player_id, p.full_name, p.position,
+  p.game_id, p.player_id, p.full_name, p.position,
   p.team, p.opponent, p.season, p.week, p.home_flag,
   p.targets_per_game_std, p.rec_per_game_std, p.rec_yds_per_game_std,
   p.rec_tds_per_game_std, p.target_share_std, p.air_yards_share_std,
@@ -345,7 +351,7 @@ SELECT
   p.actual_rec_tds, p.actual_fpts_std, p.actual_fpts_ppr
 FROM p
 LEFT JOIN ngs
-  ON  CAST(p.player_id AS VARCHAR) = CAST(ngs.player_id AS VARCHAR)
+  ON  p.player_id  = ngs.player_id
  AND  p.season    = ngs.season
  AND  p.week      = ngs.week
 WHERE p.position_group IN ('WR','TE')
@@ -354,6 +360,7 @@ WHERE p.position_group IN ('WR','TE')
 CREATE OR REPLACE VIEW mart_rusher_projection AS
 WITH p AS (
   SELECT
+    CAST(player_id      AS VARCHAR) AS player_id,
     CAST(player_id      AS VARCHAR) AS pid,
     CAST(season         AS INTEGER) AS season,
     CAST(week           AS INTEGER) AS week,
@@ -374,7 +381,7 @@ WITH p AS (
   FROM mart_player_week_projection
 )
 SELECT
-  p.game_id, p.pid AS player_id, p.full_name, p.position,
+  p.game_id, p.player_id, p.full_name, p.position,
   p.team, p.opponent, p.season, p.week, p.home_flag,
   p.carries_per_game_std, p.rush_yds_per_game_std, p.rush_tds_per_game_std,
   p.rush_epa_per_game_std, p.carries_per_game_l4, p.rush_yds_per_game_l4,
