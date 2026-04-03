@@ -6,7 +6,7 @@
 
 CREATE OR REPLACE VIEW int_player_game AS
 SELECT
-  pw.player_id,
+  CAST(pw.player_id AS VARCHAR)     AS player_id,
   pw.full_name,
   pw.position,
   pw.position_group,

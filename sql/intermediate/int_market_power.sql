@@ -197,7 +197,7 @@ bucketed AS (
           WHEN EXTRACT(EPOCH FROM (gk.kickoff_ts_approx - l.market_timestamp_utc)) / 3600.0 BETWEEN 24  AND  72 THEN '24h'
           WHEN EXTRACT(EPOCH FROM (gk.kickoff_ts_approx - l.market_timestamp_utc)) / 3600.0 BETWEEN 6   AND  24 THEN '6h'
           WHEN EXTRACT(EPOCH FROM (gk.kickoff_ts_approx - l.market_timestamp_utc)) / 3600.0 BETWEEN 1   AND   6 THEN '1h'
-          WHEN EXTRACT(EPOCH FROM (gk.kickoff_ts_aporox - l.market_timestamp_utc)) / 3600.0 BETWEEN 0   AND   1 THEN 'close'
+          WHEN EXTRACT(EPOCH FROM (gk.kickoff_ts_approx - l.market_timestamp_utc)) / 3600.0 BETWEEN 0   AND   1 THEN 'close'
           ELSE 'post_game'
         END
       ORDER BY l.market_timestamp_utc DESC  -- most recent within bucket

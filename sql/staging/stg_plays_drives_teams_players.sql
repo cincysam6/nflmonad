@@ -214,7 +214,7 @@ WHERE team_abbr IS NOT NULL
 
 CREATE OR REPLACE VIEW stg_players AS
 SELECT
-  gsis_id                                      AS player_id,
+  CAST(gsis_id AS VARCHAR)                     AS player_id,
   display_name                                 AS full_name,
   first_name,
   last_name,
