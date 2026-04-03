@@ -235,27 +235,57 @@ run_intermediate <- function(con, cfg, incremental = FALSE) {
   })
 }
 
+
 # ---- Marts ------------------------------------------------------------------
 run_marts <- function(con, cfg, incremental = FALSE) {
   logger::log_info("=== MART LAYER ===")
   sql_dir <- here::here("sql/marts")
-  out_dir <- cfg$paths$marts
-
-  tables <- list(
-    list(file = "mart_game_team_modeling.sql",  table = "mart_game_modeling",         partition = "season"),
-    list(file = "mart_game_team_modeling.sql",  table = "mart_team_week_modeling",    partition = "season"),
-    list(file = "mart_player_projections.sql",  table = "mart_player_week_projection",partition = "season"),
-    list(file = "mart_player_projections.sql",  table = "mart_qb_projection",         partition = "season"),
-    list(file = "mart_player_projections.sql",  table = "mart_receiver_projection",   partition = "season"),
-    list(file = "mart_player_projections.sql",  table = "mart_rusher_projection",     partition = "season"),
-    list(file = "mart_player_projections.sql",  table = "mart_backtest_game",         partition = "season"),
-    list(file = "mart_player_projections.sql",  table = "mart_backtest_player",       partition = "season")
-  )
-
-  purrr::walk(tables, function(t) {
-    materialise_table(con, file.path(sql_dir, t$file), t$table, out_dir,
-                      t$partition, incremental, cfg)
-  })
+  out_dir  <- cfg$paths$marts
+  
+  # Helper: recast a view to fix Arrow BIGINT->INTEGER for season
+  .rc <- function(tbl, path, has_pid = FALSE) {
+    p   <- gsub("\\\\", "/", normalizePath(path, mustWork = FALSE))
+    pid <- if (has_pid) "CAST(player_id AS VARCHAR) AS player_id, " else ""
+    ex  <- if (has_pid) "player_id, season, week" else "season, week"
+    tryCatch(
+      DBI::dbExecute(con, paste0(
+        "CREATE OR REPLACE VIEW ", tbl, " AS SELECT ", pid,
+        "CAST(season AS INTEGER) AS season, CAST(week AS INTEGER) AS week, ",
+        "* EXCLUDE (", ex, ") FROM read_parquet('", p,
+        "/**/*.parquet', hive_partitioning=true)")),
+      error = function(e) logger::log_warn("{tbl} recast failed: {e$message}")
+    )
+  }
+  
+  # Build game-level marts first
+  materialise_table(con, file.path(sql_dir, "mart_game_team_modeling.sql"),
+                    "mart_game_modeling",     out_dir, "season", incremental, cfg)
+  materialise_table(con, file.path(sql_dir, "mart_game_team_modeling.sql"),
+                    "mart_team_week_modeling", out_dir, "season", incremental, cfg)
+  
+  # Re-apply all recasts — register_parquet_view overwrites them after each materialise
+  .rc("int_player_form",        file.path(cfg$paths$intermediate, "int_player_form"),        TRUE)
+  .rc("int_player_game",        file.path(cfg$paths$intermediate, "int_player_game"),        TRUE)
+  .rc("stg_team_week",          file.path(cfg$paths$staging,      "stg_team_week"),          FALSE)
+  .rc("stg_nextgen_player_week",file.path(cfg$paths$staging,      "stg_nextgen_player_week"),TRUE)
+  .rc("int_injury_team_impact", file.path(cfg$paths$intermediate, "int_injury_team_impact"), FALSE)
+  .rc("mart_team_week_modeling",file.path(cfg$paths$marts,        "mart_team_week_modeling"),FALSE)
+  logger::log_info("All pre-mart recasts applied")
+  
+  # Build player marts
+  for (tbl in c("mart_player_week_projection", "mart_qb_projection",
+                "mart_receiver_projection",    "mart_rusher_projection",
+                "mart_backtest_game",           "mart_backtest_player")) {
+    materialise_table(con, file.path(sql_dir, "mart_player_projections.sql"),
+                      tbl, out_dir, "season", incremental, cfg)
+    # Re-apply recasts after each materialise since register_parquet_view overwrites them
+    .rc("int_player_form",        file.path(cfg$paths$intermediate, "int_player_form"),        TRUE)
+    .rc("int_player_game",        file.path(cfg$paths$intermediate, "int_player_game"),        TRUE)
+    .rc("stg_team_week",          file.path(cfg$paths$staging,      "stg_team_week"),          FALSE)
+    .rc("stg_nextgen_player_week",file.path(cfg$paths$staging,      "stg_nextgen_player_week"),TRUE)
+    .rc("int_injury_team_impact", file.path(cfg$paths$intermediate, "int_injury_team_impact"), FALSE)
+    .rc("mart_team_week_modeling",file.path(cfg$paths$marts,        "mart_team_week_modeling"),FALSE)
+  }
 }
 
 # ---- Master entry point -----------------------------------------------------
@@ -263,26 +293,41 @@ run_marts <- function(con, cfg, incremental = FALSE) {
 run_transforms <- function(cfg = load_config(), incremental = FALSE) {
   con <- db_connect(cfg)
   on.exit(db_disconnect(con), add = TRUE)
-
-  # 1. Drop ALL stale cached views — prevents old broken defs from persisting
+  
   .drop_all_platform_views(con)
-
-  # 2. Build team_stats from existing raw_pbp parquet
   log_step("build_team_stats", .build_team_stats_from_raw_pbp(con, cfg))
-
-  # 3. Register raw views (skips missing dirs gracefully)
   register_all_raw_views(con, cfg)
-
-  # 4. Staging
+  
   run_staging(con, cfg, incremental = incremental)
   .reregister_layer(con, cfg$paths$staging)
-
-  # 5. Intermediate
+  
   run_intermediate(con, cfg, incremental = incremental)
   .reregister_layer(con, cfg$paths$intermediate)
-
+  
+  # ---- Recast all tables that feed mart_player_week_projection ----
+  # Arrow reads Hive partition season=YYYY as BIGINT — recast to INTEGER
+  .recast <- function(tbl, path, has_pid = FALSE) {
+    p <- gsub("\\\\", "/", normalizePath(path, mustWork = FALSE))
+    pid <- if (has_pid) "CAST(player_id AS VARCHAR) AS player_id, " else ""
+    ex  <- if (has_pid) "player_id, season, week" else "season, week"
+    sql <- paste0("CREATE OR REPLACE VIEW ", tbl, " AS SELECT ", pid,
+                  "CAST(season AS INTEGER) AS season, CAST(week AS INTEGER) AS week, ",
+                  "* EXCLUDE (", ex, ") ",
+                  "FROM read_parquet('", p, "/**/*.parquet', hive_partitioning=true)")
+    tryCatch(
+      { DBI::dbExecute(con, sql); logger::log_info("{tbl} recast OK") },
+      error = function(e) logger::log_warn("{tbl} recast FAILED: {e$message}")
+    )
+  }
+  
+  .recast("int_player_form",        file.path(cfg$paths$intermediate, "int_player_form"),        TRUE)
+  .recast("int_player_game",         file.path(cfg$paths$intermediate, "int_player_game"),         TRUE)
+  .recast("stg_team_week",           file.path(cfg$paths$staging,      "stg_team_week"),           FALSE)
+  .recast("stg_nextgen_player_week", file.path(cfg$paths$staging,      "stg_nextgen_player_week"), TRUE)
+  .recast("int_injury_team_impact",  file.path(cfg$paths$intermediate, "int_injury_team_impact"),  FALSE)
+  
   # 6. Marts
   run_marts(con, cfg, incremental = incremental)
-
+  
   logger::log_info("run_transforms complete.")
 }

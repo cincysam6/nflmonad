@@ -231,7 +231,7 @@ SELECT
     ELSE team END                     AS team,
   CAST(season    AS INTEGER)          AS season,
   CAST(week      AS INTEGER)          AS week,
-  CAST(date_modified AS DATE)         AS report_date,
+  CAST(CAST(date_modified AS TIMESTAMP) AS DATE) AS report_date,
   report_primary_injury,
   report_secondary_injury,
   report_status,
@@ -300,52 +300,46 @@ WHERE pfr_player_id IS NOT NULL
 -- is acceptable. The BINDER error was caused by stale cached view definitions,
 -- NOT by TRY_CAST. This clean file resolves that.
 -- =============================================================================
-
 CREATE OR REPLACE VIEW stg_nextgen_player_week AS
 SELECT
-  player_gsis_id                                AS player_id,
-  player_display_name                           AS full_name,
-  player_position                               AS position,
+  player_gsis_id                               AS player_id,
+  player_display_name                          AS full_name,
+  player_position                              AS position,
   CASE team_abbr
     WHEN 'OAK' THEN 'LV'
     WHEN 'SD'  THEN 'LAC'
     WHEN 'STL' THEN 'LA'
-    ELSE team_abbr END                          AS team,
-  CAST(season    AS INTEGER)                    AS season,
-  CAST(week      AS INTEGER)                    AS week,
+    ELSE team_abbr END                         AS team,
+  CAST(season AS INTEGER)                      AS season,
+  CAST(week   AS INTEGER)                      AS week,
   season_type,
   stat_type,
 
-  -- Receiving cols — CONFIRMED present in raw_nextgen_stats
-  TRY_CAST(avg_cushion                          AS DOUBLE) AS avg_cushion,
-  TRY_CAST(avg_separation                       AS DOUBLE) AS avg_separation,
-  TRY_CAST(catch_percentage                     AS DOUBLE) AS catch_percentage,
-  TRY_CAST(avg_yac                              AS DOUBLE) AS avg_yac,
-  TRY_CAST(avg_yac_above_expectation            AS DOUBLE) AS avg_yac_above_expectation,
-  TRY_CAST(avg_intended_air_yards               AS DOUBLE) AS avg_intended_air_yards,
-  TRY_CAST(percent_share_of_intended_air_yards  AS DOUBLE) AS air_yards_share_ngs,
-  TRY_CAST(avg_expected_yac                     AS DOUBLE) AS avg_expected_yac,
+  -- Receiving columns (ALL confirmed present in raw_nextgen_stats)
+  CAST(avg_cushion                          AS DOUBLE) AS avg_cushion,
+  CAST(avg_separation                       AS DOUBLE) AS avg_separation,
+  CAST(catch_percentage                     AS DOUBLE) AS catch_percentage,
+  CAST(avg_yac                              AS DOUBLE) AS avg_yac,
+  CAST(avg_yac_above_expectation            AS DOUBLE) AS avg_yac_above_expectation,
+  CAST(avg_intended_air_yards               AS DOUBLE) AS avg_intended_air_yards,
+  CAST(percent_share_of_intended_air_yards  AS DOUBLE) AS air_yards_share_ngs,
+  CAST(avg_expected_yac                     AS DOUBLE) AS avg_expected_yac,
+  CAST(receptions                           AS INTEGER) AS receptions,
+  CAST(targets                              AS INTEGER) AS targets,
+  CAST(yards                                AS DOUBLE)  AS receiving_yards,
+  CAST(rec_touchdowns                       AS INTEGER) AS rec_touchdowns,
 
-  -- Passing cols — NOT in raw for this load; TRY_CAST → NULL (not an error)
-  TRY_CAST(avg_time_to_throw                    AS DOUBLE) AS avg_time_to_throw,
-  TRY_CAST(aggressiveness                       AS DOUBLE) AS aggressiveness,
-  TRY_CAST(completion_percentage_above_expectation AS DOUBLE) AS cpoe,
-  TRY_CAST(passer_rating                        AS DOUBLE) AS passer_rating,
-  TRY_CAST(expected_completion_percentage       AS DOUBLE) AS xcomp_pct,
-  TRY_CAST(avg_completed_air_yards              AS DOUBLE) AS avg_completed_air_yards,
+  -- Passing columns DO NOT EXIST in this dataset - omitted entirely
+  -- avg_time_to_throw, aggressiveness, cpoe, passer_rating etc. are absent
+  -- They will be NULL in downstream joins by default
 
-  -- Rushing cols — NOT in raw for this load; TRY_CAST → NULL (not an error)
-  TRY_CAST(efficiency                           AS DOUBLE) AS rush_efficiency,
-  TRY_CAST(percent_attempts_gte_eight_defenders AS DOUBLE) AS stacked_box_pct,
-  TRY_CAST(avg_time_to_los                      AS DOUBLE) AS avg_time_to_los,
-  TRY_CAST(rush_yards_over_expected             AS DOUBLE) AS ryoe,
-  TRY_CAST(rush_yards_over_expected_per_att     AS DOUBLE) AS ryoe_per_att,
+  -- Rushing columns DO NOT EXIST in this dataset - omitted entirely  
+  -- ryoe, stacked_box_pct, avg_time_to_los etc. are absent
 
   ingestion_ts
 FROM raw_nextgen_stats
 WHERE player_gsis_id IS NOT NULL
 ;
-
 
 -- =============================================================================
 -- stg_external_odds_game

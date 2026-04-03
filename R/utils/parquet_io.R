@@ -54,22 +54,29 @@ write_parquet_partition <- function(df,
                                     partition_cols = NULL,
                                     compression    = "snappy") {
   fs::dir_create(base_path)
-
+  
   if (is.null(partition_cols) || length(partition_cols) == 0) {
     out_path <- file.path(base_path, "data.parquet")
     arrow::write_parquet(df, out_path, compression = compression)
     logger::log_info("Wrote {nrow(df)} rows -> {out_path}")
     return(invisible(out_path))
   }
-
+  
   # Split and write per partition combination
+  # Force partition columns to integer to prevent Arrow reading them as DOUBLE
+  for (col in partition_cols) {
+    if (col %in% names(df) && is.numeric(df[[col]])) {
+      df[[col]] <- as.integer(df[[col]])
+    }
+  }
+  
   part_groups <- df |>
     dplyr::group_by(dplyr::across(dplyr::all_of(partition_cols))) |>
     dplyr::group_split()
-
+  
   part_keys <- df |>
     dplyr::distinct(dplyr::across(dplyr::all_of(partition_cols)))
-
+  
   purrr::walk2(part_groups, seq_len(nrow(part_keys)), function(part_df, i) {
     key_vals  <- part_keys[i, , drop = FALSE]
     dir_parts <- purrr::imap_chr(as.list(key_vals), ~ paste0(.y, "=", .x))
@@ -78,7 +85,7 @@ write_parquet_partition <- function(df,
     out_file  <- file.path(out_dir, "data.parquet")
     arrow::write_parquet(part_df, out_file, compression = compression)
   })
-
+  
   logger::log_info(
     "Wrote {nrow(df)} rows across {nrow(part_keys)} partitions -> {base_path}"
   )

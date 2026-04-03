@@ -98,18 +98,18 @@ WITH player_games AS (
     *,
     ROW_NUMBER() OVER (PARTITION BY player_id, season ORDER BY week) AS game_num
   FROM int_player_game
-  WHERE season_type = 'regular'
+  WHERE season_type IN ('REG', 'regular')
     AND player_id IS NOT NULL
 )
 
 SELECT
-  player_id,
+  CAST(player_id AS VARCHAR)  AS player_id,
   full_name,
   position,
   position_group,
   team,
-  season,
-  week,
+  CAST(season AS INTEGER)     AS season,
+  CAST(week   AS INTEGER)     AS week,
   game_num,
 
   -- ===== SEASON-TO-DATE (lagged) =====

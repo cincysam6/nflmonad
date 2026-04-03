@@ -121,3 +121,5 @@ logging:
   file: "logs/pipeline_{date}.log"
   console: true
   max_log_files: 30
+
+

@@ -90,7 +90,8 @@ register_parquet_view <- function(con,
 
   sql <- glue::glue(
     "CREATE OR REPLACE VIEW {view_name} AS ",
-    "SELECT * FROM read_parquet('{parquet_path}/**/*.parquet', {hp_flag});"
+    "SELECT * REPLACE (CAST(season AS INTEGER) AS season) ",
+    "FROM read_parquet('{parquet_path}/**/*.parquet', {hp_flag});"
   )
 
   tryCatch(
