@@ -132,6 +132,10 @@ materialise_table <- function(con, sql_file, output_table, output_dir,
       }
 
       out_path <- file.path(output_dir, output_table)
+      if (!filter_current_season && fs::dir_exists(out_path)) {
+        fs::dir_delete(out_path)
+        logger::log_info("{output_table}: cleared existing output directory for full rebuild.")
+      }
       write_parquet_partition(df, out_path, partition_cols = partition_cols)
       register_parquet_view(con, output_table, out_path)
       logger::log_info("{output_table}: {nrow(df)} rows written.")
