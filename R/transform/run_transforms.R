@@ -132,6 +132,10 @@ materialise_table <- function(con, sql_file, output_table, output_dir,
       }
 
       out_path <- file.path(output_dir, output_table)
+      if (!filter_current_season && fs::dir_exists(out_path)) {
+        fs::dir_delete(out_path)
+        logger::log_info("{output_table}: cleared existing output directory for full rebuild.")
+      }
       write_parquet_partition(df, out_path, partition_cols = partition_cols)
       register_parquet_view(con, output_table, out_path)
       logger::log_info("{output_table}: {nrow(df)} rows written.")
@@ -235,27 +239,66 @@ run_intermediate <- function(con, cfg, incremental = FALSE) {
   })
 }
 
+
 # ---- Marts ------------------------------------------------------------------
 run_marts <- function(con, cfg, incremental = FALSE) {
   logger::log_info("=== MART LAYER ===")
   sql_dir <- here::here("sql/marts")
-  out_dir <- cfg$paths$marts
-
-  tables <- list(
-    list(file = "mart_game_team_modeling.sql",  table = "mart_game_modeling",         partition = "season"),
-    list(file = "mart_game_team_modeling.sql",  table = "mart_team_week_modeling",    partition = "season"),
-    list(file = "mart_player_projections.sql",  table = "mart_player_week_projection",partition = "season"),
-    list(file = "mart_player_projections.sql",  table = "mart_qb_projection",         partition = "season"),
-    list(file = "mart_player_projections.sql",  table = "mart_receiver_projection",   partition = "season"),
-    list(file = "mart_player_projections.sql",  table = "mart_rusher_projection",     partition = "season"),
-    list(file = "mart_player_projections.sql",  table = "mart_backtest_game",         partition = "season"),
-    list(file = "mart_player_projections.sql",  table = "mart_backtest_player",       partition = "season")
-  )
-
-  purrr::walk(tables, function(t) {
-    materialise_table(con, file.path(sql_dir, t$file), t$table, out_dir,
-                      t$partition, incremental, cfg)
-  })
+  out_dir  <- cfg$paths$marts
+  
+  # Helper: recast a view to fix Arrow BIGINT->INTEGER for season/week and
+  # normalize identifier columns to VARCHAR.
+  .rc <- function(tbl, path, id_cols = character()) {
+    p   <- gsub("\\\\", "/", normalizePath(path, mustWork = FALSE))
+    id_cols <- unique(id_cols)
+    id_sql <- if (length(id_cols) > 0) {
+      paste0("CAST(", id_cols, " AS VARCHAR) AS ", id_cols, collapse = ", ")
+    } else ""
+    select_prefix <- paste(
+      c(id_sql, "CAST(season AS INTEGER) AS season", "CAST(week AS INTEGER) AS week"),
+      collapse = ", "
+    )
+    ex  <- paste(c(id_cols, "season", "week"), collapse = ", ")
+    tryCatch(
+      DBI::dbExecute(con, paste0(
+        "CREATE OR REPLACE VIEW ", tbl, " AS SELECT ", select_prefix, ", ",
+        "* EXCLUDE (", ex, ") FROM read_parquet('", p,
+        "/**/*.parquet', hive_partitioning=true)")),
+      error = function(e) logger::log_warn("{tbl} recast failed: {e$message}")
+    )
+  }
+  
+  # Build game-level marts first
+  materialise_table(con, file.path(sql_dir, "mart_game_team_modeling.sql"),
+                    "mart_game_modeling",     out_dir, "season", incremental, cfg)
+  materialise_table(con, file.path(sql_dir, "mart_game_team_modeling.sql"),
+                    "mart_team_week_modeling", out_dir, "season", incremental, cfg)
+  
+  # Re-apply all recasts — register_parquet_view overwrites them after each materialise
+  .rc("int_player_form",        file.path(cfg$paths$intermediate, "int_player_form"),         c("player_id"))
+  .rc("int_player_game",        file.path(cfg$paths$intermediate, "int_player_game"),         c("player_id"))
+  .rc("stg_team_week",          file.path(cfg$paths$staging,      "stg_team_week"))
+  .rc("stg_nextgen_player_week",file.path(cfg$paths$staging,      "stg_nextgen_player_week"), c("player_id"))
+  .rc("int_injury_team_impact", file.path(cfg$paths$intermediate, "int_injury_team_impact"))
+  .rc("raw_injuries",           file.path(cfg$paths$raw,          "raw_injuries"),            c("gsis_id"))
+  .rc("mart_team_week_modeling",file.path(cfg$paths$marts,        "mart_team_week_modeling"))
+  logger::log_info("All pre-mart recasts applied")
+  
+  # Build player marts
+  for (tbl in c("mart_player_week_projection", "mart_qb_projection",
+                "mart_receiver_projection",    "mart_rusher_projection",
+                "mart_backtest_game",           "mart_backtest_player")) {
+    materialise_table(con, file.path(sql_dir, "mart_player_projections.sql"),
+                      tbl, out_dir, "season", incremental, cfg)
+    # Re-apply recasts after each materialise since register_parquet_view overwrites them
+    .rc("int_player_form",        file.path(cfg$paths$intermediate, "int_player_form"),         c("player_id"))
+    .rc("int_player_game",        file.path(cfg$paths$intermediate, "int_player_game"),         c("player_id"))
+    .rc("stg_team_week",          file.path(cfg$paths$staging,      "stg_team_week"))
+    .rc("stg_nextgen_player_week",file.path(cfg$paths$staging,      "stg_nextgen_player_week"), c("player_id"))
+    .rc("int_injury_team_impact", file.path(cfg$paths$intermediate, "int_injury_team_impact"))
+    .rc("raw_injuries",           file.path(cfg$paths$raw,          "raw_injuries"),            c("gsis_id"))
+    .rc("mart_team_week_modeling",file.path(cfg$paths$marts,        "mart_team_week_modeling"))
+  }
 }
 
 # ---- Master entry point -----------------------------------------------------
@@ -263,26 +306,49 @@ run_marts <- function(con, cfg, incremental = FALSE) {
 run_transforms <- function(cfg = load_config(), incremental = FALSE) {
   con <- db_connect(cfg)
   on.exit(db_disconnect(con), add = TRUE)
-
-  # 1. Drop ALL stale cached views — prevents old broken defs from persisting
+  
   .drop_all_platform_views(con)
-
-  # 2. Build team_stats from existing raw_pbp parquet
   log_step("build_team_stats", .build_team_stats_from_raw_pbp(con, cfg))
-
-  # 3. Register raw views (skips missing dirs gracefully)
   register_all_raw_views(con, cfg)
-
-  # 4. Staging
+  
   run_staging(con, cfg, incremental = incremental)
   .reregister_layer(con, cfg$paths$staging)
-
-  # 5. Intermediate
+  
   run_intermediate(con, cfg, incremental = incremental)
   .reregister_layer(con, cfg$paths$intermediate)
-
+  
+  # ---- Recast all tables that feed mart_player_week_projection ----
+  # Arrow reads Hive partition season=YYYY as BIGINT — recast to INTEGER
+  # and normalize identifier columns to VARCHAR.
+  .recast <- function(tbl, path, id_cols = character()) {
+    p <- gsub("\\\\", "/", normalizePath(path, mustWork = FALSE))
+    id_cols <- unique(id_cols)
+    id_sql <- if (length(id_cols) > 0) {
+      paste0("CAST(", id_cols, " AS VARCHAR) AS ", id_cols, collapse = ", ")
+    } else ""
+    select_prefix <- paste(
+      c(id_sql, "CAST(season AS INTEGER) AS season", "CAST(week AS INTEGER) AS week"),
+      collapse = ", "
+    )
+    ex  <- paste(c(id_cols, "season", "week"), collapse = ", ")
+    sql <- paste0("CREATE OR REPLACE VIEW ", tbl, " AS SELECT ", select_prefix, ", ",
+                  "* EXCLUDE (", ex, ") ",
+                  "FROM read_parquet('", p, "/**/*.parquet', hive_partitioning=true)")
+    tryCatch(
+      { DBI::dbExecute(con, sql); logger::log_info("{tbl} recast OK") },
+      error = function(e) logger::log_warn("{tbl} recast FAILED: {e$message}")
+    )
+  }
+  
+  .recast("int_player_form",        file.path(cfg$paths$intermediate, "int_player_form"),         c("player_id"))
+  .recast("int_player_game",        file.path(cfg$paths$intermediate, "int_player_game"),         c("player_id"))
+  .recast("stg_team_week",          file.path(cfg$paths$staging,      "stg_team_week"))
+  .recast("stg_nextgen_player_week",file.path(cfg$paths$staging,      "stg_nextgen_player_week"), c("player_id"))
+  .recast("int_injury_team_impact", file.path(cfg$paths$intermediate, "int_injury_team_impact"))
+  .recast("raw_injuries",           file.path(cfg$paths$raw,          "raw_injuries"),            c("gsis_id"))
+  
   # 6. Marts
   run_marts(con, cfg, incremental = incremental)
-
+  
   logger::log_info("run_transforms complete.")
 }

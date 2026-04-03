@@ -86,12 +86,44 @@ register_parquet_view <- function(con,
     return(invisible(NULL))
   }
 
-  hp_flag <- if (hive_partition) "hive_partitioning=true" else ""
+  hp_clause <- if (hive_partition) ", hive_partitioning=true" else ""
+  pq_path   <- gsub("\\\\", "/", normalizePath(parquet_path, mustWork = FALSE))
+  from_sql  <- glue::glue("read_parquet('{pq_path}/**/*.parquet'{hp_clause})")
 
-  sql <- glue::glue(
-    "CREATE OR REPLACE VIEW {view_name} AS ",
-    "SELECT * FROM read_parquet('{parquet_path}/**/*.parquet', {hp_flag});"
+  cols <- tryCatch(
+    names(DBI::dbGetQuery(con, glue::glue("SELECT * FROM {from_sql} LIMIT 0"))),
+    error = function(e) character(0)
   )
+
+  cast_expr <- character(0)
+  exclude   <- character(0)
+
+  if ("player_id" %in% cols) {
+    cast_expr <- c(cast_expr, "CAST(player_id AS VARCHAR) AS player_id")
+    exclude   <- c(exclude, "player_id")
+  }
+  if ("season" %in% cols) {
+    cast_expr <- c(cast_expr, "CAST(season AS INTEGER) AS season")
+    exclude   <- c(exclude, "season")
+  }
+  if ("week" %in% cols) {
+    cast_expr <- c(cast_expr, "CAST(week AS INTEGER) AS week")
+    exclude   <- c(exclude, "week")
+  }
+
+  sql <- if (length(cast_expr) > 0) {
+    glue::glue(
+      "CREATE OR REPLACE VIEW {view_name} AS ",
+      "SELECT {paste(cast_expr, collapse = ', ')}, ",
+      "* EXCLUDE ({paste(exclude, collapse = ', ')}) ",
+      "FROM {from_sql};"
+    )
+  } else {
+    glue::glue(
+      "CREATE OR REPLACE VIEW {view_name} AS ",
+      "SELECT * FROM {from_sql};"
+    )
+  }
 
   tryCatch(
     {
