@@ -243,8 +243,13 @@ run_intermediate <- function(con, cfg, incremental = FALSE) {
 
 
 # ---- Master entry point -----------------------------------------------------
+#' @param build_through Character; deepest layer to materialise.
+#'   One of "staging" or "intermediate".
 #' @export
-run_transforms <- function(cfg = load_config(), incremental = FALSE) {
+run_transforms <- function(cfg = load_config(),
+                           incremental = FALSE,
+                           build_through = c("staging", "intermediate")) {
+  build_through <- match.arg(build_through)
   con <- db_connect(cfg)
   on.exit(db_disconnect(con), add = TRUE)
   
@@ -254,42 +259,14 @@ run_transforms <- function(cfg = load_config(), incremental = FALSE) {
   
   run_staging(con, cfg, incremental = incremental)
   .reregister_layer(con, cfg$paths$staging)
+
+  if (identical(build_through, "staging")) {
+    logger::log_info("run_transforms complete (staging-only build).")
+    return(invisible(NULL))
+  }
   
   run_intermediate(con, cfg, incremental = incremental)
   .reregister_layer(con, cfg$paths$intermediate)
-  
-  # ---- Recast all tables that feed mart_player_week_projection ----
-  # Arrow reads Hive partition season=YYYY as BIGINT — recast to INTEGER
-  # and normalize identifier columns to VARCHAR.
-  .recast <- function(tbl, path, id_cols = character()) {
-    p <- gsub("\\\\", "/", normalizePath(path, mustWork = FALSE))
-    id_cols <- unique(id_cols)
-    id_sql <- if (length(id_cols) > 0) {
-      paste0("CAST(", id_cols, " AS VARCHAR) AS ", id_cols, collapse = ", ")
-    } else ""
-    select_prefix <- paste(
-      c(id_sql, "CAST(season AS INTEGER) AS season", "CAST(week AS INTEGER) AS week"),
-      collapse = ", "
-    )
-    ex  <- paste(c(id_cols, "season", "week"), collapse = ", ")
-    sql <- paste0("CREATE OR REPLACE VIEW ", tbl, " AS SELECT ", select_prefix, ", ",
-                  "* EXCLUDE (", ex, ") ",
-                  "FROM read_parquet('", p, "/**/*.parquet', hive_partitioning=true)")
-    tryCatch(
-      { DBI::dbExecute(con, sql); logger::log_info("{tbl} recast OK") },
-      error = function(e) logger::log_warn("{tbl} recast FAILED: {e$message}")
-    )
-  }
-  
-  .recast("int_player_form",        file.path(cfg$paths$intermediate, "int_player_form"),         c("player_id"))
-  .recast("int_player_game",        file.path(cfg$paths$intermediate, "int_player_game"),         c("player_id"))
-  .recast("stg_team_week",          file.path(cfg$paths$staging,      "stg_team_week"))
-  .recast("stg_nextgen_player_week",file.path(cfg$paths$staging,      "stg_nextgen_player_week"), c("player_id"))
-  .recast("int_injury_team_impact", file.path(cfg$paths$intermediate, "int_injury_team_impact"))
-  .recast("raw_injuries",           file.path(cfg$paths$raw,          "raw_injuries"),            c("gsis_id"))
-  
-  # 6. Marts intentionally skipped.
-  logger::log_info("Marts step skipped in run_transforms; build marts manually.")
   
   logger::log_info("run_transforms complete.")
 }
