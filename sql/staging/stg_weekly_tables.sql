@@ -30,7 +30,7 @@
 
 CREATE OR REPLACE VIEW stg_player_week AS
 SELECT
-  player_id,
+  CAST(player_id as VARCHAR)                    AS player_id,
   player_display_name                           AS full_name,
   UPPER(position)                               AS position,
   UPPER(position_group)                         AS position_group,
@@ -189,7 +189,7 @@ WHERE team IS NOT NULL
 
 CREATE OR REPLACE VIEW stg_rosters_weekly AS
 SELECT
-  gsis_id                             AS player_id,
+  CAST(gsis_id as VARCHAR)                    AS player_id,
   full_name,
   UPPER(position)                     AS position,
   depth_chart_position,
@@ -221,7 +221,7 @@ WHERE gsis_id IS NOT NULL
 
 CREATE OR REPLACE VIEW stg_injuries_weekly AS
 SELECT
-  gsis_id                             AS player_id,
+  CAST(gsis_id as VARCHAR)                    AS player_id,
   full_name,
   UPPER(position)                     AS position,
   CASE team
