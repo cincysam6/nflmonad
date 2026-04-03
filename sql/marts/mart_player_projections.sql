@@ -180,12 +180,12 @@ LEFT JOIN int_injury_team_impact opp_inj
  AND  pf.season   = opp_inj.season
  AND  pf.week     = opp_inj.week
 LEFT JOIN inj
-  ON  pf.player_id = inj.player_id
+  ON  CAST(pf.player_id AS VARCHAR) = CAST(inj.player_id AS VARCHAR)
  AND  pf.season    = inj.season
  AND  pf.week      = inj.week
  AND  inj.rn       = 1
 LEFT JOIN pg
-  ON  pf.player_id = pg.player_id
+  ON  CAST(pf.player_id AS VARCHAR) = CAST(pg.player_id AS VARCHAR)
  AND  pf.season    = pg.season
  AND  pf.week      = pg.week
 ;
@@ -233,16 +233,22 @@ pf AS (
 ),
 ngs AS (
   SELECT
-    CAST(player_id AS VARCHAR) AS player_id,
-    CAST(season    AS INTEGER) AS season,
-    CAST(week      AS INTEGER) AS week,
-    AVG(avg_intended_air_yards) OVER w AS avg_intended_air_yards
-  FROM stg_nextgen_player_week
-  WHERE season_type = 'REG'
-  WINDOW w AS (
-    PARTITION BY player_id, season ORDER BY week
-    ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING
-  )
+    b.player_id,
+    b.season,
+    b.week,
+    AVG(b.avg_intended_air_yards) OVER (
+      PARTITION BY b.player_id, b.season ORDER BY b.week
+      ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING
+    ) AS avg_intended_air_yards
+  FROM (
+    SELECT
+      CAST(player_id AS VARCHAR) AS player_id,
+      CAST(season    AS INTEGER) AS season,
+      CAST(week      AS INTEGER) AS week,
+      CAST(avg_intended_air_yards AS DOUBLE) AS avg_intended_air_yards
+    FROM stg_nextgen_player_week
+    WHERE season_type = 'REG'
+  ) b
 )
 SELECT
   qc.game_id, qc.player_id, qc.full_name, qc.team, qc.opponent,
@@ -262,11 +268,11 @@ SELECT
   qc.qb_carries, qc.qb_rush_yards, qc.qb_rush_tds
 FROM qc
 LEFT JOIN pf
-  ON  qc.player_id = pf.player_id
+  ON  CAST(qc.player_id AS VARCHAR) = CAST(pf.player_id AS VARCHAR)
  AND  qc.season    = pf.season
  AND  qc.week      = pf.week
 LEFT JOIN ngs
-  ON  qc.player_id = ngs.player_id
+  ON  CAST(qc.player_id AS VARCHAR) = CAST(ngs.player_id AS VARCHAR)
  AND  qc.season    = ngs.season
  AND  qc.week      = ngs.week
 ;
@@ -295,18 +301,29 @@ WITH p AS (
 ),
 ngs AS (
   SELECT
-    CAST(player_id AS VARCHAR) AS player_id,
-    CAST(season    AS INTEGER) AS season,
-    CAST(week      AS INTEGER) AS week,
-    AVG(avg_separation)            OVER w AS avg_separation,
-    AVG(avg_cushion)               OVER w AS avg_cushion,
-    AVG(catch_percentage)          OVER w AS catch_percentage,
-    AVG(avg_yac)                   OVER w AS avg_yac,
-    AVG(avg_yac_above_expectation) OVER w AS avg_yac_above_expectation
-  FROM stg_nextgen_player_week
-  WHERE season_type = 'REG'
+    b.player_id,
+    b.season,
+    b.week,
+    AVG(b.avg_separation)            OVER w AS avg_separation,
+    AVG(b.avg_cushion)               OVER w AS avg_cushion,
+    AVG(b.catch_percentage)          OVER w AS catch_percentage,
+    AVG(b.avg_yac)                   OVER w AS avg_yac,
+    AVG(b.avg_yac_above_expectation) OVER w AS avg_yac_above_expectation
+  FROM (
+    SELECT
+      CAST(player_id AS VARCHAR) AS player_id,
+      CAST(season    AS INTEGER) AS season,
+      CAST(week      AS INTEGER) AS week,
+      CAST(avg_separation            AS DOUBLE) AS avg_separation,
+      CAST(avg_cushion               AS DOUBLE) AS avg_cushion,
+      CAST(catch_percentage          AS DOUBLE) AS catch_percentage,
+      CAST(avg_yac                   AS DOUBLE) AS avg_yac,
+      CAST(avg_yac_above_expectation AS DOUBLE) AS avg_yac_above_expectation
+    FROM stg_nextgen_player_week
+    WHERE season_type = 'REG'
+  ) b
   WINDOW w AS (
-    PARTITION BY player_id, season ORDER BY week
+    PARTITION BY b.player_id, b.season ORDER BY b.week
     ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING
   )
 )
@@ -328,7 +345,7 @@ SELECT
   p.actual_rec_tds, p.actual_fpts_std, p.actual_fpts_ppr
 FROM p
 LEFT JOIN ngs
-  ON  p.player_id = ngs.player_id
+  ON  CAST(p.player_id AS VARCHAR) = CAST(ngs.player_id AS VARCHAR)
  AND  p.season    = ngs.season
  AND  p.week      = ngs.week
 WHERE p.position_group IN ('WR','TE')
