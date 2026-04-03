@@ -213,6 +213,8 @@ SELECT
   tf.prior_epa_pp,
   tf.prior_def_epa_pp,
   tf.wins_l5,
+  tf.sacks_allowed_std,
+  tf.def_sacks_std,
 
   -- Injury context
   inj.total_injury_burden,

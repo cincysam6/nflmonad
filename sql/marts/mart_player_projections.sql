@@ -125,13 +125,13 @@ LEFT JOIN (
     PARTITION BY player_id, season, week
     ORDER BY report_date DESC
   ) = 1
-) inj ON pf.player_id = inj.player_id
+) inj ON CAST(pf.player_id AS VARCHAR) = CAST(inj.player_id AS VARCHAR)
      AND pf.season    = inj.season
      AND pf.week      = inj.week
 
 -- Actual outcomes (for training)
 LEFT JOIN int_player_game pg
-  ON pf.player_id = pg.player_id
+  ON CAST(pf.player_id AS VARCHAR) = CAST(pg.player_id AS VARCHAR)
   AND pf.season   = pg.season
   AND pf.week     = pg.week
 ;
@@ -188,7 +188,7 @@ SELECT
 
 FROM int_qb_team_context qc
 LEFT JOIN int_player_form pf
-  ON qc.player_id = pf.player_id
+  ON CAST(qc.player_id AS VARCHAR) = CAST(pf.player_id AS VARCHAR)
   AND qc.season   = pf.season
   AND qc.week     = pf.week
 LEFT JOIN (
@@ -204,7 +204,7 @@ LEFT JOIN (
   FROM stg_nextgen_player_week
   WHERE stat_type = 'passing'
     AND season_type = 'REG'
-) ngs ON qc.player_id = ngs.player_id
+) ngs ON CAST(qc.player_id AS VARCHAR) = CAST(ngs.player_id AS VARCHAR)
       AND qc.season   = ngs.season
       AND qc.week     = ngs.week
 ;
@@ -286,7 +286,7 @@ LEFT JOIN (
   FROM stg_nextgen_player_week
   WHERE stat_type = 'receiving'
     AND season_type = 'REG'
-) ngs ON p.player_id = ngs.player_id
+) ngs ON CAST(p.player_id AS VARCHAR) = CAST(ngs.player_id AS VARCHAR)
       AND p.season   = ngs.season
       AND p.week     = ngs.week
 
@@ -372,7 +372,7 @@ LEFT JOIN (
   FROM stg_nextgen_player_week
   WHERE stat_type = 'rushing'
     AND season_type = 'REG'
-) ngs ON p.player_id = ngs.player_id
+) ngs ON CAST(p.player_id AS VARCHAR) = CAST(ngs.player_id AS VARCHAR)
       AND p.season   = ngs.season
       AND p.week     = ngs.week
 
