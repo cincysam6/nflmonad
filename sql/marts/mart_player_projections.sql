@@ -180,12 +180,12 @@ LEFT JOIN int_injury_team_impact opp_inj
  AND  pf.season   = opp_inj.season
  AND  pf.week     = opp_inj.week
 LEFT JOIN inj
-  ON  pf.pid       = inj.pid
+  ON  CAST(pf.player_id AS VARCHAR) = CAST(inj.player_id AS VARCHAR)
  AND  pf.season    = inj.season
  AND  pf.week      = inj.week
  AND  inj.rn       = 1
 LEFT JOIN pg
-  ON  pf.pid       = pg.pid
+  ON  CAST(pf.player_id AS VARCHAR) = CAST(pg.player_id AS VARCHAR)
  AND  pf.season    = pg.season
  AND  pf.week      = pg.week
 ;
@@ -233,16 +233,16 @@ pf AS (
 ),
 ngs AS (
   SELECT
-    b.pid,
+    b.player_id,
     b.season,
     b.week,
     AVG(b.avg_intended_air_yards) OVER (
-      PARTITION BY b.pid, b.season ORDER BY b.week
+      PARTITION BY b.player_id, b.season ORDER BY b.week
       ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING
     ) AS avg_intended_air_yards
   FROM (
     SELECT
-      CAST(player_id AS VARCHAR) AS pid,
+      CAST(player_id AS VARCHAR) AS player_id,
       CAST(season    AS INTEGER) AS season,
       CAST(week      AS INTEGER) AS week,
       CAST(avg_intended_air_yards AS DOUBLE) AS avg_intended_air_yards
@@ -268,11 +268,11 @@ SELECT
   qc.qb_carries, qc.qb_rush_yards, qc.qb_rush_tds
 FROM qc
 LEFT JOIN pf
-  ON  qc.pid       = pf.pid
+  ON  CAST(qc.player_id AS VARCHAR) = CAST(pf.player_id AS VARCHAR)
  AND  qc.season    = pf.season
  AND  qc.week      = pf.week
 LEFT JOIN ngs
-  ON  qc.pid       = ngs.pid
+  ON  CAST(qc.player_id AS VARCHAR) = CAST(ngs.player_id AS VARCHAR)
  AND  qc.season    = ngs.season
  AND  qc.week      = ngs.week
 ;
@@ -301,7 +301,7 @@ WITH p AS (
 ),
 ngs AS (
   SELECT
-    b.pid,
+    b.player_id,
     b.season,
     b.week,
     AVG(b.avg_separation)            OVER w AS avg_separation,
@@ -311,7 +311,7 @@ ngs AS (
     AVG(b.avg_yac_above_expectation) OVER w AS avg_yac_above_expectation
   FROM (
     SELECT
-      CAST(player_id AS VARCHAR) AS pid,
+      CAST(player_id AS VARCHAR) AS player_id,
       CAST(season    AS INTEGER) AS season,
       CAST(week      AS INTEGER) AS week,
       CAST(avg_separation            AS DOUBLE) AS avg_separation,
@@ -323,7 +323,7 @@ ngs AS (
     WHERE season_type = 'REG'
   ) b
   WINDOW w AS (
-    PARTITION BY b.pid, b.season ORDER BY b.week
+    PARTITION BY b.player_id, b.season ORDER BY b.week
     ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING
   )
 )
@@ -345,7 +345,7 @@ SELECT
   p.actual_rec_tds, p.actual_fpts_std, p.actual_fpts_ppr
 FROM p
 LEFT JOIN ngs
-  ON  p.pid       = ngs.pid
+  ON  CAST(p.player_id AS VARCHAR) = CAST(ngs.player_id AS VARCHAR)
  AND  p.season    = ngs.season
  AND  p.week      = ngs.week
 WHERE p.position_group IN ('WR','TE')
