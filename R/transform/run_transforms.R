@@ -246,15 +246,22 @@ run_marts <- function(con, cfg, incremental = FALSE) {
   sql_dir <- here::here("sql/marts")
   out_dir  <- cfg$paths$marts
   
-  # Helper: recast a view to fix Arrow BIGINT->INTEGER for season
-  .rc <- function(tbl, path, has_pid = FALSE) {
+  # Helper: recast a view to fix Arrow BIGINT->INTEGER for season/week and
+  # normalize identifier columns to VARCHAR.
+  .rc <- function(tbl, path, id_cols = character()) {
     p   <- gsub("\\\\", "/", normalizePath(path, mustWork = FALSE))
-    pid <- if (has_pid) "CAST(player_id AS VARCHAR) AS player_id, " else ""
-    ex  <- if (has_pid) "player_id, season, week" else "season, week"
+    id_cols <- unique(id_cols)
+    id_sql <- if (length(id_cols) > 0) {
+      paste0("CAST(", id_cols, " AS VARCHAR) AS ", id_cols, collapse = ", ")
+    } else ""
+    select_prefix <- paste(
+      c(id_sql, "CAST(season AS INTEGER) AS season", "CAST(week AS INTEGER) AS week"),
+      collapse = ", "
+    )
+    ex  <- paste(c(id_cols, "season", "week"), collapse = ", ")
     tryCatch(
       DBI::dbExecute(con, paste0(
-        "CREATE OR REPLACE VIEW ", tbl, " AS SELECT ", pid,
-        "CAST(season AS INTEGER) AS season, CAST(week AS INTEGER) AS week, ",
+        "CREATE OR REPLACE VIEW ", tbl, " AS SELECT ", select_prefix, ", ",
         "* EXCLUDE (", ex, ") FROM read_parquet('", p,
         "/**/*.parquet', hive_partitioning=true)")),
       error = function(e) logger::log_warn("{tbl} recast failed: {e$message}")
@@ -268,12 +275,13 @@ run_marts <- function(con, cfg, incremental = FALSE) {
                     "mart_team_week_modeling", out_dir, "season", incremental, cfg)
   
   # Re-apply all recasts — register_parquet_view overwrites them after each materialise
-  .rc("int_player_form",        file.path(cfg$paths$intermediate, "int_player_form"),        TRUE)
-  .rc("int_player_game",        file.path(cfg$paths$intermediate, "int_player_game"),        TRUE)
-  .rc("stg_team_week",          file.path(cfg$paths$staging,      "stg_team_week"),          FALSE)
-  .rc("stg_nextgen_player_week",file.path(cfg$paths$staging,      "stg_nextgen_player_week"),TRUE)
-  .rc("int_injury_team_impact", file.path(cfg$paths$intermediate, "int_injury_team_impact"), FALSE)
-  .rc("mart_team_week_modeling",file.path(cfg$paths$marts,        "mart_team_week_modeling"),FALSE)
+  .rc("int_player_form",        file.path(cfg$paths$intermediate, "int_player_form"),         c("player_id"))
+  .rc("int_player_game",        file.path(cfg$paths$intermediate, "int_player_game"),         c("player_id"))
+  .rc("stg_team_week",          file.path(cfg$paths$staging,      "stg_team_week"))
+  .rc("stg_nextgen_player_week",file.path(cfg$paths$staging,      "stg_nextgen_player_week"), c("player_id"))
+  .rc("int_injury_team_impact", file.path(cfg$paths$intermediate, "int_injury_team_impact"))
+  .rc("raw_injuries",           file.path(cfg$paths$raw,          "raw_injuries"),            c("gsis_id"))
+  .rc("mart_team_week_modeling",file.path(cfg$paths$marts,        "mart_team_week_modeling"))
   logger::log_info("All pre-mart recasts applied")
   
   # Build player marts
@@ -283,12 +291,13 @@ run_marts <- function(con, cfg, incremental = FALSE) {
     materialise_table(con, file.path(sql_dir, "mart_player_projections.sql"),
                       tbl, out_dir, "season", incremental, cfg)
     # Re-apply recasts after each materialise since register_parquet_view overwrites them
-    .rc("int_player_form",        file.path(cfg$paths$intermediate, "int_player_form"),        TRUE)
-    .rc("int_player_game",        file.path(cfg$paths$intermediate, "int_player_game"),        TRUE)
-    .rc("stg_team_week",          file.path(cfg$paths$staging,      "stg_team_week"),          FALSE)
-    .rc("stg_nextgen_player_week",file.path(cfg$paths$staging,      "stg_nextgen_player_week"),TRUE)
-    .rc("int_injury_team_impact", file.path(cfg$paths$intermediate, "int_injury_team_impact"), FALSE)
-    .rc("mart_team_week_modeling",file.path(cfg$paths$marts,        "mart_team_week_modeling"),FALSE)
+    .rc("int_player_form",        file.path(cfg$paths$intermediate, "int_player_form"),         c("player_id"))
+    .rc("int_player_game",        file.path(cfg$paths$intermediate, "int_player_game"),         c("player_id"))
+    .rc("stg_team_week",          file.path(cfg$paths$staging,      "stg_team_week"))
+    .rc("stg_nextgen_player_week",file.path(cfg$paths$staging,      "stg_nextgen_player_week"), c("player_id"))
+    .rc("int_injury_team_impact", file.path(cfg$paths$intermediate, "int_injury_team_impact"))
+    .rc("raw_injuries",           file.path(cfg$paths$raw,          "raw_injuries"),            c("gsis_id"))
+    .rc("mart_team_week_modeling",file.path(cfg$paths$marts,        "mart_team_week_modeling"))
   }
 }
 
@@ -310,12 +319,19 @@ run_transforms <- function(cfg = load_config(), incremental = FALSE) {
   
   # ---- Recast all tables that feed mart_player_week_projection ----
   # Arrow reads Hive partition season=YYYY as BIGINT — recast to INTEGER
-  .recast <- function(tbl, path, has_pid = FALSE) {
+  # and normalize identifier columns to VARCHAR.
+  .recast <- function(tbl, path, id_cols = character()) {
     p <- gsub("\\\\", "/", normalizePath(path, mustWork = FALSE))
-    pid <- if (has_pid) "CAST(player_id AS VARCHAR) AS player_id, " else ""
-    ex  <- if (has_pid) "player_id, season, week" else "season, week"
-    sql <- paste0("CREATE OR REPLACE VIEW ", tbl, " AS SELECT ", pid,
-                  "CAST(season AS INTEGER) AS season, CAST(week AS INTEGER) AS week, ",
+    id_cols <- unique(id_cols)
+    id_sql <- if (length(id_cols) > 0) {
+      paste0("CAST(", id_cols, " AS VARCHAR) AS ", id_cols, collapse = ", ")
+    } else ""
+    select_prefix <- paste(
+      c(id_sql, "CAST(season AS INTEGER) AS season", "CAST(week AS INTEGER) AS week"),
+      collapse = ", "
+    )
+    ex  <- paste(c(id_cols, "season", "week"), collapse = ", ")
+    sql <- paste0("CREATE OR REPLACE VIEW ", tbl, " AS SELECT ", select_prefix, ", ",
                   "* EXCLUDE (", ex, ") ",
                   "FROM read_parquet('", p, "/**/*.parquet', hive_partitioning=true)")
     tryCatch(
@@ -324,11 +340,12 @@ run_transforms <- function(cfg = load_config(), incremental = FALSE) {
     )
   }
   
-  .recast("int_player_form",        file.path(cfg$paths$intermediate, "int_player_form"),        TRUE)
-  .recast("int_player_game",         file.path(cfg$paths$intermediate, "int_player_game"),         TRUE)
-  .recast("stg_team_week",           file.path(cfg$paths$staging,      "stg_team_week"),           FALSE)
-  .recast("stg_nextgen_player_week", file.path(cfg$paths$staging,      "stg_nextgen_player_week"), TRUE)
-  .recast("int_injury_team_impact",  file.path(cfg$paths$intermediate, "int_injury_team_impact"),  FALSE)
+  .recast("int_player_form",        file.path(cfg$paths$intermediate, "int_player_form"),         c("player_id"))
+  .recast("int_player_game",        file.path(cfg$paths$intermediate, "int_player_game"),         c("player_id"))
+  .recast("stg_team_week",          file.path(cfg$paths$staging,      "stg_team_week"))
+  .recast("stg_nextgen_player_week",file.path(cfg$paths$staging,      "stg_nextgen_player_week"), c("player_id"))
+  .recast("int_injury_team_impact", file.path(cfg$paths$intermediate, "int_injury_team_impact"))
+  .recast("raw_injuries",           file.path(cfg$paths$raw,          "raw_injuries"),            c("gsis_id"))
   
   # 6. Marts
   run_marts(con, cfg, incremental = incremental)
