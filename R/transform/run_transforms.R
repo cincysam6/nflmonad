@@ -255,10 +255,7 @@ run_marts <- function(con, cfg, incremental = FALSE) {
       paste0("CAST(", id_cols, " AS VARCHAR) AS ", id_cols, collapse = ", ")
     } else ""
     select_prefix <- paste(
-      Filter(
-        nzchar,
-        c(id_sql, "CAST(season AS INTEGER) AS season", "CAST(week AS INTEGER) AS week")
-      ),
+      c(id_sql, "CAST(season AS INTEGER) AS season", "CAST(week AS INTEGER) AS week"),
       collapse = ", "
     )
     ex  <- paste(c(id_cols, "season", "week"), collapse = ", ")
@@ -283,7 +280,7 @@ run_marts <- function(con, cfg, incremental = FALSE) {
   .rc("stg_team_week",          file.path(cfg$paths$staging,      "stg_team_week"))
   .rc("stg_nextgen_player_week",file.path(cfg$paths$staging,      "stg_nextgen_player_week"), c("player_id"))
   .rc("int_injury_team_impact", file.path(cfg$paths$intermediate, "int_injury_team_impact"))
-  .rc("raw_injuries",           file.path(cfg$paths$raw,          "injuries"),                c("gsis_id"))
+  .rc("raw_injuries",           file.path(cfg$paths$raw,          "raw_injuries"),            c("gsis_id"))
   .rc("mart_team_week_modeling",file.path(cfg$paths$marts,        "mart_team_week_modeling"))
   logger::log_info("All pre-mart recasts applied")
   
@@ -299,7 +296,7 @@ run_marts <- function(con, cfg, incremental = FALSE) {
     .rc("stg_team_week",          file.path(cfg$paths$staging,      "stg_team_week"))
     .rc("stg_nextgen_player_week",file.path(cfg$paths$staging,      "stg_nextgen_player_week"), c("player_id"))
     .rc("int_injury_team_impact", file.path(cfg$paths$intermediate, "int_injury_team_impact"))
-    .rc("raw_injuries",           file.path(cfg$paths$raw,          "injuries"),                c("gsis_id"))
+    .rc("raw_injuries",           file.path(cfg$paths$raw,          "raw_injuries"),            c("gsis_id"))
     .rc("mart_team_week_modeling",file.path(cfg$paths$marts,        "mart_team_week_modeling"))
   }
 }
@@ -330,10 +327,7 @@ run_transforms <- function(cfg = load_config(), incremental = FALSE) {
       paste0("CAST(", id_cols, " AS VARCHAR) AS ", id_cols, collapse = ", ")
     } else ""
     select_prefix <- paste(
-      Filter(
-        nzchar,
-        c(id_sql, "CAST(season AS INTEGER) AS season", "CAST(week AS INTEGER) AS week")
-      ),
+      c(id_sql, "CAST(season AS INTEGER) AS season", "CAST(week AS INTEGER) AS week"),
       collapse = ", "
     )
     ex  <- paste(c(id_cols, "season", "week"), collapse = ", ")
@@ -351,7 +345,7 @@ run_transforms <- function(cfg = load_config(), incremental = FALSE) {
   .recast("stg_team_week",          file.path(cfg$paths$staging,      "stg_team_week"))
   .recast("stg_nextgen_player_week",file.path(cfg$paths$staging,      "stg_nextgen_player_week"), c("player_id"))
   .recast("int_injury_team_impact", file.path(cfg$paths$intermediate, "int_injury_team_impact"))
-  .recast("raw_injuries",           file.path(cfg$paths$raw,          "injuries"),                c("gsis_id"))
+  .recast("raw_injuries",           file.path(cfg$paths$raw,          "raw_injuries"),            c("gsis_id"))
   
   # 6. Marts
   run_marts(con, cfg, incremental = incremental)
