@@ -1,13 +1,11 @@
 name: NFL Analytics Daily Refresh
 
 on:
-  # ---- Daily schedule (runs at 6:00 AM UTC = 2 AM EST) ----------------------
   schedule:
     - cron: "0 6 * * 2-4"   # Tue-Thu during season (catches Mon Night and Tue updates)
     - cron: "0 6 * * 0"     # Sunday (pre-game prep)
     - cron: "0 14 * * 2"    # Tuesday afternoon (full post-weekend refresh)
 
-  # ---- Manual dispatch with optional mode -----------------------------------
   workflow_dispatch:
     inputs:
       mode:
@@ -31,6 +29,7 @@ on:
 env:
   R_VERSION: "4.3.3"
   RENV_PATHS_CACHE: ~/.local/share/renv
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true   # opt into Node 24 now before June 2026 forced migration
 
 jobs:
   refresh:
@@ -39,7 +38,7 @@ jobs:
     timeout-minutes: 120
 
     permissions:
-      contents: write        # needed to commit updated DuckDB or push artifacts
+      contents: write
       actions: read
 
     steps:
@@ -96,8 +95,7 @@ jobs:
             cat('Set current_season to', cfg\$seasons\$current_season, '\n')
           "
 
-      # ---- 7. Restore data cache (optional — requires GH large file support) -
-      # Comment out if data is rebuilt from scratch each run
+      # ---- 7. Restore data cache ---------------------------------------------
       - name: Restore data cache
         uses: actions/cache@v4
         with:
@@ -113,10 +111,18 @@ jobs:
       # ---- 8. Run pipeline ---------------------------------------------------
       - name: Run pipeline
         env:
-          PIPELINE_MODE:   ${{ github.event.inputs.mode || 'daily' }}
-          FORCE_FULL_FLAG: ${{ github.event.inputs.force_full == 'true' && '--force-full' || '' }}
+          PIPELINE_MODE:      ${{ github.event.inputs.mode || 'daily' }}
+          FORCE_FULL_INPUT:   ${{ github.event.inputs.force_full || 'false' }}
         run: |
           set -euo pipefail
+
+          # Resolve --force-full flag safely
+          if [ "$FORCE_FULL_INPUT" = "true" ]; then
+            FORCE_FULL_FLAG="--force-full"
+          else
+            FORCE_FULL_FLAG=""
+          fi
+
           Rscript pipeline.R $PIPELINE_MODE $FORCE_FULL_FLAG
         timeout-minutes: 100
 
@@ -155,35 +161,3 @@ jobs:
         if: failure()
         run: |
           echo "::error::NFL Analytics pipeline FAILED. Check logs artifact."
-          # Add Slack/email notification here if desired
-          # curl -X POST -H 'Content-type: application/json' \
-          #   --data '{"text":"NFL pipeline failed: ${{ github.run_id }}"}' \
-          #   ${{ secrets.SLACK_WEBHOOK_URL }}
-
-  # ---- Optional: run on PR to validate (no write) ---------------------------
-  validate:
-    name: Validate on PR
-    runs-on: ubuntu-22.04
-    if: github.event_name == 'pull_request'
-    timeout-minutes: 30
-    steps:
-      - uses: actions/checkout@v4
-      - uses: r-lib/actions/setup-r@v2
-        with:
-          r-version: ${{ env.R_VERSION }}
-      - name: Check config and package setup
-        run: |
-          Rscript -e "
-            source('R/utils/install_packages.R')
-            source('R/utils/config_loader.R')
-            cfg <- load_config()
-            cat('Config OK. Current season:', cfg\$seasons\$current_season, '\n')
-          "
-      - name: Run unit tests
-        run: |
-          Rscript -e "
-            source('R/utils/config_loader.R')
-            source('R/utils/parquet_io.R')
-            source('R/utils/run_tests.R')
-            testthat::test_file('R/utils/run_tests.R')
-          "

@@ -33,6 +33,7 @@ on:
 env:
   R_VERSION: "4.3.3"
   RENV_PATHS_CACHE: ~/.local/share/renv
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true   # opt into Node 24 now before June 2026 forced migration
 
 jobs:
   refresh:
@@ -97,15 +98,25 @@ jobs:
           PREMIUM_ODDS_API_KEY:  ${{ secrets.PREMIUM_ODDS_API_KEY }}
           WEATHER_API_KEY:       ${{ secrets.WEATHER_API_KEY }}
           PIPELINE_MODE:         ${{ github.event.inputs.mode || 'daily' }}
+          # FIX: resolve force flag here in the env block, not inline in shell
+          # github.event.inputs.force_full is empty string on scheduled runs,
+          # so we default to 'false' before comparing.
+          FORCE_FULL_INPUT:      ${{ github.event.inputs.force_full || 'false' }}
         run: |
           set -euo pipefail
+
+          # Resolve --force-full flag safely (avoids bare 'else' in shell)
+          if [ "$FORCE_FULL_INPUT" = "true" ]; then
+            FORCE="--force-full"
+          else
+            FORCE=""
+          fi
 
           case "$PIPELINE_MODE" in
             daily)
               Rscript pipeline_extended.R daily
               ;;
             backfill)
-              FORCE="${{ github.event.inputs.force_full == 'true' && '--force-full' || '' }}"
               Rscript pipeline.R backfill $FORCE
               Rscript pipeline_extended.R backfill
               ;;
