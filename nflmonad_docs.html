@@ -1,0 +1,1502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>nflmonad — Platform Documentation</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f14;
+    --surface: #13161e;
+    --surface2: #1a1e29;
+    --border: #252a38;
+    --accent: #4fffb0;
+    --accent2: #ff6b35;
+    --accent3: #4db8ff;
+    --text: #d4dae8;
+    --text-muted: #6b7694;
+    --text-dim: #3d4560;
+    --heading: #eef1f8;
+    --code-bg: #0a0c10;
+    --bronze: #cd7f32;
+    --silver: #a8b4c8;
+    --gold: #f5c842;
+    --green: #4fffb0;
+    --red: #ff5566;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  /* ── LAYOUT ── */
+  .layout { display: flex; min-height: 100vh; }
+
+  nav {
+    width: 260px;
+    min-width: 260px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 32px 0;
+  }
+
+  nav .logo {
+    padding: 0 24px 28px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 20px;
+  }
+
+  nav .logo-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    color: var(--heading);
+    letter-spacing: -0.5px;
+  }
+
+  nav .logo-sub {
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  nav .nav-section {
+    padding: 0 16px;
+    margin-bottom: 8px;
+  }
+
+  nav .nav-label {
+    font-size: 10px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    padding: 8px 8px 4px;
+    font-weight: 500;
+  }
+
+  nav a {
+    display: block;
+    padding: 6px 8px;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 13px;
+    border-radius: 4px;
+    transition: all 0.15s;
+    font-weight: 400;
+  }
+
+  nav a:hover { background: var(--surface2); color: var(--accent); }
+
+  main {
+    flex: 1;
+    max-width: 900px;
+    padding: 60px 64px;
+  }
+
+  /* ── TYPOGRAPHY ── */
+  h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 52px;
+    color: var(--heading);
+    line-height: 1.1;
+    letter-spacing: -1.5px;
+    margin-bottom: 16px;
+  }
+
+  h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 32px;
+    color: var(--heading);
+    letter-spacing: -0.5px;
+    margin: 64px 0 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+
+  h2:first-of-type { border-top: none; margin-top: 48px; }
+
+  h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--heading);
+    margin: 36px 0 12px;
+    letter-spacing: 0.2px;
+  }
+
+  h4 {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin: 28px 0 10px;
+  }
+
+  p { margin-bottom: 16px; color: var(--text); }
+
+  strong { color: var(--heading); font-weight: 600; }
+
+  a { color: var(--accent3); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 0 0 48px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 8px;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    background: rgba(79, 255, 176, 0.1);
+    border: 1px solid rgba(79, 255, 176, 0.3);
+    color: var(--accent);
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    font-weight: 500;
+  }
+
+  .hero-desc {
+    font-size: 17px;
+    color: var(--text-muted);
+    max-width: 580px;
+    line-height: 1.6;
+    margin-top: 12px;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 32px;
+    margin-top: 32px;
+    flex-wrap: wrap;
+  }
+
+  .stat-pill {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 20px;
+  }
+
+  .stat-pill .num {
+    font-family: 'DM Mono', monospace;
+    font-size: 22px;
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .stat-pill .lbl {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-top: 2px;
+  }
+
+  /* ── CODE ── */
+  code {
+    font-family: 'DM Mono', monospace;
+    font-size: 12.5px;
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    color: var(--accent3);
+    padding: 2px 6px;
+    border-radius: 3px;
+  }
+
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px;
+    overflow-x: auto;
+    margin: 16px 0 24px;
+  }
+
+  pre code {
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--text);
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  pre code .cm { color: var(--text-muted); font-style: italic; }
+  pre code .kw { color: var(--accent); }
+  pre code .fn { color: var(--accent3); }
+  pre code .st { color: #f5c842; }
+
+  /* ── TABLES ── */
+  .table-wrap { overflow-x: auto; margin: 16px 0 28px; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  th {
+    background: var(--surface2);
+    color: var(--heading);
+    font-weight: 600;
+    text-align: left;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  td {
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    vertical-align: top;
+  }
+
+  tr:last-child td { border-bottom: none; }
+
+  td code { font-size: 11.5px; }
+
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .badge-bronze { background: rgba(205, 127, 50, 0.15); color: var(--bronze); border: 1px solid rgba(205,127,50,0.3); }
+  .badge-silver { background: rgba(168, 180, 200, 0.1); color: var(--silver); border: 1px solid rgba(168,180,200,0.3); }
+  .badge-gold   { background: rgba(245, 200, 66, 0.1); color: var(--gold); border: 1px solid rgba(245,200,66,0.3); }
+  .badge-green  { background: rgba(79, 255, 176, 0.1); color: var(--green); border: 1px solid rgba(79,255,176,0.3); }
+  .badge-red    { background: rgba(255, 85, 102, 0.1); color: var(--red); border: 1px solid rgba(255,85,102,0.3); }
+  .badge-blue   { background: rgba(77, 184, 255, 0.1); color: var(--accent3); border: 1px solid rgba(77,184,255,0.3); }
+
+  /* ── CALLOUTS ── */
+  .callout {
+    border-left: 3px solid var(--accent);
+    background: rgba(79, 255, 176, 0.04);
+    border-radius: 0 6px 6px 0;
+    padding: 14px 18px;
+    margin: 20px 0;
+    font-size: 13.5px;
+  }
+
+  .callout.warn {
+    border-left-color: var(--accent2);
+    background: rgba(255, 107, 53, 0.04);
+  }
+
+  .callout.info {
+    border-left-color: var(--accent3);
+    background: rgba(77, 184, 255, 0.04);
+  }
+
+  .callout-title {
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    color: var(--accent);
+  }
+
+  .callout.warn .callout-title { color: var(--accent2); }
+  .callout.info .callout-title { color: var(--accent3); }
+
+  /* ── DIAGRAMS ── */
+  .diagram {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 32px;
+    margin: 24px 0 32px;
+    overflow-x: auto;
+  }
+
+  .flow {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .flow-box {
+    border-radius: 8px;
+    padding: 14px 20px;
+    text-align: center;
+    min-width: 120px;
+  }
+
+  .flow-box .flow-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .flow-box .flow-sub {
+    font-size: 10px;
+    opacity: 0.7;
+    line-height: 1.3;
+  }
+
+  .flow-arrow {
+    color: var(--text-dim);
+    font-size: 20px;
+    padding: 0 8px;
+    flex-shrink: 0;
+  }
+
+  .box-bronze { background: rgba(205,127,50,0.12); border: 1px solid rgba(205,127,50,0.35); }
+  .box-bronze .flow-title { color: var(--bronze); }
+
+  .box-silver { background: rgba(168,180,200,0.08); border: 1px solid rgba(168,180,200,0.25); }
+  .box-silver .flow-title { color: var(--silver); }
+
+  .box-gold { background: rgba(245,200,66,0.08); border: 1px solid rgba(245,200,66,0.25); }
+  .box-gold .flow-title { color: var(--gold); }
+
+  .box-model { background: rgba(79,255,176,0.08); border: 1px solid rgba(79,255,176,0.25); }
+  .box-model .flow-title { color: var(--accent); }
+
+  /* Layered architecture diagram */
+  .arch {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+  }
+
+  .arch-row {
+    display: flex;
+    gap: 3px;
+  }
+
+  .arch-cell {
+    flex: 1;
+    padding: 10px 12px;
+    border-radius: 4px;
+    font-size: 11px;
+    line-height: 1.4;
+  }
+
+  .arch-label {
+    width: 80px;
+    min-width: 80px;
+    display: flex;
+    align-items: center;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    font-family: 'Jost', sans-serif;
+    font-weight: 500;
+  }
+
+  /* Function cards */
+  .fn-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+  }
+
+  .fn-card:hover { border-color: var(--accent3); }
+
+  .fn-sig {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--accent3);
+    margin-bottom: 10px;
+  }
+
+  .fn-desc { font-size: 13.5px; color: var(--text-muted); margin-bottom: 0; }
+
+  .fn-params {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+  }
+
+  .fn-param { display: flex; gap: 12px; margin-bottom: 6px; font-size: 12.5px; }
+  .fn-param .pname { color: var(--accent3); font-family: 'DM Mono', monospace; min-width: 160px; }
+  .fn-param .pdesc { color: var(--text-muted); }
+
+  /* Section anchor targets */
+  section { scroll-margin-top: 24px; }
+
+  .toc-number {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-right: 6px;
+  }
+
+  /* Leakage indicator */
+  .leak-safe   { color: var(--green); }
+  .leak-unsafe { color: var(--red); }
+  .leak-mixed  { color: var(--gold); }
+
+  ul, ol { padding-left: 20px; margin-bottom: 16px; }
+  li { margin-bottom: 6px; font-size: 14px; }
+
+  hr { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0 24px; }
+
+  .mini-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 18px;
+  }
+
+  .mini-card h5 {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+
+  .mini-card p { font-size: 13px; color: var(--text); margin-bottom: 0; }
+
+  @media (max-width: 1000px) {
+    nav { display: none; }
+    main { padding: 40px 28px; }
+    h1 { font-size: 36px; }
+    .two-col { grid-template-columns: 1fr; }
+    .flow { flex-direction: column; }
+    .flow-arrow { transform: rotate(90deg); }
+  }
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+<!-- ── SIDEBAR NAV ── -->
+<nav>
+  <div class="logo">
+    <div class="logo-name">nflmonad</div>
+    <div class="logo-sub">Platform Docs v1.0</div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Getting Started</div>
+    <a href="#overview">Overview</a>
+    <a href="#quickstart">Quick Start</a>
+    <a href="#architecture">Architecture</a>
+    <a href="#directory">Directory Structure</a>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Data Pipeline</div>
+    <a href="#bronze">Bronze Layer (Raw)</a>
+    <a href="#staging">Silver Layer (Staging)</a>
+    <a href="#intermediate">Intermediate Layer</a>
+    <a href="#marts">Gold Layer (Marts)</a>
+    <a href="#leakage">Leakage Rules</a>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Data Dictionary</div>
+    <a href="#dict-staging">Staging Tables</a>
+    <a href="#dict-intermediate">Intermediate Tables</a>
+    <a href="#dict-marts">Mart Tables</a>
+    <a href="#dict-features">Feature Reference</a>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Modeling</div>
+    <a href="#model-overview">How Models Work</a>
+    <a href="#simulation">Simulations</a>
+    <a href="#validation">Validation Suite</a>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Reference</div>
+    <a href="#functions">Function Reference</a>
+    <a href="#config">Configuration</a>
+    <a href="#automation">Automation (CI/CD)</a>
+    <a href="#odds">Odds Integration</a>
+    <a href="#faq">FAQ</a>
+  </div>
+</nav>
+
+<!-- ── MAIN CONTENT ── -->
+<main>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">NFL Analytics Platform</div>
+  <h1>nflmonad</h1>
+  <p class="hero-desc">A production-grade data and modeling platform for NFL game prediction, betting analysis, and player projections. Built on R, DuckDB, and Parquet.</p>
+
+  <div class="hero-stats">
+    <div class="stat-pill">
+      <div class="num">2015–2024</div>
+      <div class="lbl">Season Coverage</div>
+    </div>
+    <div class="stat-pill">
+      <div class="num">16</div>
+      <div class="lbl">Raw Data Sources</div>
+    </div>
+    <div class="stat-pill">
+      <div class="num">39</div>
+      <div class="lbl">Tables & Views</div>
+    </div>
+    <div class="stat-pill">
+      <div class="num">107+</div>
+      <div class="lbl">Model Features</div>
+    </div>
+  </div>
+</div>
+
+<!-- OVERVIEW -->
+<section id="overview">
+<h2>Overview</h2>
+
+<p>nflmonad is a self-contained NFL analytics platform. It automatically downloads NFL data every day, cleans and transforms it through multiple layers, and produces model-ready datasets for betting and projection workflows.</p>
+
+<p>Think of it as a pipeline that runs on autopilot — data flows in from public NFL data sources, gets cleaned up and enriched, and lands in structured tables ready for modeling. You don't need to manually download spreadsheets or wrangle data; the platform handles all of that and then surfaces clean, well-labeled features for you to build models on top of.</p>
+
+<h3>What problem does this solve?</h3>
+
+<p>Building a good NFL betting model requires dozens of datasets — play-by-play data, injury reports, snap counts, roster changes, odds lines, weather — all joined together consistently and without "cheating" by using information that wouldn't have been available before the game was played. Setting that up from scratch is hundreds of hours of work. nflmonad does all of it for you.</p>
+
+<div class="two-col">
+  <div class="mini-card">
+    <h5>For Modeling</h5>
+    <p>Pre-built, leakage-safe feature tables covering team strength, injury burden, rest, schedule, and betting lines — ready to drop into XGBoost, regression, or any other model.</p>
+  </div>
+  <div class="mini-card">
+    <h5>For Betting Analysis</h5>
+    <p>Closing line value calculations, ATS tracking, over/under performance, and model vs. market comparison built into the validation suite.</p>
+  </div>
+</div>
+
+<h3>Technology Stack</h3>
+<ul>
+  <li><strong>R</strong> — the primary language for data ingestion, transformation, and modeling</li>
+  <li><strong>nflverse / nflreadr</strong> — free, authoritative NFL data (play-by-play, schedules, rosters, injuries, snap counts)</li>
+  <li><strong>DuckDB</strong> — fast in-process analytical SQL engine; runs locally with no server needed</li>
+  <li><strong>Parquet</strong> — columnar file format for storage; think of it as "smart CSV" that's 10x faster to query</li>
+  <li><strong>GitHub Actions</strong> — runs the pipeline automatically on a schedule (no manual effort required in-season)</li>
+  <li><strong>XGBoost</strong> — the modeling engine for game prediction</li>
+</ul>
+</section>
+
+<!-- QUICKSTART -->
+<section id="quickstart">
+<h2>Quick Start</h2>
+
+<p>These are the only commands you need for the most common tasks.</p>
+
+<h3>Run a full historical backfill (first-time setup)</h3>
+<pre><code><span class="cm"># In R console</span>
+<span class="fn">source</span>(<span class="st">"pipeline.R"</span>)
+<span class="fn">run_backfill</span>(cfg = <span class="fn">load_config</span>())</code></pre>
+
+<h3>Update with the latest week's data</h3>
+<pre><code><span class="fn">source</span>(<span class="st">"pipeline.R"</span>)
+<span class="fn">run_daily_refresh</span>(cfg = <span class="fn">load_config</span>())</code></pre>
+
+<h3>Train models and validate</h3>
+<pre><code><span class="fn">source</span>(<span class="st">"R/models/pipeline_model.R"</span>)
+<span class="fn">run_model_pipeline</span>(<span class="st">"train"</span>)     <span class="cm"># train on historical data</span>
+<span class="fn">run_model_pipeline</span>(<span class="st">"validate"</span>)  <span class="cm"># evaluate on test set</span>
+<span class="fn">run_model_pipeline</span>(<span class="st">"predict"</span>)   <span class="cm"># predict upcoming games</span></code></pre>
+
+<h3>Check what data you have</h3>
+<pre><code><span class="cm"># Quick inventory of all tables</span>
+cfg &lt;- <span class="fn">load_config</span>()
+con &lt;- <span class="fn">db_connect</span>(cfg)
+
+<span class="cm"># Count rows in any table</span>
+<span class="fn">DBI::dbGetQuery</span>(con, <span class="st">"SELECT COUNT(*) FROM read_parquet('data/marts/mart_game_modeling/**/*.parquet')"</span>)</code></pre>
+
+<div class="callout info">
+  <div class="callout-title">💡 GitHub Actions</div>
+  The pipeline runs automatically via GitHub Actions on a schedule — Tuesday through Thursday mornings (to catch Monday Night Football updates) and Sunday mornings (pre-game prep). You only need to run things manually if you're doing a first-time backfill or debugging.
+</div>
+</section>
+
+<!-- ARCHITECTURE -->
+<section id="architecture">
+<h2>Architecture</h2>
+
+<p>The platform follows a <strong>medallion architecture</strong> — data flows through three quality layers, getting progressively cleaner and more enriched at each stage. This is a standard pattern in data engineering used by companies like Databricks, Airbnb, and Netflix.</p>
+
+<div class="diagram">
+  <div class="flow">
+    <div class="flow-box box-bronze">
+      <div class="flow-title">🥉 Bronze</div>
+      <div class="flow-sub">Raw data<br>as downloaded</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box box-silver">
+      <div class="flow-title">🥈 Silver</div>
+      <div class="flow-sub">Cleaned,<br>standardized</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box box-silver">
+      <div class="flow-title">⚙️ Intermediate</div>
+      <div class="flow-sub">Features<br>engineered</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box box-gold">
+      <div class="flow-title">🥇 Gold</div>
+      <div class="flow-sub">Model-ready<br>marts</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box box-model">
+      <div class="flow-title">🤖 Models</div>
+      <div class="flow-sub">Train, Sim,<br>Validate</div>
+    </div>
+  </div>
+</div>
+
+<h3>Why this approach?</h3>
+
+<p>Each layer has a specific job and a clear contract. If something goes wrong — say a new season has a column name change in the source data — you fix it in one place (the staging layer) and everything downstream rebuilds automatically. You never have messy join logic scattered across model notebooks.</p>
+
+<p>Each layer is stored as <strong>Parquet files partitioned by season</strong>. This means querying 2024 data only reads 2024 files — it's fast even on a laptop, and the structure mirrors what you'd have in a cloud warehouse like BigQuery or Snowflake.</p>
+
+<div class="diagram">
+  <div class="arch">
+    <div class="arch-row">
+      <div class="arch-label">Sources</div>
+      <div class="arch-cell box-bronze" style="flex:2">nflreadr (PBP, schedules, rosters, injuries, snap counts, NGS, PFR)</div>
+      <div class="arch-cell box-bronze">ESPN Odds (via schedules)</div>
+      <div class="arch-cell box-bronze">External Odds API</div>
+    </div>
+    <div class="arch-row">
+      <div class="arch-label">Bronze<br>(Raw)</div>
+      <div class="arch-cell box-bronze">raw_pbp · raw_schedules · raw_player_stats · raw_rosters_weekly · raw_injuries · raw_snap_counts · raw_nextgen_stats · raw_pfr_advstats · raw_depth_charts · raw_ftn_charting · raw_ff_opportunity · raw_external_odds</div>
+    </div>
+    <div class="arch-row">
+      <div class="arch-label">Silver<br>(Staging)</div>
+      <div class="arch-cell box-silver">stg_games · stg_plays · stg_drives · stg_players · stg_player_week · stg_team_week · stg_rosters_weekly · stg_injuries_weekly · stg_snap_counts_weekly · stg_nextgen_player_week · stg_external_odds_game</div>
+    </div>
+    <div class="arch-row">
+      <div class="arch-label">Inter-<br>mediate</div>
+      <div class="arch-cell box-silver">int_game_base · int_team_game · int_team_form · int_player_game · int_player_form · int_qb_team_context · int_injury_team_impact</div>
+    </div>
+    <div class="arch-row">
+      <div class="arch-label">Gold<br>(Marts)</div>
+      <div class="arch-cell box-gold">mart_game_modeling · mart_backtest_game · mart_team_week_modeling · mart_qb_projection · mart_team_week_modeling</div>
+    </div>
+    <div class="arch-row">
+      <div class="arch-label">Models</div>
+      <div class="arch-cell box-model">train_game_model.R → simulate_games.R → validate_model.R</div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- DIRECTORY -->
+<section id="directory">
+<h2>Directory Structure</h2>
+
+<pre><code>nflmonad/
+├── pipeline.R                    <span class="cm"># Main entry point — backfill & daily refresh</span>
+├── pipeline_model.R              <span class="cm"># Model training, simulation, prediction</span>
+│
+├── config/
+│   ├── config.yml                <span class="cm"># Seasons, paths, DuckDB settings</span>
+│   └── config_external.yml       <span class="cm"># Odds sources, weather sources</span>
+│
+├── R/
+│   ├── ingest/
+│   │   ├── ingest_pbp.R          <span class="cm"># Play-by-play ingestion</span>
+│   │   ├── ingest_all_sources.R  <span class="cm"># All other nflreadr sources</span>
+│   │   └── ingest_odds.R         <span class="cm"># Odds adapter (nflverse + The Odds API)</span>
+│   ├── transform/
+│   │   └── run_transforms.R      <span class="cm"># SQL layer orchestrator</span>
+│   ├── models/
+│   │   ├── train_game_model.R    <span class="cm"># XGBoost training</span>
+│   │   ├── simulate_games.R      <span class="cm"># Monte Carlo simulation</span>
+│   │   └── validate_model.R      <span class="cm"># Performance reporting</span>
+│   └── utils/
+│       ├── config_loader.R       <span class="cm"># YAML config reader</span>
+│       ├── db_connection.R       <span class="cm"># DuckDB connect/disconnect</span>
+│       ├── parquet_io.R          <span class="cm"># Read/write Parquet helpers</span>
+│       ├── logging.R             <span class="cm"># Logger setup</span>
+│       └── run_tests.R           <span class="cm"># Data quality tests</span>
+│
+├── sql/
+│   ├── staging/                  <span class="cm"># Silver layer SQL</span>
+│   ├── intermediate/             <span class="cm"># Feature engineering SQL</span>
+│   ├── marts/                    <span class="cm"># Gold layer SQL</span>
+│   └── tests/                    <span class="cm"># Data quality test SQL</span>
+│
+├── data/
+│   ├── raw/                      <span class="cm"># Bronze — partitioned Parquet files</span>
+│   ├── staging/                  <span class="cm"># Silver — partitioned Parquet files</span>
+│   ├── intermediate/             <span class="cm"># Feature tables</span>
+│   └── marts/                    <span class="cm"># Gold — model-ready tables</span>
+│
+├── models/game/                  <span class="cm"># Saved XGBoost model artifacts</span>
+├── reports/                      <span class="cm"># Validation reports + predictions</span>
+├── logs/                         <span class="cm"># Pipeline run logs</span>
+└── .github/workflows/            <span class="cm"># GitHub Actions automation</span></code></pre>
+</section>
+
+<!-- BRONZE -->
+<section id="bronze">
+<h2>Bronze Layer — Raw Data</h2>
+
+<p>The bronze layer contains data exactly as it comes from nflverse — no business logic, no transformations. Every table includes <code>ingestion_ts</code> (when it was downloaded), <code>source_name</code>, and <code>source_version</code> for auditability.</p>
+
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Table</th><th>Grain (one row per…)</th><th>Coverage</th><th>Source Function</th><th>Notes</th></tr></thead>
+  <tbody>
+    <tr><td><code>raw_pbp</code></td><td>play</td><td>2015+</td><td><code>load_pbp()</code></td><td>377 columns — the richest source. Every play with EPA, WP, yards, personnel</td></tr>
+    <tr><td><code>raw_schedules</code></td><td>game</td><td>2015+</td><td><code>load_schedules()</code></td><td>Includes spread_line, total_line, moneylines from ESPN</td></tr>
+    <tr><td><code>raw_player_stats</code></td><td>player-week</td><td>2015+</td><td><code>load_player_stats()</code></td><td>Box score stats: passing, rushing, receiving</td></tr>
+    <tr><td><code>raw_rosters_weekly</code></td><td>player-week-team</td><td>2015+</td><td><code>load_rosters_weekly()</code></td><td>Active roster state by week</td></tr>
+    <tr><td><code>raw_rosters</code></td><td>player-season-team</td><td>2015+</td><td><code>load_rosters()</code></td><td>Season-level roster; fallback when weekly unavailable</td></tr>
+    <tr><td><code>raw_injuries</code></td><td>player-week-injury</td><td>2015+</td><td><code>load_injuries()</code></td><td>Practice + game status reports</td></tr>
+    <tr><td><code>raw_snap_counts</code></td><td>player-week</td><td>2015+</td><td><code>load_snap_counts()</code></td><td>Offense/defense/special teams snap %</td></tr>
+    <tr><td><code>raw_depth_charts</code></td><td>player-week-position</td><td>2015+</td><td><code>load_depth_charts()</code></td><td>Starter/backup designations by formation</td></tr>
+    <tr><td><code>raw_nextgen_stats</code></td><td>player-week-stat_type</td><td>2016+</td><td><code>load_nextgen_stats()</code></td><td>NFL tracking data (separation, air yards, cushion)</td></tr>
+    <tr><td><code>raw_pfr_advstats</code></td><td>player-week-stat_type</td><td>2018+</td><td><code>load_pfr_advstats()</code></td><td>Pro Football Reference advanced stats</td></tr>
+    <tr><td><code>raw_ftn_charting</code></td><td>play</td><td>2022+</td><td><code>load_ftn_charting()</code></td><td>Manual play charting (route, coverage, motion)</td></tr>
+    <tr><td><code>raw_ff_opportunity</code></td><td>player-week</td><td>2016+</td><td><code>load_ff_opportunity()</code></td><td>Expected fantasy points and opportunity shares</td></tr>
+    <tr><td><code>raw_players</code></td><td>player</td><td>All-time</td><td><code>load_players()</code></td><td>Static player registry (full refresh each run)</td></tr>
+    <tr><td><code>raw_participation</code></td><td>play-player</td><td>2016+</td><td><code>load_participation()</code></td><td>Which players were on the field for each play</td></tr>
+    <tr><td><code>raw_external_odds</code></td><td>game-market-book</td><td>2015+</td><td>Ingest from schedules</td><td>Spread + total from ESPN, written by ingest_odds.R</td></tr>
+    <tr><td><code>raw_team_stats</code></td><td>team-season</td><td>2015+</td><td>nflfastR series conversion</td><td>Series conversion rates computed from raw PBP</td></tr>
+  </tbody>
+</table>
+</div>
+</section>
+
+<!-- STAGING -->
+<section id="staging">
+<h2>Silver Layer — Staging</h2>
+
+<p>Staging tables standardize the raw data: types are cast consistently, team abbreviations are harmonized (e.g. OAK → LV, STL → LA), and the grain (what each row represents) is made explicit and enforced. Think of this as "cleaned raw data."</p>
+
+<div class="callout">
+  <div class="callout-title">Design Rule</div>
+  Staging tables never add business logic or derived features. They only clean, type, and rename. If you add a new column here, it must come directly from the raw source.
+</div>
+
+<div id="dict-staging">
+<h3>Staging Table Dictionary</h3>
+
+<h4>stg_games</h4>
+<p>One row per NFL game. The central scheduling spine of the platform — everything else joins to this.</p>
+<div class="table-wrap"><table>
+  <thead><tr><th>Column</th><th>Type</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td><code>game_id</code></td><td>VARCHAR</td><td>Unique game identifier (e.g. <code>2024_01_KC_BAL</code>)</td></tr>
+    <tr><td><code>season</code></td><td>INTEGER</td><td>NFL season year</td></tr>
+    <tr><td><code>week</code></td><td>INTEGER</td><td>Week number (1–22, includes playoffs)</td></tr>
+    <tr><td><code>season_type</code></td><td>VARCHAR</td><td><code>regular</code> or <code>postseason</code></td></tr>
+    <tr><td><code>game_date</code></td><td>DATE</td><td>Game date</td></tr>
+    <tr><td><code>home_team</code></td><td>VARCHAR</td><td>Home team abbreviation (standardized)</td></tr>
+    <tr><td><code>away_team</code></td><td>VARCHAR</td><td>Away team abbreviation (standardized)</td></tr>
+    <tr><td><code>home_score</code></td><td>INTEGER</td><td>Final home score (NULL if game not played)</td></tr>
+    <tr><td><code>away_score</code></td><td>INTEGER</td><td>Final away score</td></tr>
+    <tr><td><code>spread_line</code></td><td>DOUBLE</td><td>Closing spread from ESPN (home perspective; negative = home fav)</td></tr>
+    <tr><td><code>total_line</code></td><td>DOUBLE</td><td>Closing over/under total from ESPN</td></tr>
+    <tr><td><code>home_moneyline</code></td><td>DOUBLE</td><td>Home team moneyline (American odds)</td></tr>
+    <tr><td><code>away_moneyline</code></td><td>DOUBLE</td><td>Away team moneyline</td></tr>
+    <tr><td><code>roof</code></td><td>VARCHAR</td><td><code>outdoors</code>, <code>dome</code>, or <code>retractable</code></td></tr>
+    <tr><td><code>surface</code></td><td>VARCHAR</td><td><code>grass</code> or <code>turf</code></td></tr>
+    <tr><td><code>temp</code></td><td>DOUBLE</td><td>Temperature at kickoff (°F, from schedule data)</td></tr>
+    <tr><td><code>wind</code></td><td>DOUBLE</td><td>Wind speed at kickoff (mph)</td></tr>
+    <tr><td><code>div_game</code></td><td>INTEGER</td><td>1 if divisional matchup</td></tr>
+    <tr><td><code>game_completed_flag</code></td><td>INTEGER</td><td>1 if game has been played</td></tr>
+  </tbody>
+</table></div>
+
+<h4>stg_player_week</h4>
+<p>One row per player per week. Box score stats from <code>raw_player_stats</code>. The primary source for player-level performance data.</p>
+<div class="table-wrap"><table>
+  <thead><tr><th>Column</th><th>Type</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td><code>player_id</code></td><td>VARCHAR</td><td>NFL GSIS player ID</td></tr>
+    <tr><td><code>full_name</code></td><td>VARCHAR</td><td>Player display name</td></tr>
+    <tr><td><code>position</code></td><td>VARCHAR</td><td>Position (QB, RB, WR, TE, etc.)</td></tr>
+    <tr><td><code>position_group</code></td><td>VARCHAR</td><td>Simplified position group</td></tr>
+    <tr><td><code>team</code></td><td>VARCHAR</td><td>Team abbreviation</td></tr>
+    <tr><td><code>season / week</code></td><td>INTEGER</td><td>Season and week</td></tr>
+    <tr><td><code>completions / attempts</code></td><td>INTEGER</td><td>Passing completions and attempts</td></tr>
+    <tr><td><code>passing_yards / passing_tds</code></td><td>DOUBLE / INTEGER</td><td>Passing production</td></tr>
+    <tr><td><code>interceptions / sacks</code></td><td>INTEGER</td><td>Turnover and pressure stats</td></tr>
+    <tr><td><code>carries / rushing_yards / rushing_tds</code></td><td>DOUBLE</td><td>Rushing production</td></tr>
+    <tr><td><code>targets / receptions</code></td><td>INTEGER</td><td>Receiving opportunity</td></tr>
+    <tr><td><code>receiving_yards / receiving_tds</code></td><td>DOUBLE</td><td>Receiving production</td></tr>
+    <tr><td><code>air_yards_share / wopr / racr</code></td><td>DOUBLE</td><td>Opportunity quality metrics</td></tr>
+    <tr><td><code>fantasy_points_std / fantasy_points_ppr</code></td><td>DOUBLE</td><td>Standard and PPR fantasy scoring</td></tr>
+  </tbody>
+</table></div>
+
+<h4>stg_injuries_weekly</h4>
+<p>One row per injury report entry per player per week. Includes a numeric <code>injury_severity_score</code> (0–4) for easy modeling.</p>
+<div class="table-wrap"><table>
+  <thead><tr><th>Column</th><th>Type</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td><code>player_id</code></td><td>VARCHAR</td><td>GSIS player ID</td></tr>
+    <tr><td><code>report_status</code></td><td>VARCHAR</td><td>Out / Doubtful / Questionable / Limited</td></tr>
+    <tr><td><code>injury_severity_score</code></td><td>INTEGER</td><td>4=Out, 3=Doubtful, 2=Questionable, 1=Limited, 0=Full/None</td></tr>
+    <tr><td><code>report_primary_injury</code></td><td>VARCHAR</td><td>Injury body part (knee, ankle, etc.)</td></tr>
+    <tr><td><code>practice_status</code></td><td>VARCHAR</td><td>DNP / Limited / Full</td></tr>
+    <tr><td><code>report_date</code></td><td>DATE</td><td>Date the report was filed</td></tr>
+  </tbody>
+</table></div>
+
+<h4>stg_snap_counts_weekly</h4>
+<p>Offensive, defensive, and special teams snap counts and snap percentages per player per week.</p>
+<div class="table-wrap"><table>
+  <thead><tr><th>Column</th><th>Type</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td><code>pfr_player_id</code></td><td>VARCHAR</td><td>Pro Football Reference player ID</td></tr>
+    <tr><td><code>offense_snaps / offense_snap_pct</code></td><td>INTEGER / DOUBLE</td><td>Offensive snap volume and share</td></tr>
+    <tr><td><code>defense_snaps / defense_snap_pct</code></td><td>INTEGER / DOUBLE</td><td>Defensive snap volume and share</td></tr>
+    <tr><td><code>st_snaps / st_snap_pct</code></td><td>INTEGER / DOUBLE</td><td>Special teams snap volume and share</td></tr>
+  </tbody>
+</table></div>
+</div>
+</section>
+
+<!-- INTERMEDIATE -->
+<section id="intermediate">
+<h2>Intermediate Layer</h2>
+
+<p>The intermediate layer is where feature engineering happens. These tables compute the rolling metrics, lags, and derived signals that models actually use. All metrics here are <strong>lag-safe by design</strong> — they only incorporate data from games that have already been played before the current game.</p>
+
+<div class="callout warn">
+  <div class="callout-title">⚠️ Critical: The Lag Rule</div>
+  Every rolling metric in this layer uses <code>ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING</code> in its SQL window function. This means the current game is never included in its own features. A Week 10 game only "knows" about Weeks 1–9.
+</div>
+
+<div id="dict-intermediate">
+<h3>Intermediate Table Dictionary</h3>
+
+<h4>int_game_base</h4>
+<p>Game-level context features: rest days, bye weeks, venue, and derived scheduling flags. One row per game.</p>
+<div class="table-wrap"><table>
+  <thead><tr><th>Column</th><th>Leakage</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td><code>home_rest_days / away_rest_days</code></td><td><span class="leak-safe">✓ Safe</span></td><td>Days since last game for each team</td></tr>
+    <tr><td><code>home_bye_prior / away_bye_prior</code></td><td><span class="leak-safe">✓ Safe</span></td><td>1 if team had a bye the prior week</td></tr>
+    <tr><td><code>home_short_week / away_short_week</code></td><td><span class="leak-safe">✓ Safe</span></td><td>1 if team has ≤ 6 days rest (Thursday game)</td></tr>
+    <tr><td><code>rest_days_advantage_home</code></td><td><span class="leak-safe">✓ Safe</span></td><td>Home rest days minus away rest days</td></tr>
+    <tr><td><code>div_game / conf_game</code></td><td><span class="leak-safe">✓ Safe</span></td><td>Divisional / conference matchup flags</td></tr>
+    <tr><td><code>primetime_flag</code></td><td><span class="leak-safe">✓ Safe</span></td><td>1 for Monday/Thursday/Sunday Night games</td></tr>
+    <tr><td><code>home_score / away_score / home_margin</code></td><td><span class="leak-unsafe">✗ Post-game</span></td><td>Actual game result (NULL for future games)</td></tr>
+    <tr><td><code>game_completed_flag</code></td><td><span class="leak-safe">✓ Safe</span></td><td>1 if the game has been played</td></tr>
+  </tbody>
+</table></div>
+
+<h4>int_team_form</h4>
+<p>The most important intermediate table. Rolling team strength metrics, computed at three time scales. One row per team per week, representing that team's form entering that week (i.e., <em>before</em> the game is played).</p>
+<div class="table-wrap"><table>
+  <thead><tr><th>Feature</th><th>Window</th><th>What it measures</th></tr></thead>
+  <tbody>
+    <tr><td><code>epa_pp_std</code></td><td>Season-to-date</td><td>Offensive expected points added per play — the gold standard for team quality</td></tr>
+    <tr><td><code>def_epa_pp_std</code></td><td>Season-to-date</td><td>Defensive EPA per play allowed (lower is better defensively)</td></tr>
+    <tr><td><code>pass_epa_std / rush_epa_std</code></td><td>Season-to-date</td><td>Passing and rushing efficiency separately</td></tr>
+    <tr><td><code>def_pass_epa_std / def_rush_epa_std</code></td><td>Season-to-date</td><td>Passing and rushing defense separately</td></tr>
+    <tr><td><code>success_rate_std</code></td><td>Season-to-date</td><td>% of plays gaining positive EPA (more stable than yards)</td></tr>
+    <tr><td><code>epa_pp_l5 / epa_pp_l3</code></td><td>Last 5 / Last 3 games</td><td>Recent form (less stable but captures hot/cold streaks)</td></tr>
+    <tr><td><code>epa_pp_blended</code></td><td>70% current + 30% prior season</td><td>The primary team strength signal. Stabilizes early-season when few games played</td></tr>
+    <tr><td><code>turnovers_per_game_std</code></td><td>Season-to-date</td><td>Giveaways per game</td></tr>
+    <tr><td><code>rz_td_rate_std</code></td><td>Season-to-date</td><td>Red zone touchdown conversion rate</td></tr>
+    <tr><td><code>sacks_allowed_std / def_sacks_std</code></td><td>Season-to-date</td><td>O-line performance and pass rush effectiveness</td></tr>
+    <tr><td><code>games_played_std</code></td><td>Count</td><td>Games played so far this season (useful for confidence weighting)</td></tr>
+    <tr><td><code>wins_l5</code></td><td>Last 5 games</td><td>Recent win count (momentum signal)</td></tr>
+  </tbody>
+</table></div>
+
+<h4>int_injury_team_impact</h4>
+<p>Aggregates individual injury reports into team-level burden scores by position group. One row per team per week.</p>
+<div class="table-wrap"><table>
+  <thead><tr><th>Column</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td><code>total_injury_burden</code></td><td>Sum of injury severity scores across all players on the roster</td></tr>
+    <tr><td><code>qb_out</code></td><td>1 if the primary QB is listed as Out</td></tr>
+    <tr><td><code>wr_burden / te_burden / rb_out</code></td><td>Position-specific injury severity</td></tr>
+    <tr><td><code>ol_burden</code></td><td>Offensive line injury burden (proxy for pass protection quality)</td></tr>
+    <tr><td><code>dl_burden / cb_burden</code></td><td>Defensive position group burden</td></tr>
+  </tbody>
+</table></div>
+
+<h4>int_player_form</h4>
+<p>Rolling usage and efficiency metrics per player per week. Used as features in player projection models.</p>
+<div class="table-wrap"><table>
+  <thead><tr><th>Column</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td><code>target_share_std</code></td><td>Player's % of team targets (season-to-date, lagged)</td></tr>
+    <tr><td><code>air_yards_share_std</code></td><td>Player's % of team air yards (quality of targets)</td></tr>
+    <tr><td><code>wopr_std</code></td><td>Weighted Opportunity Rating — combines target share and air yards share</td></tr>
+    <tr><td><code>snap_pct_std</code></td><td>Offensive snap share (season-to-date)</td></tr>
+    <tr><td><code>targets_per_game_l4</code></td><td>Average targets per game over last 4 weeks (recent form)</td></tr>
+    <tr><td><code>carries_per_game_std / carries_per_game_l2</code></td><td>Rushing volume (season-to-date and last 2 games)</td></tr>
+  </tbody>
+</table></div>
+
+<h4>int_qb_team_context</h4>
+<p>QB-specific features combining passing stats with team context. Used for QB projection and game modeling.</p>
+<div class="table-wrap"><table>
+  <thead><tr><th>Column</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td><code>pass_rate</code></td><td>Team's pass play rate</td></tr>
+    <tr><td><code>oline_sacks_allowed</code></td><td>O-line sacks allowed rate (proxy for pocket time)</td></tr>
+    <tr><td><code>opp_def_sacks / opp_def_pass_epa</code></td><td>Opponent pass rush and coverage strength</td></tr>
+    <tr><td><code>skill_position_injury_burden</code></td><td>WR/TE injury burden (affects QB's weapons)</td></tr>
+    <tr><td><code>dakota</code></td><td>Completion % above expectation (CPOE) — measures QB accuracy vs. air yards context</td></tr>
+  </tbody>
+</table></div>
+</div>
+</section>
+
+<!-- MARTS -->
+<section id="marts">
+<h2>Gold Layer — Mart Tables</h2>
+
+<p>Mart tables are the final, model-ready outputs. They join everything together into wide, flat tables — one row per the relevant grain — with features on the left and targets on the right. The key rule: <strong>targets are only populated for completed games</strong>; future games have NULL targets.</p>
+
+<div id="dict-marts">
+<h3>Mart Table Dictionary</h3>
+
+<h4>mart_game_modeling</h4>
+<p><strong>1,408 rows | 107 columns</strong> — One row per game (completed + upcoming). The primary game prediction surface. Features come from both teams' <code>int_team_form</code> and <code>int_injury_team_impact</code>. Targets are NULL for unplayed games.</p>
+<div class="table-wrap"><table>
+  <thead><tr><th>Column Group</th><th>Examples</th><th>Leakage Status</th></tr></thead>
+  <tbody>
+    <tr><td>Identifiers</td><td><code>game_id, season, week, home_team, away_team</code></td><td><span class="leak-safe">✓ Safe</span></td></tr>
+    <tr><td>Schedule context</td><td><code>surface, roof, div_game, primetime_flag, kickoff_time_local</code></td><td><span class="leak-safe">✓ Safe</span></td></tr>
+    <tr><td>Rest / bye</td><td><code>home_rest_days, away_rest_days, rest_days_advantage_home, home_bye_prior</code></td><td><span class="leak-safe">✓ Safe</span></td></tr>
+    <tr><td>Home team form</td><td><code>home_epa_pp_blended, home_pass_epa_std, home_def_epa_pp_blended, home_epa_pp_l5</code></td><td><span class="leak-safe">✓ Safe</span></td></tr>
+    <tr><td>Away team form</td><td><code>away_epa_pp_blended, away_pass_epa_std, away_def_epa_pp_blended</code></td><td><span class="leak-safe">✓ Safe</span></td></tr>
+    <tr><td>Injury</td><td><code>home_injury_burden, away_injury_burden, home_qb_out, away_qb_out</code></td><td><span class="leak-safe">✓ Safe</span></td></tr>
+    <tr><td>Market (opening)</td><td><code>opening_spread, opening_total, opening_home_win_prob</code></td><td><span class="leak-safe">✓ Safe (pregame)</span></td></tr>
+    <tr><td>Market (closing)</td><td><code>closing_spread, closing_total</code></td><td><span class="leak-unsafe">✗ CLV use only</span></td></tr>
+    <tr><td>Targets</td><td><code>home_score, away_score, home_margin, total_points, home_win_flag</code></td><td><span class="leak-unsafe">✗ Post-game only</span></td></tr>
+    <tr><td>Cover targets</td><td><code>home_covered_flag, over_flag</code></td><td><span class="leak-unsafe">✗ Post-game only</span></td></tr>
+  </tbody>
+</table></div>
+
+<h4>mart_backtest_game</h4>
+<p><strong>1,108 rows | 108 columns</strong> — Completed regular season games only, with a <code>cv_split</code> column for temporal cross-validation. This is the training dataset for game models.</p>
+<div class="table-wrap"><table>
+  <thead><tr><th>cv_split value</th><th>Seasons</th><th>Purpose</th><th>Rows</th></tr></thead>
+  <tbody>
+    <tr><td><code>train</code></td><td>&lt; 2018</td><td>Model training</td><td>~480</td></tr>
+    <tr><td><code>validation</code></td><td>2018–2021</td><td>Hyperparameter tuning, early stopping</td><td>~384</td></tr>
+    <tr><td><code>test</code></td><td>2022+</td><td>Held-out final evaluation — never touch during training</td><td>~244</td></tr>
+  </tbody>
+</table></div>
+
+<h4>mart_team_week_modeling</h4>
+<p><strong>2,686 rows | 40 columns</strong> — Team strength and injury context by week. Used as a lookup table that player projection marts join to get opponent context.</p>
+
+<h4>mart_qb_projection</h4>
+<p><strong>3,012 rows | 37 columns</strong> — QB-specific features for passing volume and efficiency projections. Combines passing form, team pass rate, O-line quality, and opponent pass defense.</p>
+
+<h4>mart_backtest_player</h4>
+<p>Historical player-week rows with actual outcomes populated. Training data for player projection models. Filtered to rows where at least one actual stat (targets, carries, or pass attempts) is recorded.</p>
+</div>
+</section>
+
+<!-- LEAKAGE -->
+<section id="leakage">
+<h2>Leakage Rules</h2>
+
+<p>Data leakage is the cardinal sin of sports modeling. It happens when your model is accidentally trained on information that wouldn't have been available before the game was played. A model with leakage will look spectacular in backtest and fall apart on real predictions.</p>
+
+<p>nflmonad enforces leakage prevention at every layer. Here are the key rules:</p>
+
+<h3>Rule 1: All rolling metrics are lagged</h3>
+<p>Every window function in the SQL uses <code>ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING</code>. This means when computing "Kansas City's EPA per play entering Week 10", we only include Weeks 1–9. Week 10's game is never part of its own features.</p>
+
+<h3>Rule 2: Targets are always separate from features</h3>
+<p>Columns like <code>home_score</code>, <code>home_margin</code>, and <code>home_win_flag</code> are NULL for future games and only populated after the game is played. The model cannot accidentally see the answer.</p>
+
+<h3>Rule 3: Temporal cross-validation only</h3>
+<p>Never randomly split data into train/test by row. Always split by season. A model trained on 2015–2021 data should be tested on 2022+ data — never tested on a random 20% of 2015–2021 games mixed in.</p>
+
+<h3>Rule 4: Opening vs. closing odds</h3>
+<p>Opening lines are available before the game — they're safe as model features. Closing lines represent the final market consensus and are only available right before kickoff. Use closing lines only as targets for closing line value (CLV) analysis, never as input features for a pregame model.</p>
+
+<div class="callout warn">
+  <div class="callout-title">⚠️ Common Trap: Injury Reports</div>
+  The injury report used as a feature should be the one filed <em>before</em> the game — the final Friday or Saturday report. Using the actual "Did Not Participate" outcome from the game itself would be leakage. <code>int_injury_team_impact</code> handles this correctly.
+</div>
+</section>
+
+<!-- FEATURE REFERENCE -->
+<section id="dict-features">
+<h2>Feature Reference</h2>
+
+<h3>What is EPA?</h3>
+<p><strong>Expected Points Added (EPA)</strong> is the most important metric in modern NFL analytics. It answers: "How much did this play change the expected point outcome of the game?" A 4-yard gain on 3rd and 3 has high positive EPA (converted the down). A 4-yard gain on 3rd and 10 has negative EPA (failed to convert). EPA is significantly better than raw yards at measuring team quality.</p>
+
+<h3>Understanding the three rolling windows</h3>
+<div class="two-col">
+  <div class="mini-card">
+    <h5>Season-to-date (_std)</h5>
+    <p>All prior games this season. Most stable, but slow to react to major changes (injuries, coaching adjustments). The primary signal for game modeling.</p>
+  </div>
+  <div class="mini-card">
+    <h5>Last 5 / Last 3 (_l5, _l3)</h5>
+    <p>Recent form. More volatile but captures hot streaks, coaching changes, and post-injury recovery. Less reliable early in the season.</p>
+  </div>
+</div>
+
+<div class="callout">
+  <div class="callout-title">The Blended Metric</div>
+  <code>epa_pp_blended = 0.70 × current_season_epa + 0.30 × prior_season_epa</code>. This solves the Week 1–3 problem where teams have almost no current-season data. The prior season acts as a regularizing prior — a Bayesian concept where you start with a reasonable belief about a team's quality and update it as new evidence comes in.
+</div>
+
+<h3>Key Feature Groups</h3>
+<div class="table-wrap"><table>
+  <thead><tr><th>Feature</th><th>Source Table</th><th>Why it matters for modeling</th></tr></thead>
+  <tbody>
+    <tr><td><code>epa_pp_blended</code></td><td>int_team_form</td><td>Single best measure of overall team quality. Primary model feature.</td></tr>
+    <tr><td><code>def_epa_pp_blended</code></td><td>int_team_form</td><td>Defensive quality. Equally important — total game score is offense + defense.</td></tr>
+    <tr><td><code>pass_epa_std</code></td><td>int_team_form</td><td>Passing efficiency. NFL games are won/lost in the passing game.</td></tr>
+    <tr><td><code>epa_pp_l3</code></td><td>int_team_form</td><td>Hot/cold streaks. Useful as a second-order signal layered on top of season-to-date.</td></tr>
+    <tr><td><code>home_rest_days</code></td><td>int_game_base</td><td>Rest advantages are real and well-documented in NFL outcomes.</td></tr>
+    <tr><td><code>home_qb_out</code></td><td>int_injury_team_impact</td><td>The single biggest binary injury signal. Backup QBs lose by an average of 4+ points more.</td></tr>
+    <tr><td><code>opening_spread</code></td><td>stg_external_odds_game</td><td>Market consensus is a powerful prior. Including it as a feature makes the model market-aware.</td></tr>
+    <tr><td><code>div_game</code></td><td>int_game_base</td><td>Divisional games are closer historically — defenses know opponents better.</td></tr>
+  </tbody>
+</table></div>
+</section>
+
+<!-- MODEL OVERVIEW -->
+<section id="model-overview">
+<h2>How the Models Work</h2>
+
+<p>The modeling layer consists of three R files that work in sequence: training, simulation, and validation. You can run them independently or chain them together with a single command.</p>
+
+<h3>Three simultaneous models</h3>
+<p>Every time you train, three models are built at once — they share the same features but predict different things:</p>
+<div class="two-col">
+  <div class="mini-card">
+    <h5>Spread Model</h5>
+    <p>Predicts <code>home_margin</code> (home score minus away score). The output is a continuous number like "home wins by 4.2 points." Used for against-the-spread analysis.</p>
+  </div>
+  <div class="mini-card">
+    <h5>Total Model</h5>
+    <p>Predicts <code>total_points</code> (combined final score). Used for over/under analysis. Weather and pace features are most important here.</p>
+  </div>
+</div>
+<div class="two-col">
+  <div class="mini-card">
+    <h5>Win Probability Model</h5>
+    <p>Predicts P(home wins) as a probability 0–1. Built as a binary classifier. Complements the spread model — they should agree on direction but may differ on certainty.</p>
+  </div>
+  <div class="mini-card">
+    <h5>Why three?</h5>
+    <p>Cross-checking models against each other catches errors. If the spread model says "home wins by 6" but the win probability model says "50/50", something is off in one of the models.</p>
+  </div>
+</div>
+
+<h3>XGBoost — why this algorithm?</h3>
+<p>XGBoost is a gradient-boosted decision tree algorithm. It's the right choice for NFL game prediction because: it handles missing values natively (games early in the season have thin rolling windows), it works well on small datasets (~1,100 training games is small by ML standards), it automatically captures non-linear relationships (e.g. the effect of rest might only matter when combined with a difficult opponent), and it provides feature importance scores that tell you what's actually driving predictions.</p>
+
+<h3>The conservative hyperparameter choice</h3>
+<p>NFL data is small. With only ~1,100 training games, overfitting is a serious risk. The models use conservative settings: <code>min_child_weight=10</code> (each leaf needs at least 10 games), <code>lambda=2.0</code> (L2 regularization), and <code>max_depth=4</code> (shallow trees). Early stopping terminates training when validation score stops improving.</p>
+</section>
+
+<!-- SIMULATION -->
+<section id="simulation">
+<h2>Monte Carlo Simulation</h2>
+
+<p>The simulation layer is what separates a prediction from a betting decision. Here's the core idea in plain language:</p>
+
+<p>Your XGBoost model says "the home team wins by 4.2 points on average." But NFL games don't happen on average — they're individual events with enormous variance. The standard deviation of NFL game margins is about <strong>13.5 points</strong>. That means a team predicted to win by 4.2 actually wins the game only about 58% of the time.</p>
+
+<h3>How simulation works</h3>
+<div class="diagram">
+  <div class="flow" style="flex-direction: column; align-items: flex-start; gap: 16px;">
+    <div style="display:flex; align-items:center; gap:16px; width:100%;">
+      <div class="flow-box box-model" style="min-width:200px;">
+        <div class="flow-title">Model Output</div>
+        <div class="flow-sub">pred_margin = 4.2<br>pred_total = 45.1</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box box-silver" style="min-width:220px;">
+        <div class="flow-title">Monte Carlo Draws</div>
+        <div class="flow-sub">10,000 samples from<br>Normal(4.2, 13.5)</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box box-gold" style="min-width:200px;">
+        <div class="flow-title">Probabilities</div>
+        <div class="flow-sub">p_home_win = 0.58<br>p_home_cover = 0.54<br>p_over = 0.49</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h3>Why simulate instead of just using the model probabilities?</h3>
+<p>The win probability model gives you P(home wins) directly. But the simulation approach has advantages: it lets you derive <em>cover probabilities</em> (not just win probabilities) against any spread line, it gives you the full distribution of outcomes (not just the mean), and it lets you run scenarios like "what if the line moves from -3 to -4.5?"</p>
+
+<h3>Expected Value (EV) calculation</h3>
+<p>Once you have a cover probability, you can calculate expected value:</p>
+<pre><code><span class="cm"># At -110 juice (standard), you risk $110 to win $100</span>
+<span class="cm"># Breakeven win rate: 110/210 = 52.38%</span>
+
+<span class="cm"># If simulation says p_home_cover = 0.56:</span>
+EV = (0.56 × $100) - (0.44 × $110) = $56 - $48.40 = <span class="kw">+$7.60 per $110 bet</span>
+ROI = 7.60 / 110 = <span class="kw">6.9% edge</span></code></pre>
+
+<p>A positive EV means the bet has long-run positive expected return. Real edges in NFL betting are typically in the 2–5% range — anything above 10% should be treated skeptically (likely a data error or overfitting).</p>
+</section>
+
+<!-- VALIDATION -->
+<section id="validation">
+<h2>Validation Suite</h2>
+
+<p>The validation suite in <code>R/models/validate_model.R</code> produces seven categories of performance reports. Run <code>run_model_pipeline("validate")</code> to generate all of them.</p>
+
+<h3>1. Accuracy Metrics</h3>
+<ul>
+  <li><strong>RMSE</strong> (Root Mean Squared Error) — average magnitude of prediction error, in points. A spread RMSE of 10–12 is typical for NFL; below 10 is excellent.</li>
+  <li><strong>MAE</strong> (Mean Absolute Error) — similar to RMSE but less sensitive to outliers (blowouts).</li>
+  <li><strong>R²</strong> — how much of the variance in outcomes the model explains. NFL game outcomes are highly variable; an R² of 0.15–0.25 is realistic.</li>
+  <li><strong>Bias</strong> — is the model systematically over- or under-predicting? Should be near zero.</li>
+</ul>
+
+<h3>2. Betting Performance</h3>
+<ul>
+  <li><strong>ATS record</strong> — wins and losses against the spread across the test set</li>
+  <li><strong>O/U record</strong> — wins and losses on over/under bets</li>
+  <li><strong>ROI</strong> — return on investment at standard -110 juice. Breakeven is 52.38%.</li>
+  <li><strong>Edge-filtered ROI</strong> — same metrics but only for games where the model had a 5%+ edge, to test whether selectivity improves performance</li>
+</ul>
+
+<h3>3. Calibration</h3>
+<p>Win probability calibration asks: "When my model says 60% probability, do the home teams win 60% of the time?" A perfectly calibrated model's points lie on the diagonal line. Deviation from the diagonal means the model is overconfident or underconfident at certain probability levels.</p>
+
+<h3>4. Segment Analysis</h3>
+<p>Breaks down model accuracy by game type: divisional vs. non-divisional, primetime vs. regular, dome vs. outdoor, etc. This tells you if the model has systematic blind spots (e.g., consistently poor at predicting divisional games).</p>
+
+<h3>5. Season-by-Season</h3>
+<p>Shows RMSE, MAE, R², and ATS record for each individual season. A good model should be consistent across seasons. If 2019 is dramatically different from 2020, investigate why — there may be a structural change in the data (COVID, rule changes) or a regime change the model doesn't handle.</p>
+
+<h3>6. Closing Line Value (CLV)</h3>
+<p>CLV analysis asks: "Does the model's prediction align with where the betting line moved?" If the line opened at -3 and moved to -4.5, sharp bettors pushed it to -4.5 — they had information the market hadn't priced in. If your model also predicted -4 or -5, you had the same information. High CLV agreement (consistently above 52%) suggests the model has real signal.</p>
+
+<h3>Understanding the console summary</h3>
+<pre><code>╔══════════════════════════════════════════════════════╗
+║          NFL MODEL VALIDATION SUMMARY                ║
+║  Split: test       Games: 244    2026-04-07          ║
+╠══════════════════════════════════════════════════════╣
+║  ACCURACY                                            ║
+║  Spread  RMSE: 11.2   MAE: 8.9   R²: 0.18           ║
+║  Total   RMSE: 12.1   MAE: 9.4   R²: 0.11           ║
+║  WinProb LogLoss: 0.682  Brier: 0.242                ║
+╠══════════════════════════════════════════════════════╣
+║  BETTING PERFORMANCE (standard -110 juice)           ║
+║  ATS all:  132-112 (54.1%)  ROI: 2.8%               ║
+║  ATS edge: 47-35   (57.3%)  ROI: 8.1%               ║
+║  O/U  all: 120-124 (49.2%)  ROI: -3.9%              ║
+╠══════════════════════════════════════════════════════╣
+║  RESIDUAL CALIBRATION                                ║
+║  Margin SD: 13.4 pts  Bias:  0.3 pts                ║
+║  Total  SD: 11.1 pts  Bias: -0.2 pts                ║
+╚══════════════════════════════════════════════════════╝</code></pre>
+
+<p>Reading this: Spread RMSE of 11.2 pts is reasonable. ATS record of 132-112 (54.1%) is profitable. The 57.3% ROI on edge-filtered bets shows selectivity improves results significantly. The O/U model underperforms — that's common because totals are more efficiently priced than sides.</p>
+</section>
+
+<!-- FUNCTIONS -->
+<section id="functions">
+<h2>Function Reference</h2>
+
+<h3>Pipeline Functions (pipeline.R)</h3>
+
+<div class="fn-card">
+  <div class="fn-sig">run_backfill(cfg, force_full = FALSE)</div>
+  <div class="fn-desc">Downloads all historical data from <code>historical_start</code> through <code>current_season</code> and runs full transforms. Run once during initial setup. Takes 30–90 minutes depending on season range.</div>
+  <div class="fn-params">
+    <div class="fn-param"><span class="pname">cfg</span><span class="pdesc">Config list from <code>load_config()</code></span></div>
+    <div class="fn-param"><span class="pname">force_full</span><span class="pdesc">If TRUE, re-downloads all seasons even if Parquet files already exist</span></div>
+  </div>
+</div>
+
+<div class="fn-card">
+  <div class="fn-sig">run_daily_refresh(cfg)</div>
+  <div class="fn-desc">Downloads current season data only and runs incremental transforms. Designed to run nightly via GitHub Actions. Completes in 5–15 minutes.</div>
+</div>
+
+<h3>Ingestion Functions (R/ingest/)</h3>
+
+<div class="fn-card">
+  <div class="fn-sig">ingest_pbp(seasons, cfg, force_full)</div>
+  <div class="fn-desc">Downloads play-by-play data. The largest and slowest download — ~2-3 minutes per season. PBP is the source for EPA calculations.</div>
+</div>
+
+<div class="fn-card">
+  <div class="fn-sig">ingest_rosters_weekly(seasons, cfg, force_full)</div>
+  <div class="fn-desc">Downloads weekly roster snapshots using <code>nflreadr::load_rosters_weekly()</code>. Gives you the active 53-man roster state for each week, which is essential for tracking when players joined/left a team.</div>
+</div>
+
+<div class="fn-card">
+  <div class="fn-sig">ingest_participation(seasons, cfg, force_full)</div>
+  <div class="fn-desc">Downloads play-level participation data — which specific players were on the field for each play. Available from 2016 onward. Large dataset but enables true snap-level analysis.</div>
+</div>
+
+<h3>Transform Functions (R/transform/run_transforms.R)</h3>
+
+<div class="fn-card">
+  <div class="fn-sig">run_transforms(cfg, incremental = FALSE)</div>
+  <div class="fn-desc">Orchestrates the full SQL pipeline: registers raw Parquet views, runs staging SQL, runs intermediate SQL, runs mart SQL. This is the function that moves data through all three layers.</div>
+  <div class="fn-params">
+    <div class="fn-param"><span class="pname">incremental</span><span class="pdesc">If TRUE, only rebuilds current season. If FALSE, rebuilds all seasons from scratch.</span></div>
+  </div>
+</div>
+
+<h3>Model Functions (R/models/)</h3>
+
+<div class="fn-card">
+  <div class="fn-sig">train_game_models(cfg, save_dir)</div>
+  <div class="fn-desc">Trains all three XGBoost models (spread, total, win probability) on <code>mart_backtest_game</code> with temporal cross-validation. Saves model artifacts to <code>models/game/</code>.</div>
+</div>
+
+<div class="fn-card">
+  <div class="fn-sig">simulate_games(predictions, margin_sd, total_sd, n_sims)</div>
+  <div class="fn-desc">Runs Monte Carlo simulation for all games in the predictions data frame. Returns probability distributions, cover probabilities, and EV calculations.</div>
+  <div class="fn-params">
+    <div class="fn-param"><span class="pname">predictions</span><span class="pdesc">Output from <code>predict_games()</code></span></div>
+    <div class="fn-param"><span class="pname">margin_sd</span><span class="pdesc">Standard deviation of the simulation noise. Default 13.5 pts (calibrated from historical residuals).</span></div>
+    <div class="fn-param"><span class="pname">n_sims</span><span class="pdesc">Number of Monte Carlo draws per game. Default 10,000.</span></div>
+  </div>
+</div>
+
+<div class="fn-card">
+  <div class="fn-sig">run_validation_suite(sim_df, report_dir, cv_split_filter)</div>
+  <div class="fn-desc">Runs all seven validation categories (accuracy, betting performance, calibration, CLV, segment analysis, season-by-season) and saves results to <code>reports/model_validation/</code>.</div>
+</div>
+
+<div class="fn-card">
+  <div class="fn-sig">calibrate_residuals(predictions)</div>
+  <div class="fn-desc">Computes empirical residual standard deviation from the test set. Run this after training to update the simulation noise parameters. Output tells you the true spread and total standard deviations for your model specifically.</div>
+</div>
+
+<div class="fn-card">
+  <div class="fn-sig">calc_ev(p_win, american_odds, stake = 100)</div>
+  <div class="fn-desc">Calculates expected value for a bet given a win probability and American odds. Returns the expected profit and ROI per bet.</div>
+  <div class="fn-params">
+    <div class="fn-param"><span class="pname">p_win</span><span class="pdesc">Your model's estimated probability of winning the bet (0–1)</span></div>
+    <div class="fn-param"><span class="pname">american_odds</span><span class="pdesc">The line in American format (e.g. -110, +150)</span></div>
+  </div>
+</div>
+
+<h3>Utility Functions (R/utils/)</h3>
+
+<div class="fn-card">
+  <div class="fn-sig">load_config(path)</div>
+  <div class="fn-desc">Reads <code>config/config.yml</code> and returns a named list. All pipeline functions take <code>cfg</code> as their first argument — always start with this.</div>
+</div>
+
+<div class="fn-card">
+  <div class="fn-sig">db_connect(cfg, read_only = FALSE)</div>
+  <div class="fn-desc">Opens a DuckDB connection to <code>db/nfl_analytics.duckdb</code>. Always pair with <code>on.exit(db_disconnect(con), add = TRUE)</code> to prevent file locks.</div>
+</div>
+
+<div class="fn-card">
+  <div class="fn-sig">write_parquet_partition(df, base_path, partition_cols)</div>
+  <div class="fn-desc">Writes a data frame to partitioned Parquet files. If <code>partition_cols = "season"</code>, creates subdirectories like <code>season=2024/data.parquet</code>. This is the standard write function used throughout the pipeline.</div>
+</div>
+
+<div class="fn-card">
+  <div class="fn-sig">run_all_tests(cfg, stop_on_failure)</div>
+  <div class="fn-desc">Runs all data quality SQL tests in <code>sql/tests/data_tests.sql</code>. Each test returns rows on failure, zero rows on pass. Tests check grain uniqueness, leakage prevention, referential integrity, and value range constraints.</div>
+</div>
+</section>
+
+<!-- CONFIG -->
+<section id="config">
+<h2>Configuration</h2>
+
+<p>All pipeline behavior is controlled by two YAML files in <code>config/</code>.</p>
+
+<h3>config.yml — Core settings</h3>
+<pre><code>seasons:
+  historical_start: 2015    <span class="cm"># earliest season to backfill</span>
+  current_season: 2024      <span class="cm"># update each year (manually or via season_override)</span>
+  incremental_seasons: [2024] <span class="cm"># only refresh this season in daily mode</span>
+
+paths:
+  raw: "data/raw"           <span class="cm"># bronze layer</span>
+  staging: "data/staging"   <span class="cm"># silver layer</span>
+  intermediate: "data/intermediate"
+  marts: "data/marts"       <span class="cm"># gold layer (model-ready)</span>
+  db: "db/nfl_analytics.duckdb"
+
+duckdb:
+  memory_limit: "8GB"       <span class="cm"># increase if you have more RAM</span>
+  threads: 4                <span class="cm"># set to your CPU core count</span></code></pre>
+
+<h3>config_external.yml — Odds sources</h3>
+<pre><code>odds_sources:
+  nflverse_lines:
+    enabled: true           <span class="cm"># free ESPN lines via load_schedules()</span>
+    coverage_start: 2015
+
+  the_odds_api:
+    enabled: false          <span class="cm"># enable when you have an API key</span>
+    api_key_env_var: "ODDS_API_KEY"  <span class="cm"># set in GitHub Secrets</span></code></pre>
+</section>
+
+<!-- AUTOMATION -->
+<section id="automation">
+<h2>Automation (GitHub Actions)</h2>
+
+<p>The pipeline runs automatically via two GitHub Actions workflows in <code>.github/workflows/</code>.</p>
+
+<h3>daily_refresh.yml — Core data pipeline</h3>
+<p>Runs on this schedule:</p>
+<ul>
+  <li><strong>Tue–Thu at 6am UTC</strong> — catches Monday Night Football updates and Tuesday roster/injury data</li>
+  <li><strong>Sunday at 6am UTC</strong> — pre-game data prep (injuries, depth charts)</li>
+  <li><strong>Tuesday at 2pm UTC</strong> — full post-weekend refresh after all data settles</li>
+</ul>
+
+<h3>daily_refresh_extended.yml — Extended pipeline (odds, weather)</h3>
+<p>Additional modes available via manual dispatch:</p>
+<ul>
+  <li><code>daily</code> — standard refresh</li>
+  <li><code>backfill</code> — full historical rebuild</li>
+  <li><code>odds_only</code> — only refresh odds data</li>
+  <li><code>weather_only</code> — only refresh weather data</li>
+  <li><code>reference</code> — rebuild stadium/travel reference tables</li>
+</ul>
+
+<h3>Triggering a manual run</h3>
+<p>In GitHub: go to <strong>Actions → NFL Analytics Daily Refresh → Run workflow</strong>. Select mode and click Run.</p>
+
+<h3>Required GitHub Secrets</h3>
+<div class="table-wrap"><table>
+  <thead><tr><th>Secret Name</th><th>Required?</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td><code>ODDS_API_KEY</code></td><td>Optional</td><td>The Odds API key (free tier available at the-odds-api.com)</td></tr>
+    <tr><td><code>WEATHER_API_KEY</code></td><td>Optional</td><td>Premium weather provider (Open-Meteo is free, no key needed)</td></tr>
+    <tr><td><code>PREMIUM_ODDS_API_KEY</code></td><td>Optional</td><td>Reserved for future premium odds provider</td></tr>
+  </tbody>
+</table></div>
+</section>
+
+<!-- ODDS -->
+<section id="odds">
+<h2>Odds Integration</h2>
+
+<h3>What's currently loaded</h3>
+<p>The platform currently loads closing spread and total lines from ESPN via <code>nflreadr::load_schedules()</code>. These are stored in <code>data/raw/external_odds/</code> and flow through to <code>stg_external_odds_game</code> and then into the mart tables.</p>
+
+<h3>Odds sources compared</h3>
+<div class="table-wrap"><table>
+  <thead><tr><th>Source</th><th>Cost</th><th>Coverage</th><th>Granularity</th><th>Best for</th></tr></thead>
+  <tbody>
+    <tr><td>nflverse ESPN (current)</td><td>Free</td><td>2002+</td><td>Open + Close</td><td>Historical backtests, long-run analysis</td></tr>
+    <tr><td>The Odds API</td><td>Free tier / ~$30/mo</td><td>2018+ live</td><td>Hourly snapshots</td><td>In-season live line tracking</td></tr>
+    <tr><td>Sportsbookreviewsonline</td><td>Free (CSV)</td><td>2007+</td><td>Open + Close</td><td>Pinnacle/sharp-book historical reference</td></tr>
+    <tr><td>Pinnacle (premium)</td><td>~$50–200 one-time</td><td>2010+</td><td>Full movement</td><td>Closing Line Value research</td></tr>
+  </tbody>
+</table></div>
+
+<h3>What "closing line" means for modeling</h3>
+<p>The closing line is the final market consensus before kickoff. It incorporates all public information — injury reports, weather, sharp betting action, public sentiment. It's the single best publicly available predictor of game outcomes (better than most models). Using it as a feature is valid for pregame prediction models. Using the closing line as your <em>target</em> (measuring whether your model predicted the final market correctly) is called <strong>Closing Line Value</strong> and is the gold standard for evaluating model quality.</p>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+<h2>FAQ</h2>
+
+<h3>Why does the pipeline build team_stats from raw_pbp instead of downloading it?</h3>
+<p>nflverse doesn't provide a pre-built series conversion rate table. The platform computes it using <code>nflfastR::calculate_series_conversion_rates()</code> applied to the raw play-by-play data that's already been downloaded. This adds a few minutes to transforms but saves a separate API call.</p>
+
+<h3>Why are there only ~1,108 rows in mart_backtest_game if there are 10 seasons of data?</h3>
+<p>The backtest mart filters to <strong>completed regular season games where both teams have played at least one prior game</strong>. This excludes Week 1 (no prior-game features exist), preseason, and postseason. A 17-game regular season × 32 teams / 2 teams per game = 272 games per season × 10 seasons = 2,720, minus the Week 1 filter ≈ 1,108. That's correct.</p>
+
+<h3>The model shows 54% ATS — is that good?</h3>
+<p>Yes. Breakeven at standard -110 juice is 52.38%. Any sustained edge above 52.4% is profitable over the long run. 54% represents about a 3% ROI per bet. Sharp sportsbooks would limit you at those numbers. Be appropriately skeptical — make sure you're evaluating on a truly held-out test set (2022+) and not on data that was touched during training.</p>
+
+<h3>Can I use this for in-game betting?</h3>
+<p>Not out of the box. The current platform is built for pregame prediction. In-game models require real-time win probability using live game state (score, time remaining, possession) — a fundamentally different problem. The play-by-play data is all here for building it, but it would require a separate modeling pipeline.</p>
+
+<h3>How do I add a new feature?</h3>
+<p>Four steps: (1) Add the raw column in the appropriate staging SQL, (2) add a derived calculation in the relevant intermediate SQL, (3) add it to the mart SQL select list, (4) add its column name to <code>.GAME_FEATURES</code> or <code>.ENGINEERED_FEATURES</code> in <code>train_game_model.R</code>. Re-run <code>run_transforms()</code> and then retrain.</p>
+
+<h3>Why is R used instead of Python?</h3>
+<p>nflverse is the authoritative NFL data ecosystem and is entirely R-based. The R packages <code>nflreadr</code>, <code>nflfastR</code>, and <code>nflplotR</code> have no equivalent Python alternatives with the same coverage or maintenance. The Parquet files produced by the pipeline are format-agnostic — you can consume them in Python with <code>pandas.read_parquet()</code> or <code>polars.read_parquet()</code> if you prefer to model in Python.</p>
+
+<h3>How do I update the platform to a new NFL season?</h3>
+<p>In <code>config/config.yml</code>, change <code>current_season: 2024</code> to <code>current_season: 2025</code>. That's it. The pipeline handles everything else automatically — the model's <code>cv_split</code> will continue to assign the newest season to "test" based on the existing time-based logic.</p>
+
+</section>
+
+<hr>
+
+<p style="color: var(--text-dim); font-size: 12px; padding-bottom: 40px;">nflmonad Platform Documentation · Generated April 2026 · R + DuckDB + Parquet + nflverse</p>
+
+</main>
+</div>
+
+<script>
+  // Smooth scroll for nav links
+  document.querySelectorAll('nav a').forEach(link => {
+    link.addEventListener('click', e => {
+      const target = document.querySelector(link.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  });
+
+  // Highlight active nav link
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        document.querySelectorAll('nav a').forEach(a => a.style.color = '');
+        const active = document.querySelector(`nav a[href="#${entry.target.id}"]`);
+        if (active) active.style.color = 'var(--accent)';
+      }
+    });
+  }, { threshold: 0.3, rootMargin: '-20px 0px -70% 0px' });
+
+  document.querySelectorAll('section').forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

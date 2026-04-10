@@ -4,7 +4,7 @@
 -- Grain:   game_id + play_id
 -- Verified against actual raw_pbp column names.
 -- Key fixes:
---   qtr_seconds_remaining  -> quarter_seconds_remaining
+--   qtr_seconds_remaining  -> quarter_seconds_remaining (renamed in staging via CTE)
 --   scramble               -> qb_scramble
 --   Uses WITH CTE pattern to avoid DuckDB alias self-reference errors
 -- =============================================================================
@@ -210,6 +210,10 @@ WHERE team_abbr IS NOT NULL
 -- STAGING: stg_players
 -- Source:  raw_players
 -- Grain:   gsis_id
+-- Key fixes:
+--   college      -> college_name  (nflreadr column renamed)
+--   entry_year   -> draft_year
+--   draft_club   -> draft_team
 -- =============================================================================
 
 CREATE OR REPLACE VIEW stg_players AS
@@ -234,15 +238,15 @@ SELECT
     ELSE 'OTHER'
   END                                          AS position_group,
   birth_date,
-  college_name                                   AS college,
+  college_name                                 AS college,     -- was: college (renamed in nflreadr)
   height,
   weight,
-  draft_year                                     AS entry_year,
-  rookie_season                                  AS rookie_year,
-  draft_team                                     AS draft_club,
-  draft_pick                                     AS draft_number,
+  draft_year                                   AS entry_year,  -- was: entry_year
+  rookie_season                                AS rookie_year,
+  draft_team                                   AS draft_club,  -- was: draft_club
+  draft_pick                                   AS draft_number,
   CASE WHEN status = 'ACT' THEN 1 ELSE 0 END  AS active_flag,
-  headshot                                       AS headshot_url,
+  headshot                                     AS headshot_url,
   short_name,
   ingestion_ts
 

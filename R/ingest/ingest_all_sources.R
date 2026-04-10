@@ -141,11 +141,11 @@ ingest_rosters_weekly <- function(seasons = NULL, cfg = load_config(),
 
   logger::log_info("rosters_weekly: Refreshing seasons {paste(seasons, collapse=', ')}")
 
-  use_weekly_fn <- .pkg_has_fn("load_weekly_rosters", "nflreadr")
+  use_weekly_fn <- .pkg_has_fn("load_rosters_weekly", "nflreadr")
 
   if (!use_weekly_fn) {
     logger::log_warn(paste0(
-      "nflreadr::load_weekly_rosters() not found in your installed version. ",
+      "nflreadr::load_rosters_weekly() not found in your installed version. ",
       "Run install.packages('nflreadr') to upgrade, then re-run. ",
       "Skipping weekly rosters for now — season-level rosters are still ingested."
     ))
@@ -155,7 +155,7 @@ ingest_rosters_weekly <- function(seasons = NULL, cfg = load_config(),
   purrr::walk(seasons, function(s) {
     log_step(glue::glue("ingest rosters_weekly season={s}"), {
       df <- tryCatch(
-        nflreadr::load_weekly_rosters(seasons = s),
+        nflreadr::load_rosters_weekly(seasons = s),
         error = function(e) {
           logger::log_warn("rosters_weekly season={s}: {e$message}")
           NULL
@@ -169,7 +169,7 @@ ingest_rosters_weekly <- function(seasons = NULL, cfg = load_config(),
 
       df <- df |>
         dplyr::mutate(season = as.integer(s)) |>
-        add_ingestion_metadata("nflreadr::load_weekly_rosters", "nflreadr",
+        add_ingestion_metadata("nflreadr::load_rosters_weekly", "nflreadr",
                                as.character(packageVersion("nflreadr")))
 
       write_parquet_partition(df, base_path, partition_cols = "season")

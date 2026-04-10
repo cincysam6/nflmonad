@@ -2,19 +2,14 @@ name: NFL Analytics — Extended Daily Refresh
 
 on:
   schedule:
-    # ---- Base refresh (football data) ----------------------------------------
-    - cron: "0 6 * * 2-4"    # Tue-Thu: post-game updates (Mon Night + Tue data)
-    - cron: "0 6 * * 0"      # Sunday: pregame prep
-    - cron: "0 14 * * 2"     # Tuesday afternoon: full post-weekend refresh
-
-    # ---- Live odds polling (during season, every 2 hours Sun/Mon/Thu) --------
-    - cron: "0 */2 * * 0"    # Sunday: every 2 hours
-    - cron: "0 */2 * * 1"    # Monday: every 2 hours
-    - cron: "0 */2 * * 4"    # Thursday: every 2 hours
-
-    # ---- Forecast weather refresh (twice daily) ------------------------------
-    - cron: "0 12 * * *"     # Noon UTC — morning forecast update
-    - cron: "0 18 * * *"     # 6pm UTC — afternoon forecast update
+    - cron: "0 6 * * 2-4"
+    - cron: "0 6 * * 0"
+    - cron: "0 14 * * 2"
+    - cron: "0 */2 * * 0"
+    - cron: "0 */2 * * 1"
+    - cron: "0 */2 * * 4"
+    - cron: "0 12 * * *"
+    - cron: "0 18 * * *"
 
   workflow_dispatch:
     inputs:
@@ -33,7 +28,6 @@ on:
 env:
   R_VERSION: "4.3.3"
   RENV_PATHS_CACHE: ~/.local/share/renv
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true   # opt into Node 24 now before June 2026 forced migration
 
 jobs:
   refresh:
@@ -74,7 +68,6 @@ jobs:
           Rscript -e "
             if (file.exists('renv.lock')) renv::restore(prompt=FALSE)
             else source('R/utils/install_packages.R')
-            # Additional packages for extended pipeline
             extra <- c('httr2','janitor','lutz')
             missing <- extra[!extra %in% rownames(installed.packages())]
             if (length(missing) > 0) install.packages(missing, repos='https://cloud.r-project.org')
@@ -98,26 +91,20 @@ jobs:
           PREMIUM_ODDS_API_KEY:  ${{ secrets.PREMIUM_ODDS_API_KEY }}
           WEATHER_API_KEY:       ${{ secrets.WEATHER_API_KEY }}
           PIPELINE_MODE:         ${{ github.event.inputs.mode || 'daily' }}
-          # FIX: resolve force flag here in the env block, not inline in shell
-          # github.event.inputs.force_full is empty string on scheduled runs,
-          # so we default to 'false' before comparing.
-          FORCE_FULL_INPUT:      ${{ github.event.inputs.force_full || 'false' }}
+          FORCE_FULL:            ${{ github.event.inputs.force_full || 'false' }}
         run: |
           set -euo pipefail
-
-          # Resolve --force-full flag safely (avoids bare 'else' in shell)
-          if [ "$FORCE_FULL_INPUT" = "true" ]; then
-            FORCE="--force-full"
-          else
-            FORCE=""
-          fi
 
           case "$PIPELINE_MODE" in
             daily)
               Rscript pipeline_extended.R daily
               ;;
             backfill)
-              Rscript pipeline.R backfill $FORCE
+              if [ "$FORCE_FULL" = "true" ]; then
+                Rscript pipeline.R backfill --force-full
+              else
+                Rscript pipeline.R backfill
+              fi
               Rscript pipeline_extended.R backfill
               ;;
             reference)
@@ -139,6 +126,10 @@ jobs:
                 cfg <- load_config_extended()
                 refresh_weather(cfg=cfg)
               "
+              ;;
+            *)
+              echo "Unknown mode: $PIPELINE_MODE"
+              exit 1
               ;;
           esac
         timeout-minutes: 120

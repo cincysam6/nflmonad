@@ -8,48 +8,46 @@
 # Source adapters are enabled by setting enabled: true.
 # The architecture supports multiple simultaneous sources.
 # Priority order determines which source is used when sources overlap.
-
 odds_sources:
-  # --- The Odds API (https://the-odds-api.com) --------------------------------
-  # Commercial, ~$30/month for historical + live. Best coverage for 2018+.
-  the_odds_api:
-    enabled: false
-    base_url: "https://api.the-odds-api.com/v4"
-    api_key_env_var: "ODDS_API_KEY"          # set in GitHub secrets
-    sports_key: "americanfootball_nfl"
-    markets: ["h2h","spreads","totals"]
-    regions: ["us"]
-    coverage_start: 2018
-    coverage_end: null                        # ongoing
-    sportsbooks: ["draftkings","fanduel","betmgm","caesars","pinnacle","consensus"]
-    timestamp_granularity: "snapshot"         # point-in-time snapshots
-    update_frequency_minutes: 60             # how often to poll during season
-    reliability_score: 9
-    notes: "Best live feed. Historical requires paid plan. No team totals."
-
-  # --- Spreadsheet-style free historical (e.g. sportsbookreviewsonline.com) --
-  sbr_free:
-    enabled: false
-    base_url: null                            # manually downloaded CSVs
-    coverage_start: 2007
-    coverage_end: 2024
-    sportsbooks: ["pinnacle","consensus"]
-    markets: ["spreads","totals","moneyline"]
-    timestamp_granularity: "open_close"      # open + close only, no intraday
-    update_frequency_minutes: null           # batch/manual
-    reliability_score: 7
-    notes: "Free CSV format. Open/close only. Good for long backtests."
-
-  # --- nflverse betting lines (where available) --------------------------------
+  # --- nflverse betting lines (free, no key required) ------------------------
   nflverse_lines:
     enabled: true
     source_fn: "nflreadr::load_espn_betting_lines"
-    coverage_start: 2002
+    coverage_start: 2015
     coverage_end: null
     markets: ["spreads","totals","moneyline"]
     timestamp_granularity: "open_close"
     reliability_score: 6
     notes: "ESPN/nflverse source. Inconsistent before 2010. Good for open/close."
+
+  # --- Spreadsheet-style free historical (e.g. sportsbookreviewsonline.com) --
+  sbr_free:
+    enabled: false
+    base_url: null
+    coverage_start: 2007
+    coverage_end: 2024
+    sportsbooks: ["pinnacle","consensus"]
+    markets: ["spreads","totals","moneyline"]
+    timestamp_granularity: "open_close"
+    update_frequency_minutes: null
+    reliability_score: 7
+    notes: "Free CSV format. Open/close only. Good for long backtests."
+
+  # --- The Odds API (https://the-odds-api.com) --------------------------------
+  the_odds_api:
+    enabled: false
+    base_url: "https://api.the-odds-api.com/v4"
+    api_key_env_var: "ODDS_API_KEY"
+    sports_key: "americanfootball_nfl"
+    markets: ["h2h","spreads","totals"]
+    regions: ["us"]
+    coverage_start: 2018
+    coverage_end: null
+    sportsbooks: ["draftkings","fanduel","betmgm","caesars","pinnacle","consensus"]
+    timestamp_granularity: "snapshot"
+    update_frequency_minutes: 60
+    reliability_score: 9
+    notes: "Best live feed. Historical requires paid plan. No team totals."
 
   # --- Placeholder: Premium feed (Pinnacle, Action Network, etc.) -------------
   premium_feed:

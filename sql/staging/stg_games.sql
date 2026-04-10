@@ -4,11 +4,10 @@
 -- Grain:   game_id  (one row per game, non-preseason)
 -- Verified against actual nflreadr::load_schedules() column names.
 -- Key fixes:
---   conf_game   -> not in source; derived from schedule metadata
+--   conf_game   -> not in source; derived from div_game as proxy
 --   pfr_game_id -> actual col is "pfr"
 --   pff_game_id -> actual col is "pff"
 --   espn_game_id-> actual col is "espn"
---   rest days   -> away_rest / home_rest already in schedules
 -- =============================================================================
 
 CREATE OR REPLACE VIEW stg_games AS
@@ -50,6 +49,10 @@ SELECT
            ELSE NULL
          END
   END                                          AS home_win_flag,
+  CASE
+    WHEN TRY_CAST(home_score AS INTEGER) IS NOT NULL THEN 1
+    ELSE 0
+  END                                          AS game_completed_flag,
 
   -- Venue
   location,
@@ -68,34 +71,28 @@ SELECT
     WHEN UPPER(weekday) = 'MONDAY'   THEN 1
     WHEN UPPER(weekday) = 'THURSDAY' THEN 1
     WHEN UPPER(weekday) = 'SUNDAY'
-     AND TRY_CAST(SPLIT_PART(COALESCE(gametime, '13:00'), ':', 1) AS INTEGER) >= 20 THEN 1
+     AND TRY_CAST(SPLIT_PART(COALESCE(gametime, '13:00'), ':', 1) AS INTEGER) >= 20
+     THEN 1
     ELSE 0
   END                                          AS primetime_flag,
 
-  -- Rest days (already pre-computed in nflreadr schedules)
-  CAST(COALESCE(home_rest, 7) AS INTEGER)      AS home_rest_days,
+  -- Rest / travel (already computed upstream in nflreadr schedules)
   CAST(COALESCE(away_rest, 7) AS INTEGER)      AS away_rest_days,
+  CAST(COALESCE(home_rest, 7) AS INTEGER)      AS home_rest_days,
 
-  -- Built-in weather from schedule (rough game-time conditions)
-  TRY_CAST(temp AS DOUBLE)                     AS schedule_temp_f,
-  TRY_CAST(wind AS DOUBLE)                     AS schedule_wind_mph,
+  -- Market data (opening lines from schedules — pre-game safe)
+  TRY_CAST(spread_line      AS DOUBLE)         AS schedule_spread_line,
+  TRY_CAST(total_line       AS DOUBLE)         AS schedule_total_line,
+  TRY_CAST(away_moneyline   AS DOUBLE)         AS schedule_away_ml,
+  TRY_CAST(home_moneyline   AS DOUBLE)         AS schedule_home_ml,
 
-  -- Built-in market lines from schedule
-  TRY_CAST(spread_line     AS DOUBLE)          AS schedule_spread_line,
-  TRY_CAST(total_line      AS DOUBLE)          AS schedule_total_line,
-  TRY_CAST(away_moneyline  AS INTEGER)         AS schedule_away_ml,
-  TRY_CAST(home_moneyline  AS INTEGER)         AS schedule_home_ml,
-
-  -- Completion flag
-  CASE WHEN TRY_CAST(home_score AS INTEGER) IS NOT NULL THEN 1 ELSE 0 END AS game_completed_flag,
-
-  -- Reference IDs (actual column names in nflreadr)
+  -- Cross-reference IDs (actual column names in nflreadr::load_schedules)
   pfr                                          AS pfr_game_id,
   pff                                          AS pff_game_id,
   espn                                         AS espn_game_id,
   nfl_detail_id,
 
-  ingestion_ts
+  NOW()                                        AS ingestion_ts
 
 FROM raw_schedules
 WHERE game_type != 'PRE'
