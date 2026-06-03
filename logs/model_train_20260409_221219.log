@@ -1,0 +1,13 @@
+[INFO] 2026-04-09 22:12:19.805076 | Logger initialised. Log file: logs/model_train_20260409_221219.log
+[INFO] 2026-04-09 22:12:19.807108 | MODE: TRAIN
+[INFO] 2026-04-09 22:12:19.841308 | Logger initialised. Log file: logs/model_train_20260409_221219.log
+[INFO] 2026-04-09 22:12:19.842643 | ========================================
+[INFO] 2026-04-09 22:12:19.843887 | GAME MODEL TRAINING — 2026-04-09
+[INFO] 2026-04-09 22:12:19.845148 | ========================================
+[INFO] 2026-04-09 22:12:20.105594 | Loaded mart_backtest_game: 1108 rows, 108 cols
+[INFO] 2026-04-09 22:12:20.107262 | Season range: 2020 - 2024
+[INFO] 2026-04-09 22:12:20.111584 | CV split distribution:
+[INFO] 2026-04-09 22:12:20.181349 | Train: 0 | Val: 443 | Test: 665
+[INFO] 2026-04-09 22:12:20.206678 | Training model: target=home_margin, objective=reg:squarederror
+[INFO] 2026-04-09 22:12:20.208733 | Train rows: 0 | Val rows: 443
+[WARN] 2026-04-09 22:12:20.210364 | Missing features (will be ignored): opening_spread, opening_total, opening_home_win_prob

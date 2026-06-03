@@ -86,7 +86,7 @@ register_parquet_view <- function(con,
     return(invisible(NULL))
   }
 
-  hp_clause <- if (hive_partition) ", hive_partitioning=true" else ""
+  hp_clause <- if (hive_partition) ", hive_partitioning=true, union_by_name=true" else ", union_by_name=true"
   pq_path   <- gsub("\\\\", "/", normalizePath(parquet_path, mustWork = FALSE))
   from_sql  <- glue::glue("read_parquet('{pq_path}/**/*.parquet'{hp_clause})")
 

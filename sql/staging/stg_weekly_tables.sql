@@ -18,26 +18,30 @@
 
 CREATE OR REPLACE VIEW stg_player_week AS
 SELECT
-  CAST(player_id as VARCHAR)                    AS player_id,
-  player_display_name                           AS full_name,
-  UPPER(position)                               AS position,
-  UPPER(position_group)                         AS position_group,
-  recent_team                                   AS team,
-  opponent_team                                 AS opponent,
-  CAST(season      AS INTEGER)                  AS season,
-  CAST(week        AS INTEGER)                  AS week,
+  CAST(player_id AS VARCHAR)                        AS player_id,
+  player_display_name                               AS full_name,
+  UPPER(position)                                   AS position,
+  UPPER(position_group)                             AS position_group,
+  team                                              AS team,
+  opponent_team                                     AS opponent,
+  CAST(season      AS INTEGER)                      AS season,
+  CAST(week        AS INTEGER)                      AS week,
   season_type,
 
   -- Passing
-  COALESCE(CAST(completions               AS INTEGER), 0) AS completions,
-  COALESCE(CAST(attempts                  AS INTEGER), 0) AS attempts,
-  COALESCE(CAST(passing_yards             AS DOUBLE),  0) AS passing_yards,
+  COALESCE(CAST(completions                AS INTEGER), 0) AS completions,
+  COALESCE(CAST(attempts                   AS INTEGER), 0) AS attempts,
+  COALESCE(CAST(passing_yards              AS DOUBLE),  0) AS passing_yards,
   COALESCE(CAST(passing_tds               AS INTEGER), 0) AS passing_tds,
-  COALESCE(CAST(interceptions             AS INTEGER), 0) AS interceptions,
-  COALESCE(CAST(sacks                     AS INTEGER), 0) AS sacks,
-  COALESCE(CAST(sack_yards                AS DOUBLE),  0) AS sack_yards,
+  COALESCE(CAST(passing_interceptions      AS INTEGER), 0) AS interceptions,
+  COALESCE(CAST(sacks_suffered             AS INTEGER), 0) AS sacks,
+  COALESCE(CAST(sack_yards_lost            AS DOUBLE),  0) AS sack_yards,
   COALESCE(CAST(sack_fumbles              AS INTEGER), 0) AS sack_fumbles,
   COALESCE(CAST(sack_fumbles_lost         AS INTEGER), 0) AS sack_fumbles_lost,
+  COALESCE(CAST(passing_air_yards         AS DOUBLE),  0) AS passing_air_yards,
+  COALESCE(CAST(passing_yards_after_catch AS DOUBLE),  0) AS passing_yac,
+  COALESCE(CAST(passing_epa               AS DOUBLE),  0) AS passing_epa,
+  COALESCE(CAST(passing_cpoe              AS DOUBLE),  0) AS dakota,
 
   -- Rushing
   COALESCE(CAST(carries                   AS INTEGER), 0) AS carries,
@@ -46,6 +50,7 @@ SELECT
   COALESCE(CAST(rushing_fumbles           AS INTEGER), 0) AS rushing_fumbles,
   COALESCE(CAST(rushing_fumbles_lost      AS INTEGER), 0) AS rushing_fumbles_lost,
   COALESCE(CAST(rushing_first_downs       AS INTEGER), 0) AS rushing_first_downs,
+  COALESCE(CAST(rushing_epa               AS DOUBLE),  0) AS rushing_epa,
 
   -- Receiving
   COALESCE(CAST(targets                   AS INTEGER), 0) AS targets,
@@ -55,24 +60,24 @@ SELECT
   COALESCE(CAST(receiving_fumbles         AS INTEGER), 0) AS receiving_fumbles,
   COALESCE(CAST(receiving_fumbles_lost    AS INTEGER), 0) AS receiving_fumbles_lost,
   COALESCE(CAST(receiving_air_yards       AS DOUBLE),  0) AS receiving_air_yards,
-  COALESCE(CAST(receiving_yards_after_catch AS DOUBLE),0) AS receiving_yards_after_catch,
+  COALESCE(CAST(receiving_yards_after_catch AS DOUBLE),0) AS receiving_yac,
   COALESCE(CAST(receiving_first_downs     AS INTEGER), 0) AS receiving_first_downs,
-  COALESCE(CAST(target_share             AS DOUBLE),   0) AS target_share,
-  COALESCE(CAST(air_yards_share          AS DOUBLE),   0) AS air_yards_share,
-  COALESCE(CAST(wopr                     AS DOUBLE),   0) AS wopr,
-  COALESCE(CAST(racr                     AS DOUBLE),   0) AS racr,
-  COALESCE(CAST(pacr                     AS DOUBLE),   0) AS pacr,
+  COALESCE(CAST(receiving_epa             AS DOUBLE),  0) AS receiving_epa,
+  COALESCE(CAST(target_share              AS DOUBLE),  0) AS target_share,
+  COALESCE(CAST(air_yards_share           AS DOUBLE),  0) AS air_yards_share,
+  COALESCE(CAST(wopr                      AS DOUBLE),  0) AS wopr,
+  COALESCE(CAST(racr                      AS DOUBLE),  0) AS racr,
+  COALESCE(CAST(pacr                      AS DOUBLE),  0) AS pacr,
 
   -- Fantasy
-  TRY_CAST(fantasy_points     AS DOUBLE)        AS fantasy_points_std,
-  TRY_CAST(fantasy_points_ppr AS DOUBLE)        AS fantasy_points_ppr,
+  TRY_CAST(fantasy_points     AS DOUBLE)            AS fantasy_points_std,
+  TRY_CAST(fantasy_points_ppr AS DOUBLE)            AS fantasy_points_ppr,
 
   ingestion_ts
 FROM raw_player_stats
 WHERE player_id IS NOT NULL
   AND season_type IN ('REG', 'POST')
 ;
-
 
 -- =============================================================================
 -- stg_team_week
@@ -154,16 +159,15 @@ FROM sides
 WHERE team IS NOT NULL
 ;
 
-
 -- =============================================================================
 -- stg_rosters_weekly
--- Source:  raw_rosters  (NOT raw_rosters_weekly — that table does not exist)
+-- Source:  raw_rosters_weekly (load_rosters_weekly — weekly grain, 2002+)
 -- Grain:   season + week + team + gsis_id
 -- =============================================================================
 
 CREATE OR REPLACE VIEW stg_rosters_weekly AS
 SELECT
-  CAST(gsis_id as VARCHAR)            AS player_id,
+  CAST(gsis_id AS VARCHAR)            AS player_id,
   full_name,
   UPPER(position)                     AS position,
   depth_chart_position,
@@ -178,7 +182,7 @@ SELECT
   jersey_number,
   CAST(years_exp AS INTEGER)          AS years_exp,
   ingestion_ts
-FROM raw_rosters
+FROM raw_rosters_weekly
 WHERE gsis_id IS NOT NULL
   AND week IS NOT NULL
 ;
