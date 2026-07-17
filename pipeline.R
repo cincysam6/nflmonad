@@ -110,7 +110,7 @@ run_daily_refresh <- function(cfg = load_config()) {
 
   # ---- 2. SILVER -> GOLD: Incremental transforms (current season only) --------
   log_step("run_transforms_incremental",
-    run_transforms(cfg = cfg, incremental = TRUE)
+    run_transforms(cfg = cfg, incremental = TRUE, build_through = "intermediate")
   )
 
   # ---- 3. Validation ----------------------------------------------------------

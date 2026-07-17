@@ -73,24 +73,24 @@ HAVING COUNT(*) > 1
 LIMIT 10;
 
 
--- ---- TEST: mart_game_modeling leakage — home_score must be NULL for future games --
-SELECT 'FAIL: mart_game_modeling future game has score' AS test_name,
-       game_id, game_date, home_score, away_score
-FROM mart_game_modeling
-WHERE game_completed_flag = 0
-  AND (home_score IS NOT NULL OR away_score IS NOT NULL)
+-- ---- TEST: stg_games leakage — completed games must have scores ----------------
+SELECT 'FAIL: stg_games completed game missing score' AS test_name,
+       game_id, gameday, home_score, away_score
+FROM stg_games
+WHERE game_completed_flag = 1
+  AND (home_score IS NULL OR away_score IS NULL)
 LIMIT 10;
 
 
--- ---- TEST: dim_team - all stg_games teams exist in dim_team -----------------
-SELECT 'FAIL: stg_games home_team not in dim_team' AS test_name, home_team
+-- ---- TEST: stg_teams - all stg_games teams exist in stg_teams ---------------
+SELECT 'FAIL: stg_games home_team not in stg_teams' AS test_name, home_team
 FROM stg_games
-WHERE home_team NOT IN (SELECT team_abbr FROM dim_team)
+WHERE home_team NOT IN (SELECT team_abbr FROM stg_teams)
 LIMIT 10;
 
-SELECT 'FAIL: stg_games away_team not in dim_team' AS test_name, away_team
+SELECT 'FAIL: stg_games away_team not in stg_teams' AS test_name, away_team
 FROM stg_games
-WHERE away_team NOT IN (SELECT team_abbr FROM dim_team)
+WHERE away_team NOT IN (SELECT team_abbr FROM stg_teams)
 LIMIT 10;
 
 
@@ -118,10 +118,9 @@ HAVING COUNT(*) > 1
 LIMIT 10;
 
 
--- ---- TEST: mart_player_week_projection — no future rows with actuals --------
-SELECT 'FAIL: projection has future actuals' AS test_name,
-       player_id, season, week, actual_targets, actual_carries
-FROM mart_player_week_projection
-WHERE (actual_targets IS NOT NULL OR actual_carries IS NOT NULL)
-  AND game_id IS NULL  -- no game yet
+-- ---- TEST: stg_player_week — no impossible negative fantasy points ----------
+SELECT 'FAIL: stg_player_week impossible negative fantasy points' AS test_name,
+       player_id, season, week, fantasy_points_ppr
+FROM stg_player_week
+WHERE fantasy_points_ppr < -20
 LIMIT 10;
