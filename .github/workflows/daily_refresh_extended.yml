@@ -66,8 +66,11 @@ jobs:
       - name: Install R packages
         run: |
           Rscript -e "
-            if (file.exists('renv.lock')) renv::restore(prompt=FALSE)
-            else source('R/utils/install_packages.R')
+            if (file.exists('renv.lock')) {
+              renv::restore(prompt=FALSE)
+            } else {
+              source('R/utils/install_packages.R')
+            }
             extra <- c('httr2','janitor','lutz')
             missing <- extra[!extra %in% rownames(installed.packages())]
             if (length(missing) > 0) install.packages(missing, repos='https://cloud.r-project.org')
