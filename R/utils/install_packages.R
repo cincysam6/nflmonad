@@ -43,7 +43,8 @@ packages <- c(
   # Utilities
   "digest",       # record hashing
   "jsonlite",
-  "withr"
+  "withr",
+  "here"
 )
 
 missing_pkgs <- packages[!packages %in% rownames(installed.packages())]
